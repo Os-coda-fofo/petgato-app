@@ -26,12 +26,6 @@ const Home = () => {
           </TouchableOpacity>
         </Link>
         
-        <Link href={"/login-error"} style={styles.btnLogin} asChild>
-          <TouchableOpacity>
-            <Text style={styles.btnLogin}> error </Text>
-          </TouchableOpacity>
-        </Link>
-
         <Image style={styles.logo} source={require('../../assets/logo/Meau_marca_2.png')} />
       </View>
   );

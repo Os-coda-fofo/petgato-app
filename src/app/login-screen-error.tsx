@@ -12,7 +12,7 @@ const LoginScreenError = () => {
           <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
   
           <Feather style={styles.menuIcon} name="menu" size={24} color="#88c9bf" />
-          <Text style={styles.title}>Olá!</Text>
+          <Text style={styles.title}>Ops!</Text>
           <Text style={[ styles.subtitle, { color: '#757575' }]}> Você não pode realizar esta ação sem possuir um cadastro.</Text>
 
         <View style={styles.buttonContainer}>
