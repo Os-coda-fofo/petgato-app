@@ -5,7 +5,7 @@ import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
 
 
-const Home = () => {
+const LoginScreenError = () => {
     const router = useRouter();
     return (
         <View style={styles.container}>
@@ -16,9 +16,9 @@ const Home = () => {
           <Text style={[ styles.subtitle, { color: '#757575' }]}> Você não pode realizar esta ação sem possuir um cadastro.</Text>
 
         <View style={styles.buttonContainer}>
-          <Button title="FAZER CADASTRO" onPress={() => router.push('//cadastrar')} variant="default" />
+          <Button title="FAZER CADASTRO" onPress={() => router.push('//cadastrar')} variant="main" />
           <Text style={[ styles.subtitle, { color: '#757575' }]}> Já possui cadatro?</Text>
-          <Button title="FAZER LOGIN" onPress={() => router.push('/login')} variant="default" />
+          <Button title="FAZER LOGIN" onPress={() => router.push('/login')} variant="main" />
         </View>
         </View>
 
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     },
     title: {
       fontSize: 72,
-      color: '#ffd358',
+      color: '#88c9bf',
       fontFamily: 'CourgetteRegular',
       marginBottom: 52
     },
@@ -70,3 +70,5 @@ const styles = StyleSheet.create({
       left: 16,
     }
   });
+
+  export default LoginScreenError;

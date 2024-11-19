@@ -40,7 +40,7 @@ export default function Layout() {
             options={{ title: "Login", headerShown: false }}
           />
           <Stack.Screen 
-            name="login-error"
+            name="login-screen-error"
             options={{ title: "login-error", headerShown: false }}
           />
         </Stack>
