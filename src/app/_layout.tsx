@@ -43,6 +43,10 @@ export default function Layout() {
             name="login-screen-error"
             options={{ title: "login-error", headerShown: false }}
           />
+          <Stach.Screen
+            name="register"
+            options={{ title: "Cadastro", headerShown: false }}
+          />
         </Stack>
       </SafeAreaView>
     </SafeAreaProvider>
