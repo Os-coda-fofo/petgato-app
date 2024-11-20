@@ -42,6 +42,13 @@ const LoginScreen = () => {
         <Input placeholder="Senha" secureTextEntry onChangeText={handlePasswordChange} value={formState.password} />
         <View style={{ width: '90%', marginTop: 40 }}>
           <Button title="ENTRAR" onPress={() => {}} variant="main" />
+          <Text style={styles.registerBtn}>
+            Não possui uma conta?
+            <Link href="/register" style={{ color: '#88c9bf', fontFamily: 'Roboto_500Medium' }}>
+              {' '}
+              Cadastre-se
+            </Link>
+          </Text>
         </View>
       </View>
 
@@ -84,6 +91,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '70%',
+  },
+  registerBtn: {
+    color: '#434343',
+    fontFamily: 'Roboto_400Regular',
+    fontSize: 16,
+    marginTop: 16,
+    alignSelf: 'center',
   },
 });
 
