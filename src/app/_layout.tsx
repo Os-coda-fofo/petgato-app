@@ -39,6 +39,10 @@ export default function Layout() {
             name="login" 
             options={{ title: "Login", headerShown: false }}
           />
+          <Stack.Screen 
+            name="register"
+            options={{ title: "Cadastro", headerShown: false }}
+          />
         </Stack>
       </SafeAreaView>
     </SafeAreaProvider>

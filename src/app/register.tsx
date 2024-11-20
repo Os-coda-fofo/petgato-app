@@ -6,26 +6,26 @@ import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
-const CadastroScreen = () => {
+const RegisterScreen = () => {
   const [formState, setFormState] = React.useState({
+    name: '',
+    age: '',
+    email: '',
+    state: '',
+    city: '',
+    address: '',
+    phone: '',
     username: '',
     password: '',
+    confirmPassword: '',
   })
 
-  const handleUsernameChange = (value: string) => {
+  const handleFormChange = (key: string, value: string) => {
     setFormState(prevState => ({
       ...prevState,
-      username: value,
+      [key]: value,
     }))
   }
-
-  const handlePasswordChange = (value: string) => {
-    setFormState(prevState => ({
-      ...prevState,
-      password: value,
-    }))
-  }
-
 
   return (
     <ScrollView style={styles.scroll}>
@@ -47,31 +47,31 @@ const CadastroScreen = () => {
         <View style={styles.inputContainer}>
         <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>INFORMAÇÕES PESSOAIS</Text>
 
-        <Input placeholder="Nome completo" onChangeText={handleUsernameChange} value={formState.username} checked={formState.username.length > 0} />
-        <Input placeholder="Idade" secureTextEntry onChangeText={handlePasswordChange} value={formState.password} />
-        <Input placeholder="E-mail" onChangeText={handleUsernameChange} value={formState.username} checked={formState.username.length > 0} />
-        <Input placeholder="Estado" secureTextEntry onChangeText={handlePasswordChange} value={formState.password} />
-        <Input placeholder="Cidade" onChangeText={handleUsernameChange} value={formState.username} checked={formState.username.length > 0} />
-        <Input placeholder="Endereço" secureTextEntry onChangeText={handlePasswordChange} value={formState.password} />
-        <Input placeholder="Telefone" onChangeText={handleUsernameChange} value={formState.username} checked={formState.username.length > 0} />
-        <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16, marginTop: 16,alignSelf: "flex-start"}}>INFORMAÇÕES DE PERFIL</Text>
+        <Input placeholder="Nome completo" onChangeText={(value) => handleFormChange('name', value)} value={formState.name}  />
+        <Input placeholder="Idade" onChangeText={(value) => handleFormChange('age', value)} value={formState.age} />
+        <Input placeholder="E-mail" onChangeText={(value) => handleFormChange('email', value)} value={formState.email}  />
+        <Input placeholder="Estado" onChangeText={(value) => handleFormChange('state', value)} value={formState.state} />
+        <Input placeholder="Cidade" onChangeText={(value) => handleFormChange('city', value)} value={formState.city}  />
+        <Input placeholder="Endereço" onChangeText={(value) => handleFormChange('address', value)} value={formState.address} />
+        <Input placeholder="Telefone" onChangeText={(value) => handleFormChange('phone',value)} value={formState.phone}  />
+        <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16, marginTop: 16,alignSelf: "flex-start" }} >INFORMAÇÕES DE PERFIL</Text>
       
-        <Input placeholder="Nome de usuário" secureTextEntry onChangeText={handlePasswordChange} value={formState.password} />
-        <Input placeholder="Senha" onChangeText={handleUsernameChange} value={formState.username} checked={formState.username.length > 0} />
-        <Input placeholder="Confirmação de senha" secureTextEntry onChangeText={handlePasswordChange} value={formState.password} />
+        <Input placeholder="Nome de usuário" onChangeText={(value) => handleFormChange('username', value)} value={formState.username}  />
+        <Input placeholder="Senha" secureTextEntry onChangeText={(value) => handleFormChange('password', value)} value={formState.username}  />
+        <Input placeholder="Confirmação de senha" secureTextEntry onChangeText={(value) => handleFormChange('confirmPassword', value)} value={formState.confirmPassword} />
         
         <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16, marginTop: 16, alignSelf: "flex-start" }}>FOTO DE PERFIL</Text>
         </View>
         
         <View style={styles.imageBox}>
           <View style={{ margin: 40, alignItems: "center"}}>
-        <MaterialIcons name="control-point" size={24} color="#434343" />
+          <MaterialIcons name="control-point" size={24} color="#434343" />
             <Text style={{ color: '#757575', fontFamily: 'Roboto_400Regular', fontSize: 16 }}>adicionar foto</Text>
-        </View>
-        </View>
-        <View style={{alignSelf: 'center'}}>
-        <Button title="FAZER CADASTRO" onPress={() => {}} variant="main" />
           </View>
+        </View>
+        <View style={styles.registerBtn}>
+          <Button title="FAZER CADASTRO" onPress={() => {}} variant="main" />
+        </View>
       </View>
     
     </ScrollView>
@@ -83,10 +83,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    
     backgroundColor: '#fafafa',
     justifyContent: 'center',
-    
   },
   infoBox: {
     backgroundColor: "#e1f7f1",
@@ -138,7 +136,13 @@ const styles = StyleSheet.create({
     color: '#757575',
     fontFamily: 'Roboto_400Regular',
     textAlign: 'center',
-  }
+  },
+  registerBtn: {
+    margin: 15,
+    marginTop: 50,
+    width: '70%',
+    alignSelf: 'center',
+  },
 });
 
-export default CadastroScreen;
+export default RegisterScreen;
