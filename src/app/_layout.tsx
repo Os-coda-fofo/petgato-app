@@ -1,10 +1,10 @@
-import { StyleSheet } from 'react-native';
-import { Stack } from 'expo-router';
-import { useEffect } from 'react';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Roboto_400Regular, Roboto_500Medium, Roboto_700Bold } from '@expo-google-fonts/roboto';
+import { useFonts } from 'expo-font';
+import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -40,6 +40,10 @@ export default function Layout() {
             options={{ title: "Login", headerShown: false }}
           />
           <Stack.Screen 
+            name="login-screen-error"
+            options={{ title: "login-error", headerShown: false }}
+          />
+          <Stach.Screen
             name="register"
             options={{ title: "Cadastro", headerShown: false }}
           />

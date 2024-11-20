@@ -1,8 +1,8 @@
-import React from 'react'; 
-import { View, Text, StyleSheet, TouchableOpacity, Image, StatusBar } from 'react-native';
-import Button from '../components/Button';
-import { Link, useRouter } from 'expo-router';
 import Feather from '@expo/vector-icons/Feather';
+import { Link, useRouter } from 'expo-router';
+import React from 'react';
+import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Button from '../components/Button';
 
 const Home = () => {
   const router = useRouter();
@@ -15,7 +15,7 @@ const Home = () => {
         <Text style={[ styles.subtitle, { color: '#757575' }]}> Bem vindo ao Meau! Aqui você pode adotar, doar e ajudar cães e gatos com facilidade. Qual o seu interesse? </Text>
         
         <View style={styles.buttonContainer}>
-          <Button title="ADOTAR" onPress={() => router.push('/adotar')} variant="default" />
+          <Button title="ADOTAR" onPress={() => router.push('/login-screen-error')} variant="default" />
           <Button title="AJUDAR" onPress={() => router.push('/ajudar')} variant="default" />
           <Button title="CADASTRAR ANIMAL" onPress={() => router.push('/cadastrar')} variant="default" />
         </View>
@@ -25,7 +25,7 @@ const Home = () => {
             <Text style={styles.btnLogin}> login </Text>
           </TouchableOpacity>
         </Link>
-
+        
         <Image style={styles.logo} source={require('../../assets/logo/Meau_marca_2.png')} />
       </View>
   );
