@@ -1,5 +1,5 @@
-import Feather from '@expo/vector-icons/Feather';
-import { useRouter } from 'expo-router';
+import { AntDesign } from '@expo/vector-icons';
+import { Link, useRouter } from 'expo-router';
 import React from 'react';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
@@ -9,9 +9,17 @@ const LoginScreenError = () => {
     const router = useRouter();
     return (
         <View style={styles.container}>
+              <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
+
+                <View style={styles.header}>
+                    <Link href="/" asChild>
+                        <AntDesign name="arrowleft" size={24} color="#434343" />
+                    </Link>
+                    <Text style={styles.headerTitle}>Cadastro</Text>
+                </View>
+
           <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
   
-          <Feather style={styles.menuIcon} name="menu" size={24} color="#88c9bf" />
           <Text style={styles.title}>Ops!</Text>
           <Text style={[ styles.subtitle, { color: '#757575' }]}> Você não pode realizar esta ação sem possuir um cadastro.</Text>
 
@@ -68,7 +76,29 @@ const styles = StyleSheet.create({
       position: 'absolute',
       top: 16,
       left: 16,
-    }
+    },
+    header: {
+        flexDirection: 'row',
+        width: '100%',
+        height: 64,
+        backgroundColor: '#cfe9e5',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        gap: 16,
+    },
+    headerTitle: {
+        fontSize: 20,
+        fontFamily: 'Roboto_500Medium',
+        color: '#434343',
+    },
+    inputContainer: {
+        width: '80%',
+        alignItems: 'center',
+        marginBottom: 80,
+    },
   });
 
   export default LoginScreenError;
