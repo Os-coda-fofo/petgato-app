@@ -4,10 +4,10 @@ import Button from '../components/Button';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link } from 'expo-router';
 import Input from '../components/Input';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../services/firebase-config';
+import { useSession } from '../services/auth/ctx';
 
 const LoginScreen = () => {
+  const { signIn, isLoading } = useSession();
   const [formState, setFormState] = React.useState({
     email: '',
     password: '',
@@ -20,24 +20,23 @@ const LoginScreen = () => {
     })
   }
 
-  const handleLogin = () => {
-    createUserWithEmailAndPassword(auth, formState.email, formState.password)
-    .then((userCredential) => {
-      const user = userCredential.user
+  const handleLogin = async () => {
+    try {
+      await signIn(formState.email, formState.password)
+      console.log('Logado com sucesso!')
+    } 
+    catch (error) {
+      console.error('Erro de login', error);
+  }}
 
-      console.log(user)
-      setFormState({
-        email: '',
-        password: '',
-      })
-    })
-    .catch((error) => {
-      const errorCode = error.code
-      const errorMessage = error.message
-      console.log(errorCode, errorMessage)
-    })
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <Text>Carregando...</Text>
+      </View>
+    );
   }
-
+  
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
@@ -50,25 +49,32 @@ const LoginScreen = () => {
         </View>
 
       <View style={styles.inputContainer}>
-      <Input placeholder="Nome de usuário" onChangeText={(value) => handleFormChange('username', value)} value={formState.email} checked={formState.email.length > 0} />
+      <Input placeholder="Nome de usuário" onChangeText={(value) => handleFormChange('email', value)} value={formState.email} checked={formState.email.length > 0} />
         <Input placeholder="Senha" secureTextEntry onChangeText={(value) => handleFormChange('password', value)} value={formState.password} />
         <View style={{ width: '90%', marginTop: 40 }}>
-        <Button title="ENTRAR" onPress={() => {}} variant="main" />
-          <Text style={styles.registerBtn}>
-            Não possui uma conta?
+          <Button title="ENTRAR" onPress={() => handleLogin()} variant="main" />
+          <Text style={styles.forgotBtn}>
+            Esqueceu sua senha?
             <Link href="/register" style={{ color: '#88c9bf', fontFamily: 'Roboto_500Medium' }}>
               {' '}
-              Cadastre-se
+              Recupere-a
             </Link>
           </Text>
-          <Button title="ENTRAR" onPress={() => handleLogin()} variant="main" />
-        </View>
+          </View>
       </View>
 
       <View style={styles.buttonContainer}>
         <Button textColor="#ffff" title="ENTRAR COM FACEBOOK" onPress={() => {}} variant="facebook" />
         <Button textColor="#ffff" title="ENTRAR COM GOOGLE" onPress={() => {}} variant="google" />
       </View>
+
+      <Text style={styles.registerBtn}>
+        Não possui uma conta?
+        <Link href="/register" style={{ color: '#88c9bf', fontFamily: 'Roboto_500Medium' }}>
+          {' '}
+          Cadastre-se
+        </Link>
+      </Text>
     </View>
   );
 };
@@ -106,11 +112,18 @@ const styles = StyleSheet.create({
     width: '70%',
   },
   registerBtn: {
+    position: 'absolute',
+    bottom: 24,
+    color: '#434343',
+    fontFamily: 'Roboto_400Regular',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  forgotBtn: {
     color: '#434343',
     fontFamily: 'Roboto_400Regular',
     fontSize: 16,
-    marginTop: 16,
-    alignSelf: 'center',
+    textAlign: 'center',
   },
 });
 
