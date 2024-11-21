@@ -4,27 +4,39 @@ import Button from '../components/Button';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link } from 'expo-router';
 import Input from '../components/Input';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../services/firebase-config';
 
 const LoginScreen = () => {
   const [formState, setFormState] = React.useState({
-    username: '',
+    email: '',
     password: '',
   })
 
-  const handleUsernameChange = (value: string) => {
-    setFormState(prevState => ({
-      ...prevState,
-      username: value,
-    }))
+  const handleFormChange = (key: string, value: string) => {
+    setFormState({
+      ...formState,
+      [key]: value,
+    })
   }
 
-  const handlePasswordChange = (value: string) => {
-    setFormState(prevState => ({
-      ...prevState,
-      password: value,
-    }))
-  }
+  const handleLogin = () => {
+    createUserWithEmailAndPassword(auth, formState.email, formState.password)
+    .then((userCredential) => {
+      const user = userCredential.user
 
+      console.log(user)
+      setFormState({
+        email: '',
+        password: '',
+      })
+    })
+    .catch((error) => {
+      const errorCode = error.code
+      const errorMessage = error.message
+      console.log(errorCode, errorMessage)
+    })
+  }
 
   return (
     <View style={styles.container}>
@@ -38,10 +50,10 @@ const LoginScreen = () => {
         </View>
 
       <View style={styles.inputContainer}>
-      <Input placeholder="Nome de usuário" onChangeText={handleUsernameChange} value={formState.username} checked={formState.username.length > 0} />
-        <Input placeholder="Senha" secureTextEntry onChangeText={handlePasswordChange} value={formState.password} />
+      <Input placeholder="Nome de usuário" onChangeText={(value) => handleFormChange('username', value)} value={formState.email} checked={formState.email.length > 0} />
+        <Input placeholder="Senha" secureTextEntry onChangeText={(value) => handleFormChange('password', value)} value={formState.password} />
         <View style={{ width: '90%', marginTop: 40 }}>
-          <Button title="ENTRAR" onPress={() => {}} variant="main" />
+        <Button title="ENTRAR" onPress={() => {}} variant="main" />
           <Text style={styles.registerBtn}>
             Não possui uma conta?
             <Link href="/register" style={{ color: '#88c9bf', fontFamily: 'Roboto_500Medium' }}>
@@ -49,6 +61,7 @@ const LoginScreen = () => {
               Cadastre-se
             </Link>
           </Text>
+          <Button title="ENTRAR" onPress={() => handleLogin()} variant="main" />
         </View>
       </View>
 
