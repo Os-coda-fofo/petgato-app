@@ -43,8 +43,10 @@ const SessionProvider = ({ children }: PropsWithChildren) => {
     setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      console.log('Logado com sucesso!');
+      console.log('Usuário:', auth.currentUser);
     } catch (error) {
-      console.error('Error signing in:', error);
+      console.error('Erro de login', error);
     } finally {
       setIsLoading(false);
     }
@@ -65,17 +67,8 @@ const SessionProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <AuthContext.Provider value={{ user, isLoading, signIn, signOut }}>
-      {isLoading ? <LoadingScreen /> : children}
+      {children}
     </AuthContext.Provider>
-  );
-}
-
-// Componente opcional para exibir enquanto verifica o estado do usuário
-function LoadingScreen() {
-  return (
-    <View>
-      <Text>Loading...</Text>
-    </View>
   );
 }
 

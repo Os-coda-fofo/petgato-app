@@ -5,13 +5,15 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link } from 'expo-router';
 import Input from '../components/Input';
 import { useSession } from '../services/auth/ctx';
+import { useRouter } from 'expo-router';
 
 const LoginScreen = () => {
-  const { signIn, isLoading } = useSession();
   const [formState, setFormState] = React.useState({
     email: '',
     password: '',
   })
+  const { signIn, isLoading } = useSession();
+  const router = useRouter();
 
   const handleFormChange = (key: string, value: string) => {
     setFormState({
@@ -20,10 +22,16 @@ const LoginScreen = () => {
     })
   }
 
+  const verifyEmail = (email: string) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
+    return emailRegex.test(email)
+  }
+
   const handleLogin = async () => {
     try {
       await signIn(formState.email, formState.password)
       console.log('Logado com sucesso!')
+      router.replace('/logged')
     } 
     catch (error) {
       console.error('Erro de login', error);
@@ -31,8 +39,8 @@ const LoginScreen = () => {
 
   if (isLoading) {
     return (
-      <View style={styles.container}>
-        <Text>Carregando...</Text>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ fontSize: 24, fontFamily: 'CourgetteRegular' }} >Loading...</Text>
       </View>
     );
   }
@@ -55,7 +63,7 @@ const LoginScreen = () => {
           <Button title="ENTRAR" onPress={() => handleLogin()} variant="main" />
           <Text style={styles.forgotBtn}>
             Esqueceu sua senha?
-            <Link href="/register" style={{ color: '#88c9bf', fontFamily: 'Roboto_500Medium' }}>
+            <Link href="" style={{ color: '#88c9bf', fontFamily: 'Roboto_500Medium' }}>
               {' '}
               Recupere-a
             </Link>
