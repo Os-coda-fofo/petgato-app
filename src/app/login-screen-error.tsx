@@ -24,7 +24,7 @@ const LoginScreenError = () => {
           <Text style={[ styles.subtitle, { color: '#757575' }]}> Você não pode realizar esta ação sem possuir um cadastro.</Text>
 
         <View style={styles.buttonContainer}>
-          <Button title="FAZER CADASTRO" onPress={() => router.push('//cadastrar')} variant="main" />
+          <Button title="FAZER CADASTRO" onPress={() => router.push('/register')} variant="main" />
           <Text style={[ styles.subtitle, { color: '#757575' }]}> Já possui cadatro?</Text>
           <Button title="FAZER LOGIN" onPress={() => router.push('/login')} variant="main" />
         </View>
