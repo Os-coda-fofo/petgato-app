@@ -57,7 +57,7 @@ const RegisterScreen = () => {
         <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16, marginTop: 16,alignSelf: "flex-start" }} >INFORMAÇÕES DE PERFIL</Text>
       
         <Input placeholder="Nome de usuário" onChangeText={(value) => handleFormChange('username', value)} value={formState.username}  />
-        <Input placeholder="Senha" secureTextEntry onChangeText={(value) => handleFormChange('password', value)} value={formState.username}  />
+        <Input placeholder="Senha" secureTextEntry onChangeText={(value) => handleFormChange('password', value)} value={formState.password}  />
         <Input placeholder="Confirmação de senha" secureTextEntry onChangeText={(value) => handleFormChange('confirmPassword', value)} value={formState.confirmPassword} />
         
         <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16, marginTop: 16, alignSelf: "flex-start" }}>FOTO DE PERFIL</Text>
