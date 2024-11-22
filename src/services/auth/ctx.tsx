@@ -1,6 +1,5 @@
 import { User, onAuthStateChanged, signInWithEmailAndPassword, signOut as firebaseSignOut } from 'firebase/auth';
 import { auth } from './firebase-config';
-import { View, Text } from 'react-native';
 import React, { useContext, createContext, useState, useEffect, type PropsWithChildren } from 'react';
 
 const AuthContext = createContext<{
