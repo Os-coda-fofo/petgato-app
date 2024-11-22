@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, Text, StatusBar } from 'react-native';
+import { View, StyleSheet, Text, StatusBar, TouchableOpacity } from 'react-native';
 import Button from '../components/Button';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Link } from 'expo-router';
 import Input from '../components/Input';
+import {
+  useNavigation, Link
+} from '@react-navigation/native';
 
 const LoginScreen = () => {
   const [formState, setFormState] = React.useState({
@@ -25,15 +27,15 @@ const LoginScreen = () => {
     }))
   }
 
-
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
         <View style={styles.header}>
-          <Link href="/" asChild>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <AntDesign name="arrowleft" size={24} color="#434343" />
-          </Link>
+          </TouchableOpacity>
           <Text style={styles.headerTitle}>Login</Text>
         </View>
 
@@ -44,10 +46,12 @@ const LoginScreen = () => {
           <Button title="ENTRAR" onPress={() => {}} variant="main" />
           <Text style={styles.registerBtn}>
             Não possui uma conta?
-            <Link href="/register" style={{ color: '#88c9bf', fontFamily: 'Roboto_500Medium' }}>
-              {' '}
-              Cadastre-se
-            </Link>
+            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+              <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_500Medium' }}>
+                {' '}
+                Cadastre-se
+              </Text>
+            </TouchableOpacity>
           </Text>
         </View>
       </View>

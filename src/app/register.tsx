@@ -1,10 +1,12 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Link } from 'expo-router';
 import React from 'react';
-import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import {
+  useNavigation, Link
+} from '@react-navigation/native';
 
 const RegisterScreen = () => {
   const [formState, setFormState] = React.useState({
@@ -26,16 +28,16 @@ const RegisterScreen = () => {
       [key]: value,
     }))
   }
-
+  const navigation = useNavigation();
   return (
     <ScrollView style={styles.scroll}>
     <View style={styles.container}>
       <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
         <View style={styles.header}>
-          <Link href="/" asChild>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <AntDesign name="arrowleft" size={24} color="#434343" />
-          </Link>
+          </TouchableOpacity>
           <Text style={styles.headerTitle}>Cadastro Pessoal</Text>
         </View>
 

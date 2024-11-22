@@ -1,7 +1,11 @@
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { Link, Stack } from 'expo-router';
+import {
+  useNavigation
+} from '@react-navigation/native';
 
 export default function NotFoundScreen() {
+  const navigation = useNavigation();
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />

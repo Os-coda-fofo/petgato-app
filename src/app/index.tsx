@@ -1,11 +1,13 @@
 import Feather from '@expo/vector-icons/Feather';
-import { Link, useRouter } from 'expo-router';
+import {
+  useNavigation
+} from '@react-navigation/native';
 import React from 'react';
 import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../components/Button';
 
 const Home = () => {
-  const router = useRouter();
+  const navigation = useNavigation();
   return (
       <View style={styles.container}>
         <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
@@ -15,16 +17,14 @@ const Home = () => {
         <Text style={[ styles.subtitle, { color: '#757575' }]}> Bem vindo ao Meau! Aqui você pode adotar, doar e ajudar cães e gatos com facilidade. Qual o seu interesse? </Text>
         
         <View style={styles.buttonContainer}>
-          <Button title="ADOTAR" onPress={() => router.push('/login-screen-error')} variant="default" />
-          <Button title="AJUDAR" onPress={() => router.push('/ajudar')} variant="default" />
-          <Button title="CADASTRAR ANIMAL" onPress={() => router.push('/cadastrar')} variant="default" />
+          <Button title="ADOTAR" onPress={() => navigation.navigate('LoginScreenError')} variant="default" />
+          <Button title="AJUDAR" onPress={() => navigation.navigate('LoginScreenError')} variant="default" />
+          <Button title="CADASTRAR ANIMAL" onPress={() => navigation.navigate('Register')} variant="default" />
         </View>
 
-        <Link href={"/login"} style={styles.btnLogin} asChild>
-          <TouchableOpacity>
-            <Text style={styles.btnLogin}> login </Text>
-          </TouchableOpacity>
-        </Link>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.btnLogin}> login </Text>
+        </TouchableOpacity>
         
         <Image style={styles.logo} source={require('../../assets/logo/Meau_marca_2.png')} />
       </View>

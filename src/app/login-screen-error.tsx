@@ -1,20 +1,21 @@
 import { AntDesign } from '@expo/vector-icons';
-import { Link, useRouter } from 'expo-router';
 import React from 'react';
-import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import { StatusBar, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Button from '../components/Button';
-
+import {
+  useNavigation, Link
+} from '@react-navigation/native';
 
 const LoginScreenError = () => {
-    const router = useRouter();
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
               <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
                 <View style={styles.header}>
-                    <Link href="/" asChild>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
                         <AntDesign name="arrowleft" size={24} color="#434343" />
-                    </Link>
+                    </TouchableOpacity>
                     <Text style={styles.headerTitle}>Cadastro</Text>
                 </View>
 
@@ -24,9 +25,9 @@ const LoginScreenError = () => {
           <Text style={[ styles.subtitle, { color: '#757575' }]}> Você não pode realizar esta ação sem possuir um cadastro.</Text>
 
         <View style={styles.buttonContainer}>
-          <Button title="FAZER CADASTRO" onPress={() => router.push('/register')} variant="main" />
+          <Button title="FAZER CADASTRO" onPress={() => navigation.navigate('Register')} variant="main" />
           <Text style={[ styles.subtitle, { color: '#757575' }]}> Já possui cadatro?</Text>
-          <Button title="FAZER LOGIN" onPress={() => router.push('/login')} variant="main" />
+          <Button title="FAZER LOGIN" onPress={() => navigation.navigate('Login')} variant="main" />
         </View>
         </View>
 
