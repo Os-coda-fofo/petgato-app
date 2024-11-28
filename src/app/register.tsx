@@ -1,10 +1,9 @@
-import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Link } from 'expo-router';
 import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import Header from '../components/Header';
 
 const RegisterScreen = () => {
   const [formState, setFormState] = React.useState({
@@ -32,12 +31,7 @@ const RegisterScreen = () => {
     <View style={styles.container}>
       <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-        <View style={styles.header}>
-          <Link href="/" asChild>
-            <AntDesign name="arrowleft" size={24} color="#434343" />
-          </Link>
-          <Text style={styles.headerTitle}>Cadastro Pessoal</Text>
-        </View>
+      <Header title="Cadastro" />
 
       <View style={styles.infoBox}>
       <Text style={[ styles.subtitle, { color: '#757575' }]}> As informações preenchidas serão divulgadas apenas para a pessoa com qual você realizar o processo de adoção e/ou apadrinhamento, após a formalização do processo.</Text>
