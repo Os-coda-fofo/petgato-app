@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Text, StatusBar } from 'react-native';
 import Button from '../components/Button';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { Link } from 'expo-router';
 import Input from '../components/Input';
+import Header from '../components/Header';
 
 const LoginScreen = () => {
   const [formState, setFormState] = React.useState({
@@ -30,12 +30,7 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-        <View style={styles.header}>
-          <Link href="/" asChild>
-            <AntDesign name="arrowleft" size={24} color="#434343" />
-          </Link>
-          <Text style={styles.headerTitle}>Login</Text>
-        </View>
+      <Header title="Login" />
 
       <View style={styles.inputContainer}>
       <Input placeholder="Nome de usuário" onChangeText={handleUsernameChange} value={formState.username} checked={formState.username.length > 0} />
