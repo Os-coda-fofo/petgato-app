@@ -5,6 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SessionProvider } from '../services/auth/ctx';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,25 +32,27 @@ export default function Layout() {
   }
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.safeView}>
-        <Stack>
-          <Stack.Screen name="index" options={{ title: "Home", headerShown: false }} />
-          <Stack.Screen 
-            name="login" 
-            options={{ title: "Login", headerShown: false }}
-          />
-          <Stack.Screen 
-            name="login-screen-error"
-            options={{ title: "login-error", headerShown: false }}
-          />
-          <Stack.Screen
-            name="register"
-            options={{ title: "Cadastro", headerShown: false }}
-          />
-        </Stack>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <SessionProvider>
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.safeView}>
+          <Stack>
+            <Stack.Screen name="index" options={{ title: "Home", headerShown: false }} />
+            <Stack.Screen 
+              name="login" 
+              options={{ title: "Login", headerShown: false }}
+            />
+            <Stack.Screen 
+              name="login-screen-error"
+              options={{ title: "login-error", headerShown: false }}
+            />
+            <Stack.Screen
+              name="register"
+              options={{ title: "Cadastro", headerShown: false }}
+            />
+          </Stack>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </SessionProvider>
   )
 }
 
