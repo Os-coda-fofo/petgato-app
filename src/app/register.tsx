@@ -1,10 +1,11 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import { useSession } from '../services/auth/ctx';
 
 const RegisterScreen = () => {
   const [formState, setFormState] = React.useState({
@@ -19,6 +20,35 @@ const RegisterScreen = () => {
     password: '',
     confirmPassword: '',
   })
+  
+  const { signUp, isLoading } = useSession();
+  const router = useRouter();
+
+  const handleSubmit = async () => {
+    const { name, age, email, state, city, address, phone, username, password, confirmPassword } = formState;
+
+    if (!email || !password || password !== confirmPassword) {
+      console.log('Erro', 'Verifique os campos de e-mail e senha');
+      return;
+    }
+
+    const userData = {
+      name,
+      age,
+      state,
+      city,
+      address,
+      phone,
+      username,
+    };
+
+    try {
+      await signUp(email, password, userData);
+      console.log('Sucesso', 'Cadastro realizado com sucesso!');
+    } catch (error) {
+      console.log('Erro', 'Houve um problema ao criar a conta');
+    }
+  }
 
   const handleFormChange = (key: string, value: string) => {
     setFormState(prevState => ({
@@ -70,7 +100,7 @@ const RegisterScreen = () => {
           </View>
         </View>
         <View style={styles.registerBtn}>
-          <Button title="FAZER CADASTRO" onPress={() => {}} variant="main" />
+          <Button title={ isLoading ? "Carregando..." : "FAZER CADASTRO" } onPress={() => {handleSubmit(), router.replace('/login')}} variant="main" />
         </View>
       </View>
     

@@ -15,7 +15,6 @@ export default function ProtectedLayout() {
 
   return (
     <Stack>
-      <Stack.Screen name="logged" options={{ headerShown: false }} />
       <Slot />
     </Stack>
   );

@@ -1,4 +1,5 @@
-import { User, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut } from 'firebase/auth';
+
+cimport { User, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut } from 'firebase/auth';
 import { auth, db } from './firebase-config';
 import { doc, setDoc } from 'firebase/firestore';
 import React, { useContext, createContext, useState, useEffect, type PropsWithChildren } from 'react';
@@ -7,7 +8,7 @@ const AuthContext = createContext<{
   user: any;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, userData: object) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }>({
   user: null,
@@ -50,17 +51,11 @@ const SessionProvider = ({ children }: PropsWithChildren) => {
       console.log('Usuário:', auth.currentUser);
     } catch (error) {
       if (error.code === 'auth/invalid-email') {
-        alert('E-mail inválido . Por favor, verifique o e-mail fornecido.');
+        console.error('E-mail inválido . Por favor, verifique o e-mail fornecido.');
       } else if (error.code === 'auth/wrong-password') {
-        alert('Senha incorreta. Tente novamente.');
-      } else {
-        alert('Erro ao fazer login. Tente novamente.');
+        console.error('Senha incorreta. Tente novamente.');
       }
     }
-      finally {
-        setIsLoading(false);
-      }
-  }
 
   // Função para criar nova conta e salvar dados no Firestore
   const signUp = async (email: string, password: string, userData: object) => {
@@ -103,7 +98,6 @@ const SessionProvider = ({ children }: PropsWithChildren) => {
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
 export { useSession, SessionProvider };
-
