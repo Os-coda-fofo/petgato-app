@@ -30,12 +30,9 @@ const FullAnimalRegistry = () => {
                         em contato!</Text>
 
         <View style={styles.buttonContainer}>
-            <View style={styles.shadowButton}>
           <Button title="MEUS PETS" onPress={() => router.push('/login')} variant="default"  />
-          </View>
         </View>
         </View>
-
     );
 }
 
@@ -66,26 +63,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
     },
-    shadowButton: {
-        backgroundColor: '#ffd358',
-        height: 80,
-        width: 200,
-        borderColor: '#ffd358',
-        alignItems: "center",
-        borderWidth: 2,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 8,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 4.65,
-        elevation: 8,
-    },
-    
+   
     logo: {
       width: 122,
       height: 44,

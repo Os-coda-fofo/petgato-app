@@ -1,6 +1,6 @@
-import React from 'react';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 interface ButtonProps {
   title: string;
