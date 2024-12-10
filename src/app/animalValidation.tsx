@@ -5,7 +5,7 @@ import Button from '../components/Button';
 import Header from '../components/Header';
 
 
-const AnimalInfoScreen = () => {
+const AnimalValidationScreen = () => {
 
     const mockPets = [
         {
@@ -48,60 +48,66 @@ const AnimalInfoScreen = () => {
             <Text style={{color: "#434343", left: 20, fontWeight: 'bold'}}>{pet.nome}</Text>
             <View style={styles.inline}>
               <View style={styles.infoblock}>
-                <Text style={{color: '#f7a800'}}>SEXO</Text>
+                <Text style={{color: '#589b9b'}}>SEXO</Text>
                 <Text style={{color: "#757575"}}>{pet.sexo}</Text>
               </View>
               <View style={styles.infoblock}>
-              <Text style={{color: '#f7a800'}}>PORTE</Text>
+              <Text style={{color: '#589b9b'}}>PORTE</Text>
                 <Text style={{color: "#757575"}}>{pet.porte}</Text>
               </View>
               <View style={styles.infoblock}>
-              <Text style={{color: '#f7a800'}}>IDADE</Text>
+              <Text style={{color: '#589b9b'}}>IDADE</Text>
                 <Text style={{color: "#757575"}}>{pet.idade}</Text>
               </View>
             </View>
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>LOCALIZAÇÃO</Text>
+            <Text style={{color: '#589b9b'}}>LOCALIZAÇÃO</Text>
               <Text style={{color: "#757575"}}>{pet.localizacao}</Text>
             </View>
             <View style={styles.horizontalLine} />
             <View style={styles.inline}>
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>CASTRADO</Text>
+            <Text style={{color: '#589b9b'}}>CASTRADO</Text>
               <Text style={{color: "#757575"}}>{pet.castrado}</Text>
             </View>
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>VERMIFUGADO</Text>
+            <Text style={{color: '#589b9b'}}>VERMIFUGADO</Text>
             <Text style={{color: "#757575"}}>{pet.vermifugado}</Text>
             </View>
             </View>
             <View style={styles.inline}>
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>VACINADO</Text>
+            <Text style={{color: '#589b9b'}}>VACINADO</Text>
             <Text style={{color: "#757575"}}>{pet.vacinado}</Text>
             </View>
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>DOENÇAS</Text>
+            <Text style={{color: '#589b9b'}}>DOENÇAS</Text>
             <Text style={{color: "#757575"}}>{pet.doencas}</Text>
             </View>
             </View>
             <View style={styles.horizontalLine} />
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>TEMPERAMENTO</Text>
+            <Text style={{color: '#589b9b'}}>TEMPERAMENTO</Text>
             <Text style={{color: "#757575"}}>{pet.temperamento}</Text>
             </View>
             <View style={styles.horizontalLine} />
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>EXIGÊNCIAS DO DOADOR</Text>
+            <Text style={{color: '#589b9b'}}>EXIGÊNCIAS DO DOADOR</Text>
             <Text style={{maxWidth: 320, color: "#434343"}}>{pet.exigencias}</Text>
             </View>
             <View style={styles.horizontalLine} />
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>MAIS SOBRE {pet.nome.toUpperCase()}</Text>
+            <Text style={{color: '#589b9b'}}>MAIS SOBRE {pet.nome.toUpperCase()}</Text>
             <Text style={{maxWidth: 320, color: "#434343"}}>{pet.descricao}</Text>
             </View>
+            <View style = {{flexDirection: "row", padding: 50}}>
             <View style={styles.buttonContainer}>
-              <Button title="PRETENTO ADOTAR" onPress={() => router.push('/confirmacao')} variant="default" />
+              <Button title="VER INTERESSADOS" onPress={() => router.push('/confirmacao')} variant="main" />
+            </View>
+
+            <View style={styles.buttonContainer}>
+              <Button title="REMOVER PET" onPress={() => router.push('/confirmacao')} variant="main" />
+            </View>
             </View>
           </View>    
         </View>
@@ -181,11 +187,13 @@ const styles = StyleSheet.create({
     width: '80%',
     alignItems: 'center',
     alignSelf: 'center',
+    
   },
   buttonContainer: {
     width: 250,
     height: 35,
     alignSelf: 'center',
+    margin: 10,
   },
   subtitle:{
     maxWidth: 350,
@@ -202,4 +210,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AnimalInfoScreen;
+export default AnimalValidationScreen;
