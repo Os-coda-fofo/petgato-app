@@ -50,7 +50,7 @@ export default function Layout() {
               options={{ title: "Cadastro", headerShown: false }}
             />
             <Stack.Screen
-            name="animalCadastro"
+            name="registerAnimal"
             options={{ title: "Cadastro do Animal", headerShown: false }}
           />
           </Stack>

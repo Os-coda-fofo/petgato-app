@@ -13,33 +13,42 @@ const AnimalScreen = () => {
     saude: '',
     sobre: '',
   })
-  const [isGato, setGato] = React.useState(false);
-  const [isCachorro, setCachorro] = React.useState(false);
-    const [isMacho, setMacho] = React.useState(false);
-    const [isFemea, setFemea] = React.useState(false);
-    const [isPequeno, setPequeno] = React.useState(false);
-    const [isMedio, setMedio] = React.useState(false);
-    const [isGrande, setGrande] = React.useState(false);
-    const [isFilhote, setFilhote] = React.useState(false);
-    const [isAdulto, setAdulto] = React.useState(false);
-    const [isIdoso, setIdoso] = React.useState(false);
-    const [isBrincalhao, setBrincalhao] = React.useState(false);
-    const [isTimido, setTimido] = React.useState(false);
-    const [isCalmo, setCalmo] = React.useState(false);
-    const [isGuarda, setGuarda] = React.useState(false);
-    const [isAmoroso, setAmoroso] = React.useState(false);
-    const [isPreguicoso, setPreguicoso] = React.useState(false);
-    const [isVacinado, setVacinado] = React.useState(false);
-    const [isVermifugado, setVermifugado] = React.useState(false);
-    const [isCastrado, setCastrado] = React.useState(false);
-    const [isDoente, setDoente] = React.useState(false);
-    const [isTermo, setTermo] = React.useState(false);
-    const [isFotos, setFotos] = React.useState(false);
-    const [isVisita, setVisita] = React.useState(false);
-    const [isAcompanhamento, setAcompanhamento] = React.useState(false);
-    const [is1mes, set1mes] = React.useState(false);
-    const [is3mes, set3mes] = React.useState(false);
-    const [is6mes, set6mes] = React.useState(false);
+  const [checkboxState, setCheckboxState] = React.useState({
+    isGato: false,
+    isCachorro: false,
+    isMacho: false,
+    isFemea: false,
+    isPequeno: false,
+    isMedio: false,
+    isGrande: false,
+    isFilhote: false,
+    isAdulto: false,
+    isIdoso: false,
+    isBrincalhao: false,
+    isTimido: false,
+    isCalmo: false,
+    isGuarda: false,
+    isAmoroso: false,
+    isPreguicoso: false,
+    isVacinado: false,
+    isVermifugado: false,
+    isCastrado: false,
+    isDoente: false,
+    isTermo: false,
+    isFotos: false,
+    isVisita: false,
+    isAcompanhamento: false,
+    is1mes: false,
+    is3mes: false,
+    is6mes: false,
+  })
+  const handleCheckboxChange = (key: keyof typeof checkboxState) =>{
+    setCheckboxState(prevState => ({
+      ...prevState,
+      [key]: !prevState[key]
+      
+    }))
+  }
 
   const handleFormChange = (key: string, value: string) => {
     setFormState(prevState => ({
@@ -57,18 +66,10 @@ const AnimalScreen = () => {
           <Link href="/" asChild>
             <AntDesign name="arrowleft" size={24} color="#434343" />
           </Link>
-          <Text style={styles.headerTitle}>Cadastro Pessoal</Text>
+          <Text style={styles.headerTitle}>Cadastro Animal</Text>
         </View>
 
-      <View style={styles.infoBox}>
-      <Text style={[ styles.subtitle, { color: '#757575' ,alignSelf: 'flex-start'}]}> Tenho interesse em cadastrar o animal para: </Text>
-      </View> 
-
-      <View style={styles.registerBtn}>
-          <Button title="ADOÇÃO" onPress={() => {}} variant="yellow" />
-          <Button title="APADRINHAR" onPress={() => {}} variant="white" textColor='#bdbdbd'/>
-          <Button title="AJUDA" onPress={() => {}} variant="white" />
-        </View>
+        <View style={{top: 100}}>
 
         
         <View style={styles.inputContainer}>
@@ -86,67 +87,100 @@ const AnimalScreen = () => {
           </View>
         </View>
         <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>ESPÉCIE</Text>
-        <Checkbox style={styles.checkbox} value={isCachorro} onValueChange={setCachorro} />
+        <View style={styles.checkboxline}>
+        <Checkbox style={styles.checkbox} value={checkboxState.isCachorro} onValueChange={() => handleCheckboxChange('isCachorro')} />
         <Text style={styles.paragraph}>Cachorro</Text>
-        <Checkbox style={styles.checkbox} value={isGato} onValueChange={setGato} />
+        <Checkbox style={styles.checkbox} value={checkboxState.isGato} onValueChange={() => handleCheckboxChange('isGato')} />
         <Text style={styles.paragraph}>Gato</Text>
+        </View>
         <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SEXO</Text>
-        <Checkbox style={styles.checkbox} value={isMacho} onValueChange={setMacho} />
+
+        <View style={styles.checkboxline}>
+        <Checkbox style={styles.checkbox} value={checkboxState.isMacho} onValueChange={() => handleCheckboxChange('isMacho')} />
         <Text style={styles.paragraph}>Macho</Text>
-        <Checkbox style={styles.checkbox} value={isFemea} onValueChange={setFemea} />
+        <Checkbox style={styles.checkbox} value={checkboxState.isFemea} onValueChange={() => handleCheckboxChange('isFemea')} />
         <Text style={styles.paragraph}>Fêmea</Text>
+        </View>
         <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>PORTE</Text>
-        <Checkbox style={styles.checkbox} value={isPequeno} onValueChange={setPequeno} />
+        <View style={styles.checkboxline}>
+        <Checkbox style={styles.checkbox} value={checkboxState.isPequeno} onValueChange={() => handleCheckboxChange('isPequeno')} />
         <Text style={styles.paragraph}>Pequeno</Text>
-        <Checkbox style={styles.checkbox} value={isMedio} onValueChange={setMedio} />
+        <Checkbox style={styles.checkbox} value={checkboxState.isMedio} onValueChange={() => handleCheckboxChange('isMedio')} />
         <Text style={styles.paragraph}>Médio</Text>
-        <Checkbox style={styles.checkbox} value={isGrande} onValueChange={setGrande} />
+        <Checkbox style={styles.checkbox} value={checkboxState.isGrande} onValueChange={() => handleCheckboxChange('isGrande')} />
         <Text style={styles.paragraph}>Grande</Text>
+        </View>
         <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>IDADE</Text>
-        <Checkbox style={styles.checkbox} value={isFilhote} onValueChange={setFilhote} />
+        <View style={styles.checkboxline}>
+        <Checkbox style={styles.checkbox} value={checkboxState.isFilhote} onValueChange={() => handleCheckboxChange('isFilhote')} />
         <Text style={styles.paragraph}>Filhote</Text>
-        <Checkbox style={styles.checkbox} value={isAdulto} onValueChange={setAdulto} />
+        <Checkbox style={styles.checkbox} value={checkboxState.isAdulto} onValueChange={() => handleCheckboxChange('isAdulto')} />
         <Text style={styles.paragraph}>Adulto</Text>
-        <Checkbox style={styles.checkbox} value={isIdoso} onValueChange={setIdoso} />
+        <Checkbox style={styles.checkbox} value={checkboxState.isIdoso} onValueChange={() => handleCheckboxChange('isIdoso')} />
         <Text style={styles.paragraph}>Idoso</Text>
+        </View>
         <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>TEMPERAMENTO</Text>
-        <Checkbox style={styles.checkbox} value={isBrincalhao} onValueChange={setBrincalhao} />
+        <View style={styles.checkboxline}>
+        <Checkbox style={styles.checkbox} value={checkboxState.isBrincalhao} onValueChange={() => handleCheckboxChange('isBrincalhao')} />
         <Text style={styles.paragraph}>Brincalhão</Text>
-        <Checkbox style={styles.checkbox} value={isTimido} onValueChange={setTimido} />
+        <Checkbox style={styles.checkbox} value={checkboxState.isTimido} onValueChange={() => handleCheckboxChange('isTimido')} />
         <Text style={styles.paragraph}>Tímido</Text>
-        <Checkbox style={styles.checkbox} value={isCalmo} onValueChange={setCalmo} />
+        <Checkbox style={styles.checkbox} value={checkboxState.isCalmo} onValueChange={() => handleCheckboxChange('isCalmo')} />
         <Text style={styles.paragraph}>Calmo</Text>
-        <Checkbox style={styles.checkbox} value={isGuarda} onValueChange={setGuarda} />
+        </View>
+        <View style={styles.checkboxline}>
+        <Checkbox style={styles.checkbox} value={checkboxState.isGuarda} onValueChange={() => handleCheckboxChange('isGuarda')} />
         <Text style={styles.paragraph}>Guarda</Text>
-        <Checkbox style={styles.checkbox} value={isAmoroso} onValueChange={setAmoroso} />
+        <Checkbox style={styles.checkbox} value={checkboxState.isAmoroso} onValueChange={() => handleCheckboxChange('isAmoroso')} />
         <Text style={styles.paragraph}>Amoroso</Text>
-        <Checkbox style={styles.checkbox} value={isPreguicoso} onValueChange={setPreguicoso} />
+        <Checkbox style={styles.checkbox} value={checkboxState.isPreguicoso} onValueChange={() => handleCheckboxChange('isPreguicoso')} />
         <Text style={styles.paragraph}>Preguiçoso</Text>
+        </View>
         <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SAÚDE</Text>
-        <Checkbox style={styles.checkbox} value={isVacinado} onValueChange={setVacinado} />
+        <View style={styles.checkboxline}>
+        <Checkbox style={styles.checkbox} value={checkboxState.isVacinado} onValueChange={() => handleCheckboxChange('isVacinado')} />
         <Text style={styles.paragraph}>Vacinado</Text>
-        <Checkbox style={styles.checkbox} value={isVermifugado} onValueChange={setVermifugado} />
+        <Checkbox style={styles.checkbox} value={checkboxState.isVermifugado} onValueChange={() => handleCheckboxChange('isVermifugado')} />
         <Text style={styles.paragraph}>Vermifugado</Text>
-        <Checkbox style={styles.checkbox} value={isCastrado} onValueChange={setCastrado} />
+        </View>
+        <View style={styles.checkboxline}>
+        <Checkbox style={styles.checkbox} value={checkboxState.isCastrado} onValueChange={() => handleCheckboxChange('isCastrado')} />
         <Text style={styles.paragraph}>Castrado</Text>
-        <Checkbox style={styles.checkbox} value={isDoente} onValueChange={setDoente} />
+        <Checkbox style={styles.checkbox} value={checkboxState.isDoente} onValueChange={() => handleCheckboxChange('isDoente')} />
         <Text style={styles.paragraph}>Doente</Text>
+        </View>
         <Input placeholder="Doenças do animal" onChangeText={(value) => handleFormChange('saude', value)} value={formState.saude}  />
         <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>EXIGÊNCIAS PARA ADOÇÃO</Text>
-        <Checkbox style={styles.checkbox} value={isTermo} onValueChange={setTermo} />
+        
+        <View style={styles.checkboxline}>
+        <Checkbox style={styles.checkbox} value={checkboxState.isTermo} onValueChange={() => handleCheckboxChange('isTermo')} />
         <Text style={styles.paragraph}>Termo de adoção</Text>
-        <Checkbox style={styles.checkbox} value={isFotos} onValueChange={setFotos} />
+        </View>
+        <View style={styles.checkboxline}>
+        <Checkbox style={styles.checkbox} value={checkboxState.isFotos} onValueChange={() => handleCheckboxChange('isFotos')} />
         <Text style={styles.paragraph}>Fotos da Casa</Text>
-        <Checkbox style={styles.checkbox} value={isVisita} onValueChange={setVisita} />
+        </View>
+        <View style={styles.checkboxline}>
+        <Checkbox style={styles.checkbox} value={checkboxState.isVisita} onValueChange={() => handleCheckboxChange('isVisita')} />
         <Text style={styles.paragraph}>Visita prévia ao animal</Text>
-        <Checkbox style={styles.checkbox} value={isAcompanhamento} onValueChange={setAcompanhamento} />
+        </View>
+        <View style={styles.checkboxline}>
+        <Checkbox style={styles.checkbox} value={checkboxState.isAcompanhamento} onValueChange={() => handleCheckboxChange('isAcompanhamento')} />
         <Text style={styles.paragraph}>Acompanhamento pós adoção</Text>
-        <Checkbox style={styles.checkboxFade} value={is1mes} onValueChange={set1mes} />
+        </View>
+        <View style={styles.checkboxtempo}>
+        <Checkbox style={styles.checkboxFade} value={checkboxState.is1mes} onValueChange={() => handleCheckboxChange('is1mes')} />
         <Text style={styles.paragraphFade}>1 mês</Text>
-        <Checkbox style={styles.checkboxFade} value={is3mes} onValueChange={set3mes} />
+        </View>
+        <View style={styles.checkboxtempo}>
+        <Checkbox style={styles.checkboxFade} value={checkboxState.is3mes} onValueChange={() => handleCheckboxChange('is3mes')} />
         <Text style={styles.paragraphFade}>3 meses</Text>
-        <Checkbox style={styles.checkboxFade} value={is6mes} onValueChange={set6mes} />
+        </View>
+        <View style={styles.checkboxtempo}>
+        <Checkbox style={styles.checkboxFade} value={checkboxState.is6mes} onValueChange={() => handleCheckboxChange('is6mes')} />
         <Text style={styles.paragraphFade}>6 meses</Text>
+        </View>
+        
         <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SOBRE O ANIMAL</Text>
         <Input placeholder="Compartilhe a história do animal" onChangeText={(value) => handleFormChange('sobre', value)} value={formState.sobre}  />
         </View>
@@ -154,7 +188,7 @@ const AnimalScreen = () => {
           <Button title="COLOCAR PARA ADOÇÃO" onPress={() => {}} variant="yellow" />
         </View>
       </View>
-    
+      </View> 
     </ScrollView>
   );
 };
@@ -166,6 +200,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fafafa',
     justifyContent: 'center',
+    
   },
   infoBox: {
     margin: 15,
@@ -175,6 +210,17 @@ const styles = StyleSheet.create({
     maxWidth: 350,
     alignSelf: 'flex-start',
     alignItems: 'center',
+  },
+  checkboxline:{
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    justifyContent: 'space-between',
+  },
+  checkboxtempo:{
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    left: 15,
+    justifyContent: 'space-between',
   },
   imageBox: {
     backgroundColor: "#e6e7e7",
