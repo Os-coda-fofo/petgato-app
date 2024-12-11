@@ -43,12 +43,65 @@ const AnimalScreen = () => {
     is6mes: false,
   })
   const handleCheckboxChange = (key: keyof typeof checkboxState) =>{
+    if (key === 'isCachorro' || key === 'isGato') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        isCachorro: false,
+        isGato: false,
+        [key]: true
+      }))
+    }
+    else if (key === 'isMacho' || key === 'isFemea') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        isMacho: false,
+        isFemea: false,
+        [key]: true
+      }))
+    }
+    else if (key === 'isPequeno' || key === 'isMedio' || key === 'isGrande') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        isPequeno: false,
+        isMedio: false,
+        isGrande: false,
+        [key]: true
+      }))
+    }
+    else if (key === 'isFilhote' || key === 'isAdulto' || key === 'isIdoso') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        isFilhote: false,
+        isAdulto: false,
+        isIdoso: false,
+        [key]: true
+      }))
+    }
+    else if (key === 'is1mes' || key === 'is3mes' || key === 'is6mes') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        is1mes: false,
+        is3mes: false,
+        is6mes: false,
+        isAcompanhamento: true,
+        [key]: true
+      }))
+    }
+    else if (key === 'isAcompanhamento'){
+      setCheckboxState(prevState => ({
+        ...prevState,
+        is1mes: false,
+        is3mes: false,
+        is6mes: false,
+        [key]: !prevState[key]
+      }))
+    }
+    else{
     setCheckboxState(prevState => ({
       ...prevState,
       [key]: !prevState[key]
-      
     }))
-  }
+  }}
 
   const handleFormChange = (key: string, value: string) => {
     setFormState(prevState => ({
