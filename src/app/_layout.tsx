@@ -46,8 +46,8 @@ export default function Layout() {
               options={{ title: "login-error", headerShown: false }}
             />
             <Stack.Screen
-              name="animalInfo"
-              options={{ title: "Detalhes-Animal", headerShown: false }}
+              name="animalValidation"
+              options={{ title: "Validação-Animal", headerShown: false }}
             />
             <Stack.Screen
               name="register"
