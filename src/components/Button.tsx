@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 interface ButtonProps {
   title: string;
   onPress?: () => void;
-  variant?: 'default' | 'facebook' | 'google' | 'main' | 'yellow' | 'white' | 'fade';
+  variant?: 'default' | 'facebook' | 'google' | 'main' | 'yellow' | 'white' | 'fade' | 'transparent';
   textColor?: string;
 }
 
@@ -79,6 +79,9 @@ const styles = StyleSheet.create({
   },
   fade: {
     backgroundColor: '#e0e0e0',
+  },
+  transparent: {
+    backgroundColor: 'transparent',
   },
 });
 
