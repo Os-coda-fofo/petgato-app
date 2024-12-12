@@ -54,6 +54,10 @@ export default function Layout() {
               options={{ title: "Cadastro", headerShown: false }}
             />
             <Stack.Screen
+              name="registerAnimal"
+              options={{ title: "Cadastro de animal", headerShown: false }}
+            />
+            <Stack.Screen
               name="animalsList"
               options={{ title: "Listagem de animais", headerShown: false }}
             />
@@ -61,6 +65,7 @@ export default function Layout() {
               name="animal/[animalId]"
               options={{ title: "Validação de animal", headerShown: false }}
             />
+            
           </Stack>
         </SafeAreaView>
       </SafeAreaProvider>
