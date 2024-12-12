@@ -23,14 +23,9 @@ const LoginScreen = () => {
     })
   }
 
-  const verifyEmail = (email: string) => {
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
-    return emailRegex.test(email)
-  }
-
   useEffect(() => {
     if (!isLoading && user) {
-      router.replace(redirectTo || '/logged');
+      router.replace(redirectTo || '/animalsList');
       setRedirectTo(null); 
     }
   }, [isLoading, user]);
@@ -38,7 +33,7 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       await signIn(formState.email, formState.password)
-      router.replace(redirectTo || '/logged')
+      router.replace(redirectTo || '/animalsList')
     } 
     catch (error) {
       console.error('Erro de login', error);

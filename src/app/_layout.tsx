@@ -41,6 +41,10 @@ export default function Layout() {
     </SessionProvider>
   )
 }
+export const screenOptions = {
+  headerShown: false,
+};
+
 
 const styles = StyleSheet.create({
   safeView: {
@@ -48,3 +52,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffff',
   }
 });
+

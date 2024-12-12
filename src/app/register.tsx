@@ -25,7 +25,7 @@ const RegisterScreen = () => {
   const router = useRouter();
 
   if (user) {
-    router.replace(redirectTo || '/logged');
+    router.replace(redirectTo || '/animalsList');
     return null;
   }
 
