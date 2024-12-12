@@ -1,6 +1,6 @@
-# 🐈 [Petgato]
+# 🐈 Petgato
 
-[An animal adoption app.]
+An animal adoption app.
 
 ---
 
@@ -16,15 +16,15 @@
 
 ## 📖 Introduction
 
-[The app was made in react native, with the aim of serving as learning for a group of students in a subject at college. And for community purpose.]
+The app was made in react native, with the aim of serving as learning for a group of students in a subject at college. And for community purpose.
 
 ---
 
 ## 🛠️ Features
 
-- [Feature 1: User can register and login]
-- [Feature 2: User can register a pet]
-- [Feature 3: User can make a description of pet characteristics]
+- Feature 1: User can register and login
+- Feature 2: User can register a pet
+- Feature 3: User can make a description of pet characteristics
 
 ---
 
@@ -37,11 +37,11 @@
 git clone https://github.com/Os-coda-fofo/petgato-app.git
 ```
 
-[Command to install dependencies]
+Command to install dependencies
 ```bash
 npm install
 ```
-[Command to start the app]
+Command to start the app
 ```bash
 npm run start
 ```
