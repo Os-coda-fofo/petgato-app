@@ -5,6 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SessionProvider } from '../services/auth/ctx';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -31,30 +32,48 @@ export default function Layout() {
   }
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.safeView}>
-        <Stack>
-          <Stack.Screen name="index" options={{ title: "Home", headerShown: false }} />
-          <Stack.Screen 
-            name="login" 
-            options={{ title: "Login", headerShown: false }}
-          />
-          <Stack.Screen 
-            name="login-screen-error"
-            options={{ title: "login-error", headerShown: false }}
-          />
-          <Stack.Screen
-            name="register"
-            options={{ title: "Cadastro", headerShown: false }}
-          />
-          <Stack.Screen
-            name="full-animal-registry"
-            options={{ title: "Registro Animal Completo", headerShown: false }}
-          />
-        </Stack>
-        
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <SessionProvider>
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.safeView}>
+          <Stack>
+            <Stack.Screen name="index" options={{ title: "Home", headerShown: false }} />
+            <Stack.Screen 
+              name="login" 
+              options={{ title: "Login", headerShown: false }}
+            />
+            <Stack.Screen 
+              name="login-screen-error"
+              options={{ title: "login-error", headerShown: false }}
+            />
+            <Stack.Screen
+              name="animalValidation"
+              options={{ title: "Validação-Animal", headerShown: false }}
+            />
+            <Stack.Screen
+              name="register"
+              options={{ title: "Cadastro", headerShown: false }}
+            />
+            <Stack.Screen
+              name="registerAnimal"
+              options={{ title: "Cadastro de animal", headerShown: false }}
+            />
+            <Stack.Screen
+              name="animalsList"
+              options={{ title: "Listagem de animais", headerShown: false }}
+            />
+            <Stack.Screen
+              name="animal/[animalId]"
+              options={{ title: "Validação de animal", headerShown: false }}
+            />
+            <Stack.Screen 
+              name="fullAnimalRegistry" 
+              options={{ title: "Tela de confirmação do animal", headerShown: false }}
+            />
+            
+          </Stack>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </SessionProvider>
   )
 }
 

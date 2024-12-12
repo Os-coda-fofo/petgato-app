@@ -36,6 +36,12 @@ const FullAnimalRegistry = () => {
     );
 }
 
+
+export const screenOptions = {
+    headerShown: false,
+
+};
+
 const styles = StyleSheet.create({
     container: {
       flex: 1,

@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 interface ButtonProps {
   title: string;
   onPress?: () => void;
-  variant?: 'default' | 'facebook' | 'google' | 'main';
+  variant?: 'default' | 'facebook' | 'google' | 'main' | 'yellow' | 'white' | 'fade' | 'transparent';
   textColor?: string;
 }
 
@@ -70,6 +70,18 @@ const styles = StyleSheet.create({
   },
   main: {
     backgroundColor: '#88c9bf',
+  },
+  yellow: {
+    backgroundColor: '#ffd358',
+  },
+  white: {
+    backgroundColor: '#f1f2f2',
+  },
+  fade: {
+    backgroundColor: '#e0e0e0',
+  },
+  transparent: {
+    backgroundColor: 'transparent',
   },
 });
 

@@ -17,7 +17,7 @@ const Home = () => {
         <View style={styles.buttonContainer}>
           <Button title="ADOTAR" onPress={() => router.push('/login-screen-error')} variant="default" />
           <Button title="AJUDAR" onPress={() => router.push('/ajudar')} variant="default" />
-          <Button title="CADASTRAR ANIMAL" onPress={() => router.push('/cadastrar')} variant="default" />
+          <Button title="CADASTRAR ANIMAL" onPress={() => router.push('/registerAnimal')} variant="default" />
         </View>
 
         <Link href={"/login"} style={styles.btnLogin} asChild>
