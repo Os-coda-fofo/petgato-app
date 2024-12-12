@@ -15,7 +15,7 @@ const Home = () => {
         <Text style={[ styles.subtitle, { color: '#757575' }]}> Bem vindo ao Meau! Aqui você pode adotar, doar e ajudar cães e gatos com facilidade. Qual o seu interesse? </Text>
         
         <View style={styles.buttonContainer}>
-          <Button title="ADOTAR" onPress={() => router.push('/login-screen-error')} variant="default" />
+          <Button title="ADOTAR" onPress={() => router.push('/animalsList')} variant="default" />
           <Button title="AJUDAR" onPress={() => router.push('/ajudar')} variant="default" />
           <Button title="CADASTRAR ANIMAL" onPress={() => router.push('/registerAnimal')} variant="default" />
         </View>

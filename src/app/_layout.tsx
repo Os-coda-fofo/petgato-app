@@ -66,7 +66,7 @@ export default function Layout() {
               options={{ title: "Validação de animal", headerShown: false }}
             />
             <Stack.Screen 
-              name="fullAnimalRegistry" 
+              name="full-animal-registry" 
               options={{ title: "Tela de confirmação do animal", headerShown: false }}
             />
             
