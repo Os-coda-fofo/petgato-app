@@ -1,18 +1,43 @@
+import React, { useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Checkbox from 'expo-checkbox';
+import * as ImagePicker from 'expo-image-picker';
 import { Link } from 'expo-router';
-import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 
 const AnimalScreen = () => {
+
+  const [images, setImages] = useState<string[]>([]);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImages(prevImages => [...prevImages, result.assets[0].uri]);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setImages(prevImages => prevImages.filter((_, i) => i !== index));
+  };
+
   const [formState, setFormState] = React.useState({
     name: '',
     saude: '',
     sobre: '',
   })
+
   const [checkboxState, setCheckboxState] = React.useState({
     isGato: false,
     isCachorro: false,
@@ -42,13 +67,73 @@ const AnimalScreen = () => {
     is3mes: false,
     is6mes: false,
   })
+
   const handleCheckboxChange = (key: keyof typeof checkboxState) =>{
+    if (key === 'isCachorro' || key === 'isGato') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        isCachorro: false,
+        isGato: false,
+        [key]: true
+      }))
+    }
+
+    else if (key === 'isMacho' || key === 'isFemea') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        isMacho: false,
+        isFemea: false,
+        [key]: true
+      }))
+    }
+
+    else if (key === 'isPequeno' || key === 'isMedio' || key === 'isGrande') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        isPequeno: false,
+        isMedio: false,
+        isGrande: false,
+        [key]: true
+      }))
+    }
+
+    else if (key === 'isFilhote' || key === 'isAdulto' || key === 'isIdoso') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        isFilhote: false,
+        isAdulto: false,
+        isIdoso: false,
+        [key]: true
+      }))
+    }
+
+    else if (key === 'is1mes' || key === 'is3mes' || key === 'is6mes') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        is1mes: false,
+        is3mes: false,
+        is6mes: false,
+        isAcompanhamento: true,
+        [key]: true
+      }))
+    }
+
+    else if (key === 'isAcompanhamento'){
+      setCheckboxState(prevState => ({
+        ...prevState,
+        is1mes: false,
+        is3mes: false,
+        is6mes: false,
+        [key]: !prevState[key]
+      }))
+    }
+
+    else{
     setCheckboxState(prevState => ({
       ...prevState,
       [key]: !prevState[key]
-      
     }))
-  }
+  }}
 
   const handleFormChange = (key: string, value: string) => {
     setFormState(prevState => ({
@@ -82,10 +167,19 @@ const AnimalScreen = () => {
         
         <View style={styles.imageBox}>
           <View style={{ margin: 40, alignItems: "center"}}>
-          <MaterialIcons name="control-point" size={24} color="#434343" />
-            <Text style={{ color: '#757575', fontFamily: 'Roboto_400Regular', fontSize: 16 }}>adicionar foto</Text>
+            <MaterialIcons name="control-point" size={24} color="#434343" />
+            <Button title="adicionar foto" onPress={pickImage} variant="transparent" />
           </View>
         </View>
+        <ScrollView horizontal>
+              {images.map((uri, index) => (
+                <View key={index} style={styles.imageContainer}>
+                  <Image src={uri} style={styles.image} />
+                  <Button title="Remover" onPress={() => removeImage(index)} variant="transparent" />
+                </View>
+              ))}
+            </ScrollView>
+        
         <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>ESPÉCIE</Text>
         <View style={styles.checkboxline}>
         <Checkbox style={styles.checkbox} value={checkboxState.isCachorro} onValueChange={() => handleCheckboxChange('isCachorro')} />
@@ -222,6 +316,10 @@ const styles = StyleSheet.create({
     left: 15,
     justifyContent: 'space-between',
   },
+  imageContainer: {
+    margin: 10,
+    alignItems: 'center',
+  },
   imageBox: {
     backgroundColor: "#e6e7e7",
     margin: 15,
@@ -233,6 +331,11 @@ const styles = StyleSheet.create({
   },
   paragraph: {
     fontSize: 15,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
   },
   checkbox: {
     margin: 8,
