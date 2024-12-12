@@ -2,7 +2,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Checkbox from 'expo-checkbox';
 import * as ImagePicker from 'expo-image-picker';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import React, { useState } from 'react';
 import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
@@ -327,7 +327,7 @@ const saveAnimalData = async () => {
         <Input placeholder="Compartilhe a história do animal" onChangeText={(value) => handleFormChange('sobre', value)} value={formState.sobre}  />
         </View>
         <View style={styles.registerBtn}>
-          <Button title="COLOCAR PARA ADOÇÃO" onPress={saveAnimalData} variant="yellow" />
+          <Button title="COLOCAR PARA ADOÇÃO" onPress={async () => { await saveAnimalData(); router.push('/full-animal-registry'); }} variant="yellow" />
         </View>
       </View>
       </View> 
