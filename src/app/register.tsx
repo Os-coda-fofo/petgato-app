@@ -1,5 +1,5 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
@@ -21,8 +21,13 @@ const RegisterScreen = () => {
     confirmPassword: '',
   })
   
-  const { signUp, isLoading } = useSession();
+  const { user, signUp, isLoading, redirectTo } = useSession();
   const router = useRouter();
+
+  if (user) {
+    router.replace(redirectTo || '/logged');
+    return null;
+  }
 
   const handleSubmit = async () => {
     const { name, age, email, state, city, address, phone, username, password, confirmPassword } = formState;

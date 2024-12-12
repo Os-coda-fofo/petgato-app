@@ -1,6 +1,6 @@
 import { Roboto_400Regular, Roboto_500Medium, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
@@ -35,33 +35,7 @@ export default function Layout() {
     <SessionProvider>
       <SafeAreaProvider>
         <SafeAreaView style={styles.safeView}>
-          <Stack>
-            <Stack.Screen name="index" options={{ title: "Home", headerShown: false }} />
-            <Stack.Screen 
-              name="login" 
-              options={{ title: "Login", headerShown: false }}
-            />
-            <Stack.Screen 
-              name="login-screen-error"
-              options={{ title: "login-error", headerShown: false }}
-            />
-            <Stack.Screen
-              name="animalInfo"
-              options={{ title: "Detalhes-Animal", headerShown: false }}
-            />
-            <Stack.Screen
-              name="register"
-              options={{ title: "Cadastro", headerShown: false }}
-            />
-            <Stack.Screen
-              name="animalsList"
-              options={{ title: "Listagem de animais", headerShown: false }}
-            />
-            <Stack.Screen
-              name="animal/[animalId]"
-              options={{ title: "Validação de animal", headerShown: false }}
-            />
-          </Stack>
+          <Slot />
         </SafeAreaView>
       </SafeAreaProvider>
     </SessionProvider>
