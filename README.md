@@ -9,10 +9,8 @@
 1. [Introduction](#introduction)
 2. [Features](#features)
 3. [Installation](#installation)
-4. [Usage](#usage)
-5. [Contributing](#contributing)
-6. [License](#license)
-7. [Contact](#contact)
+4. [License](#license)
+5. [Authors](#authors)
 
 ---
 
@@ -52,7 +50,7 @@ npm run start
 ### 📝 License
 This project is licensed under the MIT License - see the LICENSE file for more details.
 
-### 🧑‍💻 Autors
+### 🧑‍💻 Authors
 
 - **Daniel Monteiro:** - <a href="https://www.linkedin.com/in/danielmonteirooo/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a> 
 - **Gustavo Barbosa:** - <a href="https://www.linkedin.com/in/barbosa885/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
