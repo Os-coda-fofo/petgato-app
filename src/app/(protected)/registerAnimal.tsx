@@ -4,8 +4,8 @@ import Checkbox from 'expo-checkbox';
 import { Link } from 'expo-router';
 import React from 'react';
 import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import Button from '../components/Button';
-import Input from '../components/Input';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 
 const AnimalScreen = () => {
   const [formState, setFormState] = React.useState({

@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import React from 'react';
 import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Header from '../components/Header';
+import Header from '../../components/Header';
 
 
 const AnimalInfoScreen = () => {
@@ -13,7 +13,7 @@ const AnimalInfoScreen = () => {
       porte: 'Médio',
       idade: 'Adulto',
       localizacao: 'Samambaia Sul - Distrito Federal',
-      imagem: require('../../assets/bidu.png'),
+      imagem: require('../../../assets/bidu.png'),
     },
     {
       id: 2,
@@ -22,7 +22,7 @@ const AnimalInfoScreen = () => {
       porte: 'Pequeno',
       idade: 'Filhote',
       localizacao: 'Taguatinga Norte - Distrito Federal',
-      imagem: require('../../assets/bidu.png'),
+      imagem: require('../../../assets/bidu.png'),
     },
     {
       id: 3,
@@ -31,7 +31,7 @@ const AnimalInfoScreen = () => {
       porte: 'Grande',
       idade: 'Filhote',
       localizacao: 'Ceilândia Sul - Distrito Federal',
-      imagem: require('../../assets/bidu.png'),
+      imagem: require('../../../assets/bidu.png'),
     },
     {
       id: 4,
@@ -40,7 +40,7 @@ const AnimalInfoScreen = () => {
       porte: 'Pequeno',
       idade: 'Filhote',
       localizacao: 'Gama - Distrito Federal',
-      imagem: require('../../assets/bidu.png'),
+      imagem: require('../../../assets/bidu.png'),
     },
     {
       id: 5,
@@ -49,7 +49,7 @@ const AnimalInfoScreen = () => {
       porte: 'Médio',
       idade: 'Adulto',
       localizacao: 'Samambaia Norte - Distrito Federal',
-      imagem: require('../../assets/bidu.png'),
+      imagem: require('../../../assets/bidu.png'),
     },
 
   ];

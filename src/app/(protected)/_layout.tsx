@@ -20,6 +20,8 @@ export default function ProtectedLayout() {
       <SafeAreaView style={{ flex: 1 }}>
         <Stack>
           <Stack.Screen name="logged" options={{ headerShown: false }} />
+          <Stack.Screen name="animalsList" options={{ headerShown: false }} />
+          <Stack.Screen name="registerAnimal" options={{ headerShown: false }} />
           <Slot/>
         </Stack>
       </SafeAreaView>

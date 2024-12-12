@@ -1,8 +1,8 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import Button from '../../components/Button';
-import Header from '../../components/Header';
+import Button from '../../../components/Button';
+import Header from '../../../components/Header';
 
 
 const AnimalInfoScreen = () => {
@@ -82,7 +82,7 @@ const AnimalInfoScreen = () => {
           
           <Image 
             style={styles.imageBox}
-            source={require('../../../assets/bidu.png')} 
+            source={require('../../../../assets/bidu.png')} 
             resizeMode="cover" />
           
           <View style={styles.body}>
