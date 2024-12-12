@@ -1,13 +1,43 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Checkbox from 'expo-checkbox';
+import * as ImagePicker from 'expo-image-picker';
 import { Link } from 'expo-router';
-import React from 'react';
-import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import React, { useState } from 'react';
+import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import { app, auth } from '../services/auth/firebase-config';
 
 const AnimalScreen = () => {
+
+  const id = auth.currentUser?.uid;
+  const db = getFirestore(app); 
+
+  const [images, setImages] = useState<string[]>([]);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImages(prevImages => [...prevImages, result.assets[0].uri]);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setImages(prevImages => prevImages.filter((_, i) => i !== index));
+  };
+
+
   const [formState, setFormState] = React.useState({
     name: '',
     saude: '',
@@ -43,12 +73,65 @@ const AnimalScreen = () => {
     is6mes: false,
   })
   const handleCheckboxChange = (key: keyof typeof checkboxState) =>{
+    if (key === 'isCachorro' || key === 'isGato') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        isCachorro: false,
+        isGato: false,
+        [key]: true
+      }))
+    }
+    else if (key === 'isMacho' || key === 'isFemea') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        isMacho: false,
+        isFemea: false,
+        [key]: true
+      }))
+    }
+    else if (key === 'isPequeno' || key === 'isMedio' || key === 'isGrande') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        isPequeno: false,
+        isMedio: false,
+        isGrande: false,
+        [key]: true
+      }))
+    }
+    else if (key === 'isFilhote' || key === 'isAdulto' || key === 'isIdoso') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        isFilhote: false,
+        isAdulto: false,
+        isIdoso: false,
+        [key]: true
+      }))
+    }
+    else if (key === 'is1mes' || key === 'is3mes' || key === 'is6mes') {
+      setCheckboxState(prevState => ({
+        ...prevState,
+        is1mes: false,
+        is3mes: false,
+        is6mes: false,
+        isAcompanhamento: true,
+        [key]: true
+      }))
+    }
+    else if (key === 'isAcompanhamento'){
+      setCheckboxState(prevState => ({
+        ...prevState,
+        is1mes: false,
+        is3mes: false,
+        is6mes: false,
+        [key]: !prevState[key]
+      }))
+    }
+    else{
     setCheckboxState(prevState => ({
       ...prevState,
       [key]: !prevState[key]
-      
     }))
-  }
+  }}
 
   const handleFormChange = (key: string, value: string) => {
     setFormState(prevState => ({
@@ -56,6 +139,56 @@ const AnimalScreen = () => {
       [key]: value,
     }))
   }
+
+
+// Função para salvar os dados do animal no Firestore
+const saveAnimalData = async () => {
+  try {
+    // Crie uma referência para o Firestore
+    const animalCollectionRef = collection(db, 'animals');
+    
+    // Crie um objeto com os dados do formulário
+    const animalData = {
+      owner: id,
+      name: formState.name,
+      diseases: formState.saude,
+      about: formState.sobre,
+      species: checkboxState.isCachorro ? 'Cachorro' : checkboxState.isGato ? 'Gato' : '',
+      gender: checkboxState.isMacho ? 'Macho' : checkboxState.isFemea ? 'Fêmea' : '',
+      size: checkboxState.isPequeno ? 'Pequeno' : checkboxState.isMedio ? 'Médio' : checkboxState.isGrande ? 'Grande' : '',
+      photos: images,
+      age: checkboxState.isFilhote ? 'Filhote' : checkboxState.isAdulto ? 'Adulto' : checkboxState.isIdoso ? 'Idoso' : '',
+      brincalhao: checkboxState.isBrincalhao,
+      timido: checkboxState.isTimido,
+      calmo: checkboxState.isCalmo,
+      guarda: checkboxState.isGuarda,
+      amoroso: checkboxState.isAmoroso,
+      preguicoso: checkboxState.isPreguicoso,
+      vacinado: checkboxState.isVacinado,
+      vermifugado: checkboxState.isVermifugado,
+      castrado: checkboxState.isCastrado,
+      doente: checkboxState.isDoente,
+      termo: checkboxState.isTermo,
+      fotos: checkboxState.isFotos,
+      visita: checkboxState.isVisita,
+      acompanhamento: checkboxState.isAcompanhamento,
+      acompanhamentoTempo: checkboxState.is1mes ? '1 mês' : checkboxState.is3mes ? '3 meses' : checkboxState.is6mes ? '6 meses' : '',
+
+    };
+
+    console.log("usuario:", id);
+    console.log('Dados do animal:', animalData);
+    // Adicione os dados do animal na coleção "animals"
+    await addDoc(animalCollectionRef, animalData);
+    
+    console.log('Animal adicionado com sucesso!');
+  } catch (error) {
+    console.error('Erro ao salvar os dados do animal:', error);
+  }
+};
+
+
+  
 
   return (
     <ScrollView style={styles.scroll}>
@@ -82,10 +215,19 @@ const AnimalScreen = () => {
         
         <View style={styles.imageBox}>
           <View style={{ margin: 40, alignItems: "center"}}>
-          <MaterialIcons name="control-point" size={24} color="#434343" />
-            <Text style={{ color: '#757575', fontFamily: 'Roboto_400Regular', fontSize: 16 }}>adicionar foto</Text>
+            <MaterialIcons name="control-point" size={24} color="#434343" />
+            <Button title="adicionar foto" onPress={pickImage} variant="transparent" />
           </View>
         </View>
+        <ScrollView horizontal>
+              {images.map((uri, index) => (
+                <View key={index} style={styles.imageContainer}>
+                  <Image source={{ uri }} style={styles.image} />
+                  <Button title="Remover" onPress={() => removeImage(index)} variant="transparent" />
+                </View>
+              ))}
+            </ScrollView>
+        
         <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>ESPÉCIE</Text>
         <View style={styles.checkboxline}>
         <Checkbox style={styles.checkbox} value={checkboxState.isCachorro} onValueChange={() => handleCheckboxChange('isCachorro')} />
@@ -185,7 +327,7 @@ const AnimalScreen = () => {
         <Input placeholder="Compartilhe a história do animal" onChangeText={(value) => handleFormChange('sobre', value)} value={formState.sobre}  />
         </View>
         <View style={styles.registerBtn}>
-          <Button title="COLOCAR PARA ADOÇÃO" onPress={() => {}} variant="yellow" />
+          <Button title="COLOCAR PARA ADOÇÃO" onPress={saveAnimalData} variant="yellow" />
         </View>
       </View>
       </View> 
@@ -222,6 +364,10 @@ const styles = StyleSheet.create({
     left: 15,
     justifyContent: 'space-between',
   },
+  imageContainer: {
+    margin: 10,
+    alignItems: 'center',
+  },
   imageBox: {
     backgroundColor: "#e6e7e7",
     margin: 15,
@@ -233,6 +379,11 @@ const styles = StyleSheet.create({
   },
   paragraph: {
     fontSize: 15,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
   },
   checkbox: {
     margin: 8,
