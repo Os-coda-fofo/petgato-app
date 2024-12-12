@@ -1,66 +1,88 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import React from 'react';
-import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../../../components/Button';
 import Header from '../../../components/Header';
+import { doc, getDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { db } from '../../../services/auth/firebase-config';
 
 
 const AnimalInfoScreen = () => {
 
   const {animalId} = useLocalSearchParams();
+  interface Pet {
+    owner: string;
+    id: string;
+    name: string;
+    gender: string;
+    size: string;
+    age: string;
+    diseases: string;
+    about: string;
+    species: string;
+    photos: string[];
+
+    brincalhao: boolean;
+    timido: boolean;
+    calmo: boolean;
+    guarda: boolean;
+    amoroso: boolean;
+    preguicoso: boolean;
+    vacinado: boolean;
+    vermifugado: boolean;
+    castrado:boolean;
+    doente: boolean;
+    termo: boolean;
+    fotos: boolean;
+    visita: boolean;
+    acompanhamento: boolean;
+    acompanhamentoTempo: string;
+  }
+  
+  const [pet, setPet] = useState<Pet | null>(null);
+  const [loading, setLoading] = useState(true);
 
   console.log(animalId);
     
-    const mockPets = [
-        {
-          id: 1,
-          nome: 'Bidu',
-          sexo: 'Macho',
-          porte: 'Médio',
-          idade: 'Adulto',
-          localizacao: 'Samambaia Sul - Distrito Federal',
-          castrado: 'Não',
-          vermifugado: 'Sim',
-          vacinado: 'Não',
-          doencas: 'Nenhuma',
-          temperamento: 'Calmo e dócil',
-          exigencias: 'Termo de adoção, fotos da casa, visita prévia e acompanhamento durante três meses',
-          descricao: 'Bidu é um cão muito dócil e de fácil convivência. Adora caminhadas e se dá muito bem com crianças. Tem muito medo de raios e de chuva, nesses momentos ele requer mais atenção. Está disponível para adoção pois eu e minha família o encontramos na rua e não podemos mantê-lo em nossa casa.'
+  useEffect(() => {
+    const fetchPet = async () => {
+      try {
+        const docRef = doc(db, 'animals/'+ animalId);
+        const docSnap = await getDoc(docRef);
 
+        if (docSnap.exists()) {
+          setPet(docSnap.data() as Pet);
+        } else {
+          console.log('Animal não encontrado no banco de dados');
+          setPet(null);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar o animal:', error);
+        setPet(null);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        },
-        {
-          id: 2,
-          nome: 'Branquinha',
-          sexo: 'Fêmea',
-          porte: 'Pequeno',
-          idade: 'Filhote',
-          localizacao: 'Taguatinga Norte - Distrito Federal',
-          castrado: 'Não',
-          vermifugado: 'Sim',
-          vacinado: 'Não',
-          doencas: 'Nenhuma',
-          temperamento: 'Calma e dócil',
-          exigencias: 'Termo de adoção, fotos da casa, visita prévia e acompanhamento durante três meses',
-          descricao: 'Branquinha é uma cadela muito dócil e de fácil convivência. Adora brincar e se dá muito bem com crianças. Está disponível para adoção pois eu e minha família a encontramos na rua e não podemos mantê-la em nossa casa.'
-        },
-        {
-          id: 3,
-          nome: 'Rex',
-          sexo: 'Macho',
-          porte: 'Grande',
-          idade: 'Filhote',
-          localizacao: 'Ceilândia Sul - Distrito Federal',
-          castrado: 'Não',
-          vermifugado: 'Sim',
-          vacinado: 'Não',
-          doencas: 'Nenhuma',
-          temperamento: 'Brincalhão e dócil',
-          exigencias: 'Termo de adoção, fotos da casa, visita prévia e acompanhamento durante três meses',
-          descricao: 'Rex é um cão muito brincalhão e de fácil convivência. Adora brincar e se dá muito bem'
-        },
-      ];
-      const pet = mockPets.find((animal) => animal.id.toString() === animalId.toString());
+    fetchPet();
+  }, [animalId]);
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#f7a800" />
+      </View>
+    );
+  }
+
+  if (!pet) {
+    return (
+      <View style={styles.container}>
+        <Text>Animal não encontrado.</Text>
+      </View>
+    );
+  }
+      //const pet = mockPets.find((animal) => animal.id.toString() === animalId.toString());
 
       if (!pet) {
         return (
@@ -70,76 +92,87 @@ const AnimalInfoScreen = () => {
         );
       }
 
-  
-
   return (
     <ScrollView style={styles.scroll}>
     <View style={styles.container}>
       <StatusBar backgroundColor={"#ffee29b"} barStyle={"light-content"} />
       
         <View key={pet.id}>
-          <Header title={pet.nome} />
+          <Header title={pet.name} />
           
           <Image 
             style={styles.imageBox}
-            source={require('../../../../assets/bidu.png')} 
-            resizeMode="cover" />
+            source={{ uri: pet.photos[0] }} 
+            resizeMode="cover" 
+          />
           
           <View style={styles.body}>
-            <Text style={{color: "#434343", left: 20, fontWeight: 'bold'}}>{pet.nome}</Text>
+            <Text style={{color: "#434343", left: 20, fontWeight: 'bold'}}>{pet.name}</Text>
             <View style={styles.inline}>
               <View style={styles.infoblock}>
                 <Text style={{color: '#f7a800'}}>SEXO</Text>
-                <Text style={{color: "#757575"}}>{pet.sexo}</Text>
+                <Text style={{color: "#757575"}}>{pet.gender}</Text>
               </View>
               <View style={styles.infoblock}>
               <Text style={{color: '#f7a800'}}>PORTE</Text>
-                <Text style={{color: "#757575"}}>{pet.porte}</Text>
+                <Text style={{color: "#757575"}}>{pet.size}</Text>
               </View>
               <View style={styles.infoblock}>
               <Text style={{color: '#f7a800'}}>IDADE</Text>
-                <Text style={{color: "#757575"}}>{pet.idade}</Text>
+                <Text style={{color: "#757575"}}>{pet.age}</Text>
               </View>
-            </View>
-            <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>LOCALIZAÇÃO</Text>
-              <Text style={{color: "#757575"}}>{pet.localizacao}</Text>
             </View>
             <View style={styles.horizontalLine} />
             <View style={styles.inline}>
             <View style={styles.infoblock}>
             <Text style={{color: '#f7a800'}}>CASTRADO</Text>
-              <Text style={{color: "#757575"}}>{pet.castrado}</Text>
+              <Text style={{color: "#757575"}}>{pet.castrado  ? 'Sim' : 'Não'}</Text>
             </View>
             <View style={styles.infoblock}>
             <Text style={{color: '#f7a800'}}>VERMIFUGADO</Text>
-            <Text style={{color: "#757575"}}>{pet.vermifugado}</Text>
+            <Text style={{color: "#757575"}}>{pet.vermifugado ? 'Sim' : 'Não'}</Text>
             </View>
             </View>
             <View style={styles.inline}>
             <View style={styles.infoblock}>
             <Text style={{color: '#f7a800'}}>VACINADO</Text>
-            <Text style={{color: "#757575"}}>{pet.vacinado}</Text>
+            <Text style={{color: "#757575"}}>{pet.vacinado  ? 'Sim' : 'Não'}</Text>
             </View>
             <View style={styles.infoblock}>
             <Text style={{color: '#f7a800'}}>DOENÇAS</Text>
-            <Text style={{color: "#757575"}}>{pet.doencas}</Text>
+            <Text style={{color: "#757575"}}>{pet.doente  ? 'Sim' : 'Nenhuma'}</Text>
             </View>
             </View>
             <View style={styles.horizontalLine} />
             <View style={styles.infoblock}>
             <Text style={{color: '#f7a800'}}>TEMPERAMENTO</Text>
-            <Text style={{color: "#757575"}}>{pet.temperamento}</Text>
+            <Text style={{color: "#757575"}}>{[
+    pet.brincalhao && "brincalhão",
+    pet.timido && "tímido",
+    pet.calmo && "calmo",
+    pet.guarda && "guarda",
+    pet.amoroso && "amoroso",
+    pet.preguicoso && "preguiçoso",
+  ]
+    .filter(Boolean)
+    .join(", ")}</Text>
             </View>
             <View style={styles.horizontalLine} />
             <View style={styles.infoblock}>
             <Text style={{color: '#f7a800'}}>EXIGÊNCIAS DO DOADOR</Text>
-            <Text style={{maxWidth: 320, color: "#434343"}}>{pet.exigencias}</Text>
+            <Text style={{maxWidth: 320, color: "#434343"}}>{[
+    pet.termo && "Termo de adoção",
+    pet.fotos && "Fotos da casa",
+    pet.visita && "Visita prévia",
+    pet.acompanhamento && `Acompanhamento durante ${pet.acompanhamentoTempo}`,
+  ]
+    .filter(Boolean)
+    .join(", ")}</Text>
             </View>
             <View style={styles.horizontalLine} />
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>MAIS SOBRE {pet.nome.toUpperCase()}</Text>
-            <Text style={{maxWidth: 320, color: "#434343"}}>{pet.descricao}</Text>
+            <Text style={{color: '#f7a800'}}>MAIS SOBRE {pet.name.toUpperCase()}</Text>
+            <Text style={{maxWidth: 320, color: "#434343"}}>{pet.about}</Text>
             </View>
             <View style={styles.buttonContainer}>
               <Button title="PRETENTO ADOTAR" onPress={() => router.push('/confirmacao')} variant="default" />

@@ -3,7 +3,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Checkbox from 'expo-checkbox';
 import * as ImagePicker from 'expo-image-picker';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
@@ -11,6 +11,7 @@ import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import { app, auth } from '../../services/auth/firebase-config';
 
 const AnimalScreen = () => {
+  const router = useRouter();
 
   const id = auth.currentUser?.uid;
   const db = getFirestore(app); 
@@ -18,7 +19,6 @@ const AnimalScreen = () => {
   const [images, setImages] = useState<string[]>([]);
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -149,6 +149,11 @@ const AnimalScreen = () => {
 
     // Função para salvar os dados do animal no Firestore
     const saveAnimalData = async () => {
+      if (!id) {
+        console.error('Usuário não está logado');
+        return;
+      }
+
       try {
         // Crie uma referência para o Firestore
         const animalCollectionRef = collection(db, 'animals');
@@ -179,10 +184,10 @@ const AnimalScreen = () => {
           visita: checkboxState.isVisita,
           acompanhamento: checkboxState.isAcompanhamento,
           acompanhamentoTempo: checkboxState.is1mes ? '1 mês' : checkboxState.is3mes ? '3 meses' : checkboxState.is6mes ? '6 meses' : '',
-
+          createdAt: new Date().toISOString(),
         };
 
-        console.log("usuario:", id);
+        console.log("Usuário:", id);
         console.log('Dados do animal:', animalData);
         await addDoc(animalCollectionRef, animalData);
 
@@ -208,7 +213,6 @@ const AnimalScreen = () => {
 
         
         <View style={styles.inputContainer}>
-        <Text style={{ color: '#434343', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>Adoção</Text>
         <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>NOME DO ANIMAL</Text>
 
         <Input placeholder="Nome completo" onChangeText={(value) => handleFormChange('name', value)} value={formState.name}  />
@@ -329,7 +333,7 @@ const AnimalScreen = () => {
         <Input placeholder="Compartilhe a história do animal" onChangeText={(value) => handleFormChange('sobre', value)} value={formState.sobre}  />
         </View>
         <View style={styles.registerBtn}>
-          <Button title="COLOCAR PARA ADOÇÃO" onPress={saveAnimalData} variant="yellow" />
+          <Button title="COLOCAR PARA ADOÇÃO" onPress={async () => { await saveAnimalData(); router.push('/full-animal-registry'); }} variant="yellow" />
         </View>
       </View>
       </View> 

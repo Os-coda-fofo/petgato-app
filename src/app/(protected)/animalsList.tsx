@@ -6,6 +6,7 @@ import Header from '../../components/Header';
 import { db } from '../../services/auth/firebase-config';
 
 const AnimalInfoScreen = () => {
+
   interface Pet {
     id: string;
     name: string;
@@ -57,16 +58,16 @@ const AnimalInfoScreen = () => {
           <View>
             <TouchableOpacity
               key={pet.id}
-              onPress={() => router.push(`./animal/${pet.id}`)} // Navega para a tela de detalhes
-              >
+              onPress={() => router.push(`./animal/${pet.id}`)}
+            >
             <Text style={styles.name}>{pet.name}</Text>
             <Image source={{ uri: pet.photos[0] }} style={styles.image} />
             <View style={{flexDirection:"row",justifyContent:"space-between",marginHorizontal:50}}>
             <Text style={styles.info}>{pet.gender}</Text>
             <Text style={styles.info}>{pet.age}</Text>
             <Text style={styles.info}>{pet.size}</Text>
-            </View>
-            </TouchableOpacity>
+          </View>
+          </TouchableOpacity>
           </View>
         </View>
       ))}
@@ -94,8 +95,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     overflow: 'hidden',
     width: '90%',
-    elevation: 4, // Sombra para Android
-    shadowColor: '#000', // Sombra para iOS
+    elevation: 4,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
