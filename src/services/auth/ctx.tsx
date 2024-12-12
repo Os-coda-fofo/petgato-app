@@ -1,16 +1,19 @@
-import { User, onAuthStateChanged, signInWithEmailAndPassword, signOut as firebaseSignOut } from 'firebase/auth';
-import { auth } from './firebase-config';
+import { User, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut } from 'firebase/auth';
+import { auth, db } from './firebase-config';
+import { doc, setDoc } from 'firebase/firestore';
 import React, { useContext, createContext, useState, useEffect, type PropsWithChildren } from 'react';
 
 const AuthContext = createContext<{
   user: any;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, userData: object) => Promise<void>;
   signOut: () => Promise<void>;
 }>({
   user: null,
   isLoading: true,
   signIn: async () => {},
+  signUp: async () => {},
   signOut: async () => {},
 });
 
@@ -42,10 +45,41 @@ const SessionProvider = ({ children }: PropsWithChildren) => {
     setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log('Logado com sucesso!');
+
+      console.log('Usuário logado com sucesso!');
       console.log('Usuário:', auth.currentUser);
     } catch (error) {
-      console.error('Erro de login', error);
+      if (error.code === 'auth/invalid-email') {
+        alert('E-mail inválido . Por favor, verifique o e-mail fornecido.');
+      } else if (error.code === 'auth/wrong-password') {
+        alert('Senha incorreta. Tente novamente.');
+      } else {
+        alert('Erro ao fazer login. Tente novamente.');
+      }
+    }
+      finally {
+        setIsLoading(false);
+      }
+  }
+
+  // Função para criar nova conta e salvar dados no Firestore
+  const signUp = async (email: string, password: string, userData: object) => {
+    setIsLoading(true);
+    try {
+      // Cria o usuário com email e senha
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const { uid } = userCredential.user;
+
+      // Salva os dados adicionais do usuário no Firestore
+      await setDoc(doc(db, 'users', uid), {
+        email,
+        ...userData, // Inclui os dados adicionais
+        createdAt: new Date(),
+      });
+
+      console.log('Conta criada com sucesso!');
+    } catch (error) {
+      console.error('Erro ao criar conta', error);
     } finally {
       setIsLoading(false);
     }
@@ -65,10 +99,11 @@ const SessionProvider = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, isLoading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
 export { useSession, SessionProvider };
+

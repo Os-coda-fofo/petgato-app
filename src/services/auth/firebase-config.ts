@@ -1,5 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { initializeAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDmfXZtHpDVGnb_sjf0YT49k4XNb0Mn4yQ",
   authDomain: "petgato-app.firebaseapp.com",
@@ -11,7 +13,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = initializeAuth(app, {
-});
+const auth = initializeAuth(app);
+const db = getFirestore(app);
 
-export { app, auth };
+export { app, auth, db };
