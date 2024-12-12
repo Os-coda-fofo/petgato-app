@@ -1,5 +1,6 @@
+import { router } from 'expo-router';
 import React from 'react';
-import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../components/Header';
 
 
@@ -64,6 +65,10 @@ const AnimalInfoScreen = () => {
         <View key={pet.id} style={styles.card}>
           
           <View>
+            <TouchableOpacity
+              key={pet.id}
+              onPress={() => router.push(`./animal/${pet.id}`)} // Navega para a tela de detalhes
+              >
             <Text style={styles.name}>{pet.nome}</Text>
             <Image source={pet.imagem} style={styles.image} />
             <View style={{flexDirection:"row",justifyContent:"space-between",marginHorizontal:50}}>
@@ -72,6 +77,7 @@ const AnimalInfoScreen = () => {
             <Text style={styles.info}>{pet.porte}</Text>
             </View>
             <Text style={[styles.info,{alignSelf:"center"}]}>{pet.localizacao}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       ))}
