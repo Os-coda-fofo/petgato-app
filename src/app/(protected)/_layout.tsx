@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect, Slot, Stack } from 'expo-router';
 import { useSession } from '../../services/auth/ctx';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProtectedLayout() {
   const { user, isLoading } = useSession();
@@ -14,8 +15,14 @@ export default function ProtectedLayout() {
   }
 
   return (
-    <Stack>
-      <Slot />
-    </Stack>
+
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Stack>
+          <Stack.Screen name="logged" options={{ headerShown: false }} />
+          <Slot/>
+        </Stack>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
