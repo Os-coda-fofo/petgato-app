@@ -151,12 +151,28 @@ const AnimalInfoScreen = () => {
             <View style={styles.horizontalLine} />
             <View style={styles.infoblock}>
             <Text style={{color: '#f7a800'}}>TEMPERAMENTO</Text>
-            <Text style={{color: "#757575"}}>{pet.brincalhao ? "bricalhao, ": "" + pet.timido ? "timido, " : "" + pet.calmo ? "calmo, " : "" + pet.guarda ? "guarda, " : "" + pet.amoroso ? "amoroso, " : '' + pet.preguicoso ? "preguiçoiso" : ""}</Text>
+            <Text style={{color: "#757575"}}>{[
+    pet.brincalhao && "brincalhão",
+    pet.timido && "tímido",
+    pet.calmo && "calmo",
+    pet.guarda && "guarda",
+    pet.amoroso && "amoroso",
+    pet.preguicoso && "preguiçoso",
+  ]
+    .filter(Boolean)
+    .join(", ")}</Text>
             </View>
             <View style={styles.horizontalLine} />
             <View style={styles.infoblock}>
             <Text style={{color: '#f7a800'}}>EXIGÊNCIAS DO DOADOR</Text>
-            <Text style={{maxWidth: 320, color: "#434343"}}>{pet.termo ? "Termo de adoção, " : "" + pet.fotos ? "Fotos da casa, " : '' + pet.visita ? "visita prévia, " : "" + pet.acompanhamento ? "acompanhamento durante" : "" + pet.acompanhamentoTempo}</Text>
+            <Text style={{maxWidth: 320, color: "#434343"}}>{[
+    pet.termo && "Termo de adoção",
+    pet.fotos && "Fotos da casa",
+    pet.visita && "Visita prévia",
+    pet.acompanhamento && `Acompanhamento durante ${pet.acompanhamentoTempo}`,
+  ]
+    .filter(Boolean)
+    .join(", ")}</Text>
             </View>
             <View style={styles.horizontalLine} />
             <View style={styles.infoblock}>

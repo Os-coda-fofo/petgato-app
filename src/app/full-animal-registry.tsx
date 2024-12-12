@@ -30,7 +30,7 @@ const FullAnimalRegistry = () => {
                         em contato!</Text>
 
         <View style={styles.buttonContainer}>
-          <Button title="MEUS PETS" onPress={() => router.push('/login')} variant="default"  />
+          <Button title="MEUS PETS" onPress={() => router.push('/mypets')} variant="default"  />
         </View>
         </View>
     );

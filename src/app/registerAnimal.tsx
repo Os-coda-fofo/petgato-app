@@ -206,7 +206,6 @@ const saveAnimalData = async () => {
 
         
         <View style={styles.inputContainer}>
-        <Text style={{ color: '#434343', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>Adoção</Text>
         <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>NOME DO ANIMAL</Text>
 
         <Input placeholder="Nome completo" onChangeText={(value) => handleFormChange('name', value)} value={formState.name}  />
