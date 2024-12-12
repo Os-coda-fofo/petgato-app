@@ -46,13 +46,21 @@ export default function Layout() {
               options={{ title: "login-error", headerShown: false }}
             />
             <Stack.Screen
+              name="animalInfo"
+              options={{ title: "Detalhes-Animal", headerShown: false }}
+            />
+            <Stack.Screen
               name="register"
               options={{ title: "Cadastro", headerShown: false }}
             />
             <Stack.Screen
-            name="registerAnimal"
-            options={{ title: "Cadastro do Animal", headerShown: false }}
-          />
+              name="animalsList"
+              options={{ title: "Listagem de animais", headerShown: false }}
+            />
+            <Stack.Screen
+              name="animal/[animalId]"
+              options={{ title: "Validação de animal", headerShown: false }}
+            />
           </Stack>
         </SafeAreaView>
       </SafeAreaProvider>
