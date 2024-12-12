@@ -4,11 +4,16 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Checkbox from 'expo-checkbox';
 import * as ImagePicker from 'expo-image-picker';
 import { Link } from 'expo-router';
-import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import { app, auth } from '../../services/auth/firebase-config';
 
 const AnimalScreen = () => {
+
+  const id = auth.currentUser?.uid;
+  const db = getFirestore(app); 
 
   const [images, setImages] = useState<string[]>([]);
 
@@ -129,18 +134,63 @@ const AnimalScreen = () => {
     }
 
     else{
-    setCheckboxState(prevState => ({
-      ...prevState,
-      [key]: !prevState[key]
-    }))
-  }}
+      setCheckboxState(prevState => ({
+        ...prevState,
+        [key]: !prevState[key]
+      }))
+    }}
 
-  const handleFormChange = (key: string, value: string) => {
-    setFormState(prevState => ({
-      ...prevState,
-      [key]: value,
-    }))
-  }
+    const handleFormChange = (key: string, value: string) => {
+      setFormState(prevState => ({
+        ...prevState,
+        [key]: value,
+      }))
+    }
+
+    // Função para salvar os dados do animal no Firestore
+    const saveAnimalData = async () => {
+      try {
+        // Crie uma referência para o Firestore
+        const animalCollectionRef = collection(db, 'animals');
+
+        // Crie um objeto com os dados do formulário
+        const animalData = {
+          owner: id,
+          name: formState.name,
+          diseases: formState.saude,
+          about: formState.sobre,
+          species: checkboxState.isCachorro ? 'Cachorro' : checkboxState.isGato ? 'Gato' : '',
+          gender: checkboxState.isMacho ? 'Macho' : checkboxState.isFemea ? 'Fêmea' : '',
+          size: checkboxState.isPequeno ? 'Pequeno' : checkboxState.isMedio ? 'Médio' : checkboxState.isGrande ? 'Grande' : '',
+          photos: images,
+          age: checkboxState.isFilhote ? 'Filhote' : checkboxState.isAdulto ? 'Adulto' : checkboxState.isIdoso ? 'Idoso' : '',
+          brincalhao: checkboxState.isBrincalhao,
+          timido: checkboxState.isTimido,
+          calmo: checkboxState.isCalmo,
+          guarda: checkboxState.isGuarda,
+          amoroso: checkboxState.isAmoroso,
+          preguicoso: checkboxState.isPreguicoso,
+          vacinado: checkboxState.isVacinado,
+          vermifugado: checkboxState.isVermifugado,
+          castrado: checkboxState.isCastrado,
+          doente: checkboxState.isDoente,
+          termo: checkboxState.isTermo,
+          fotos: checkboxState.isFotos,
+          visita: checkboxState.isVisita,
+          acompanhamento: checkboxState.isAcompanhamento,
+          acompanhamentoTempo: checkboxState.is1mes ? '1 mês' : checkboxState.is3mes ? '3 meses' : checkboxState.is6mes ? '6 meses' : '',
+
+        };
+
+        console.log("usuario:", id);
+        console.log('Dados do animal:', animalData);
+        await addDoc(animalCollectionRef, animalData);
+
+        console.log('Animal adicionado com sucesso!');
+      } catch (error) {
+        console.error('Erro ao salvar os dados do animal:', error);
+      }
+    };
 
   return (
     <ScrollView style={styles.scroll}>
@@ -174,7 +224,7 @@ const AnimalScreen = () => {
         <ScrollView horizontal>
               {images.map((uri, index) => (
                 <View key={index} style={styles.imageContainer}>
-                  <Image src={uri} style={styles.image} />
+                  <Image source={{ uri }} style={styles.image} />
                   <Button title="Remover" onPress={() => removeImage(index)} variant="transparent" />
                 </View>
               ))}
@@ -279,7 +329,7 @@ const AnimalScreen = () => {
         <Input placeholder="Compartilhe a história do animal" onChangeText={(value) => handleFormChange('sobre', value)} value={formState.sobre}  />
         </View>
         <View style={styles.registerBtn}>
-          <Button title="COLOCAR PARA ADOÇÃO" onPress={() => {}} variant="yellow" />
+          <Button title="COLOCAR PARA ADOÇÃO" onPress={saveAnimalData} variant="yellow" />
         </View>
       </View>
       </View> 
