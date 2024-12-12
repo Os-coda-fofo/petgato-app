@@ -1,12 +1,16 @@
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import Button from '../components/Button';
-import Header from '../components/Header';
+import Button from '../../components/Button';
+import Header from '../../components/Header';
 
 
 const AnimalInfoScreen = () => {
 
+  const {animalId} = useLocalSearchParams();
+
+  console.log(animalId);
+    
     const mockPets = [
         {
           id: 1,
@@ -25,9 +29,46 @@ const AnimalInfoScreen = () => {
 
 
         },
-        // Adicione mais pets conforme necessário
+        {
+          id: 2,
+          nome: 'Branquinha',
+          sexo: 'Fêmea',
+          porte: 'Pequeno',
+          idade: 'Filhote',
+          localizacao: 'Taguatinga Norte - Distrito Federal',
+          castrado: 'Não',
+          vermifugado: 'Sim',
+          vacinado: 'Não',
+          doencas: 'Nenhuma',
+          temperamento: 'Calma e dócil',
+          exigencias: 'Termo de adoção, fotos da casa, visita prévia e acompanhamento durante três meses',
+          descricao: 'Branquinha é uma cadela muito dócil e de fácil convivência. Adora brincar e se dá muito bem com crianças. Está disponível para adoção pois eu e minha família a encontramos na rua e não podemos mantê-la em nossa casa.'
+        },
+        {
+          id: 3,
+          nome: 'Rex',
+          sexo: 'Macho',
+          porte: 'Grande',
+          idade: 'Filhote',
+          localizacao: 'Ceilândia Sul - Distrito Federal',
+          castrado: 'Não',
+          vermifugado: 'Sim',
+          vacinado: 'Não',
+          doencas: 'Nenhuma',
+          temperamento: 'Brincalhão e dócil',
+          exigencias: 'Termo de adoção, fotos da casa, visita prévia e acompanhamento durante três meses',
+          descricao: 'Rex é um cão muito brincalhão e de fácil convivência. Adora brincar e se dá muito bem'
+        },
       ];
+      const pet = mockPets.find((animal) => animal.id.toString() === animalId.toString());
 
+      if (!pet) {
+        return (
+          <View style={styles.container}>
+            <Text>Animal não encontrado.</Text>
+          </View>
+        );
+      }
 
   
 
@@ -35,13 +76,13 @@ const AnimalInfoScreen = () => {
     <ScrollView style={styles.scroll}>
     <View style={styles.container}>
       <StatusBar backgroundColor={"#ffee29b"} barStyle={"light-content"} />
-      {mockPets.map((pet) => (
-        <View>
+      
+        <View key={pet.id}>
           <Header title={pet.nome} />
           
           <Image 
             style={styles.imageBox}
-            source={require('../../assets/bidu.png')} 
+            source={require('../../../assets/bidu.png')} 
             resizeMode="cover" />
           
           <View style={styles.body}>
@@ -105,7 +146,7 @@ const AnimalInfoScreen = () => {
             </View>
           </View>    
         </View>
-        ))}
+        
       
     </View>
     </ScrollView>
