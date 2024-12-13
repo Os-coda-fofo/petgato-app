@@ -1,10 +1,10 @@
 import { router, useLocalSearchParams } from 'expo-router';
+import Button from '../../../components/Button';
+import Header from '../../../components/Header';
 import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import Button from '../../components/Button';
-import Header from '../../components/Header';
-import { db } from '../../services/auth/firebase-config';
+import { db } from '../../../services/auth/firebase-config';
 
 
 const AnimalInfoScreen = () => {
@@ -82,10 +82,6 @@ const AnimalInfoScreen = () => {
       </View>
     );
   }
-
-      
-      
-      
       //const pet = mockPets.find((animal) => animal.id.toString() === animalId.toString());
 
       if (!pet) {
@@ -95,8 +91,6 @@ const AnimalInfoScreen = () => {
           </View>
         );
       }
-
-  
 
   return (
     <ScrollView style={styles.scroll}>
@@ -109,7 +103,8 @@ const AnimalInfoScreen = () => {
           <Image 
             style={styles.imageBox}
             source={{ uri: pet.photos[0] }} 
-            resizeMode="cover" />
+            resizeMode="cover" 
+          />
           
           <View style={styles.body}>
             <Text style={{color: "#434343", left: 20, fontWeight: 'bold'}}>{pet.name}</Text>

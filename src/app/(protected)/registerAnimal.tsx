@@ -1,16 +1,17 @@
+import React, { useState } from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Checkbox from 'expo-checkbox';
 import * as ImagePicker from 'expo-image-picker';
-import { Link, router } from 'expo-router';
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
-import React, { useState } from 'react';
+import { Link, useRouter } from 'expo-router';
 import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import { app, auth } from '../services/auth/firebase-config';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import { app, auth } from '../../services/auth/firebase-config';
 
 const AnimalScreen = () => {
+  const router = useRouter();
 
   const id = auth.currentUser?.uid;
   const db = getFirestore(app); 
@@ -18,7 +19,6 @@ const AnimalScreen = () => {
   const [images, setImages] = useState<string[]>([]);
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -37,12 +37,12 @@ const AnimalScreen = () => {
     setImages(prevImages => prevImages.filter((_, i) => i !== index));
   };
 
-
   const [formState, setFormState] = React.useState({
     name: '',
     saude: '',
     sobre: '',
   })
+
   const [checkboxState, setCheckboxState] = React.useState({
     isGato: false,
     isCachorro: false,
@@ -72,6 +72,7 @@ const AnimalScreen = () => {
     is3mes: false,
     is6mes: false,
   })
+
   const handleCheckboxChange = (key: keyof typeof checkboxState) =>{
     if (key === 'isCachorro' || key === 'isGato') {
       setCheckboxState(prevState => ({
@@ -81,6 +82,7 @@ const AnimalScreen = () => {
         [key]: true
       }))
     }
+
     else if (key === 'isMacho' || key === 'isFemea') {
       setCheckboxState(prevState => ({
         ...prevState,
@@ -89,6 +91,7 @@ const AnimalScreen = () => {
         [key]: true
       }))
     }
+
     else if (key === 'isPequeno' || key === 'isMedio' || key === 'isGrande') {
       setCheckboxState(prevState => ({
         ...prevState,
@@ -98,6 +101,7 @@ const AnimalScreen = () => {
         [key]: true
       }))
     }
+
     else if (key === 'isFilhote' || key === 'isAdulto' || key === 'isIdoso') {
       setCheckboxState(prevState => ({
         ...prevState,
@@ -107,6 +111,7 @@ const AnimalScreen = () => {
         [key]: true
       }))
     }
+
     else if (key === 'is1mes' || key === 'is3mes' || key === 'is6mes') {
       setCheckboxState(prevState => ({
         ...prevState,
@@ -117,6 +122,7 @@ const AnimalScreen = () => {
         [key]: true
       }))
     }
+
     else if (key === 'isAcompanhamento'){
       setCheckboxState(prevState => ({
         ...prevState,
@@ -126,69 +132,70 @@ const AnimalScreen = () => {
         [key]: !prevState[key]
       }))
     }
+
     else{
-    setCheckboxState(prevState => ({
-      ...prevState,
-      [key]: !prevState[key]
-    }))
-  }}
+      setCheckboxState(prevState => ({
+        ...prevState,
+        [key]: !prevState[key]
+      }))
+    }}
 
-  const handleFormChange = (key: string, value: string) => {
-    setFormState(prevState => ({
-      ...prevState,
-      [key]: value,
-    }))
-  }
+    const handleFormChange = (key: string, value: string) => {
+      setFormState(prevState => ({
+        ...prevState,
+        [key]: value,
+      }))
+    }
 
+    // Função para salvar os dados do animal no Firestore
+    const saveAnimalData = async () => {
+      if (!id) {
+        console.error('Usuário não está logado');
+        return;
+      }
 
-// Função para salvar os dados do animal no Firestore
-const saveAnimalData = async () => {
-  try {
-    // Crie uma referência para o Firestore
-    const animalCollectionRef = collection(db, 'animals');
-    
-    // Crie um objeto com os dados do formulário
-    const animalData = {
-      owner: id,
-      name: formState.name,
-      diseases: formState.saude,
-      about: formState.sobre,
-      species: checkboxState.isCachorro ? 'Cachorro' : checkboxState.isGato ? 'Gato' : '',
-      gender: checkboxState.isMacho ? 'Macho' : checkboxState.isFemea ? 'Fêmea' : '',
-      size: checkboxState.isPequeno ? 'Pequeno' : checkboxState.isMedio ? 'Médio' : checkboxState.isGrande ? 'Grande' : '',
-      photos: images,
-      age: checkboxState.isFilhote ? 'Filhote' : checkboxState.isAdulto ? 'Adulto' : checkboxState.isIdoso ? 'Idoso' : '',
-      brincalhao: checkboxState.isBrincalhao,
-      timido: checkboxState.isTimido,
-      calmo: checkboxState.isCalmo,
-      guarda: checkboxState.isGuarda,
-      amoroso: checkboxState.isAmoroso,
-      preguicoso: checkboxState.isPreguicoso,
-      vacinado: checkboxState.isVacinado,
-      vermifugado: checkboxState.isVermifugado,
-      castrado: checkboxState.isCastrado,
-      doente: checkboxState.isDoente,
-      termo: checkboxState.isTermo,
-      fotos: checkboxState.isFotos,
-      visita: checkboxState.isVisita,
-      acompanhamento: checkboxState.isAcompanhamento,
-      acompanhamentoTempo: checkboxState.is1mes ? '1 mês' : checkboxState.is3mes ? '3 meses' : checkboxState.is6mes ? '6 meses' : '',
+      try {
+        // Crie uma referência para o Firestore
+        const animalCollectionRef = collection(db, 'animals');
 
+        // Crie um objeto com os dados do formulário
+        const animalData = {
+          owner: id,
+          name: formState.name,
+          diseases: formState.saude,
+          about: formState.sobre,
+          species: checkboxState.isCachorro ? 'Cachorro' : checkboxState.isGato ? 'Gato' : '',
+          gender: checkboxState.isMacho ? 'Macho' : checkboxState.isFemea ? 'Fêmea' : '',
+          size: checkboxState.isPequeno ? 'Pequeno' : checkboxState.isMedio ? 'Médio' : checkboxState.isGrande ? 'Grande' : '',
+          photos: images,
+          age: checkboxState.isFilhote ? 'Filhote' : checkboxState.isAdulto ? 'Adulto' : checkboxState.isIdoso ? 'Idoso' : '',
+          brincalhao: checkboxState.isBrincalhao,
+          timido: checkboxState.isTimido,
+          calmo: checkboxState.isCalmo,
+          guarda: checkboxState.isGuarda,
+          amoroso: checkboxState.isAmoroso,
+          preguicoso: checkboxState.isPreguicoso,
+          vacinado: checkboxState.isVacinado,
+          vermifugado: checkboxState.isVermifugado,
+          castrado: checkboxState.isCastrado,
+          doente: checkboxState.isDoente,
+          termo: checkboxState.isTermo,
+          fotos: checkboxState.isFotos,
+          visita: checkboxState.isVisita,
+          acompanhamento: checkboxState.isAcompanhamento,
+          acompanhamentoTempo: checkboxState.is1mes ? '1 mês' : checkboxState.is3mes ? '3 meses' : checkboxState.is6mes ? '6 meses' : '',
+          createdAt: new Date().toISOString(),
+        };
+
+        console.log("Usuário:", id);
+        console.log('Dados do animal:', animalData);
+        await addDoc(animalCollectionRef, animalData);
+
+        console.log('Animal adicionado com sucesso!');
+      } catch (error) {
+        console.error('Erro ao salvar os dados do animal:', error);
+      }
     };
-
-    console.log("usuario:", id);
-    console.log('Dados do animal:', animalData);
-    // Adicione os dados do animal na coleção "animals"
-    await addDoc(animalCollectionRef, animalData);
-    
-    console.log('Animal adicionado com sucesso!');
-  } catch (error) {
-    console.error('Erro ao salvar os dados do animal:', error);
-  }
-};
-
-
-  
 
   return (
     <ScrollView style={styles.scroll}>

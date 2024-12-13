@@ -22,14 +22,8 @@ const AnimalValidationScreen = () => {
           temperamento: 'Calmo e dócil',
           exigencias: 'Termo de adoção, fotos da casa, visita prévia e acompanhamento durante três meses',
           descricao: 'Bidu é um cão muito dócil e de fácil convivência. Adora caminhadas e se dá muito bem com crianças. Tem muito medo de raios e de chuva, nesses momentos ele requer mais atenção. Está disponível para adoção pois eu e minha família o encontramos na rua e não podemos mantê-lo em nossa casa.'
-
-
         },
-        // Adicione mais pets conforme necessário
       ];
-
-
-  
 
   return (
     <ScrollView style={styles.scroll}>

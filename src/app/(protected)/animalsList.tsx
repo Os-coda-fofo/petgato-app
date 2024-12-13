@@ -2,10 +2,8 @@ import { router } from 'expo-router';
 import { collection, getDocs } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Header from '../components/Header';
-import { db } from '../services/auth/firebase-config';
-
-
+import Header from '../../components/Header';
+import { db } from '../../services/auth/firebase-config';
 
 const AnimalInfoScreen = () => {
 
@@ -47,7 +45,6 @@ const AnimalInfoScreen = () => {
     return <ActivityIndicator size="large" color="#88c9bf" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />;
   }
 
-
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.container}>
@@ -61,16 +58,16 @@ const AnimalInfoScreen = () => {
           <View>
             <TouchableOpacity
               key={pet.id}
-              onPress={() => router.push(`./animal/${pet.id}`)} // Navega para a tela de detalhes
-              >
+              onPress={() => router.push(`./animal/${pet.id}`)}
+            >
             <Text style={styles.name}>{pet.name}</Text>
             <Image source={{ uri: pet.photos[0] }} style={styles.image} />
             <View style={{flexDirection:"row",justifyContent:"space-between",marginHorizontal:50}}>
             <Text style={styles.info}>{pet.gender}</Text>
             <Text style={styles.info}>{pet.age}</Text>
             <Text style={styles.info}>{pet.size}</Text>
-            </View>
-            </TouchableOpacity>
+          </View>
+          </TouchableOpacity>
           </View>
         </View>
       ))}
@@ -81,15 +78,16 @@ const AnimalInfoScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'relative',
-        backgroundColor: '#fafafa',
-      },
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    backgroundColor: '#fafafa',
+  },
+
   card: {
     backgroundColor: '#fff',
-    
+
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     borderTopLeftRadius: 3,
@@ -97,8 +95,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     overflow: 'hidden',
     width: '90%',
-    elevation: 4, // Sombra para Android
-    shadowColor: '#000', // Sombra para iOS
+    elevation: 4,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -109,7 +107,7 @@ const styles = StyleSheet.create({
     height: 150,
     resizeMode: 'cover',
   },
-  
+
   name: {
     backgroundColor: '#fee29b',
     fontSize: 18,
@@ -117,17 +115,17 @@ const styles = StyleSheet.create({
     color: '#333',
     padding: 5,
   },
+
   info: {
     fontSize: 14,
     color: '#555',
     marginBottom: 4,
   },
+
   scroll: {
     flex: 1,
   },
 });
-
-
 
 export default AnimalInfoScreen;
 

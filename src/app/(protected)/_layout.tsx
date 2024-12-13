@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Slot, Stack } from 'expo-router';
+import { Redirect, Slot } from 'expo-router';
 import { useSession } from '../../services/auth/ctx';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
@@ -18,11 +18,12 @@ export default function ProtectedLayout() {
 
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1 }}>
-        <Stack>
-          <Stack.Screen name="logged" options={{ headerShown: false }} />
-          <Slot/>
-        </Stack>
+        <Slot/>
       </SafeAreaView>
     </SafeAreaProvider>
   );
 }
+
+export const screenOptions = {
+  headerShown: false,
+};
