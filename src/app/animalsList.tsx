@@ -14,7 +14,7 @@ const AnimalInfoScreen = () => {
     age: string;
     size: string;
     owner: string;
-    localidade: string;
+    city: string;
   }
   const [pets, setPets] = useState<Pet[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,10 +30,10 @@ const AnimalInfoScreen = () => {
             let localidade = 'Não informada';
 
             if (data.owner) {
-              const ownerDoc = await getDoc(doc(db, 'owners', data.owner));
+              const ownerDoc = await getDoc(doc(db, 'users', data.owner));
               if (ownerDoc.exists()) {
-                const ownerData = ownerDoc.data() as { localidade?: string };
-                localidade = ownerData.localidade || 'Não informada';
+                const ownerData = ownerDoc.data() as { city?: string };
+                localidade = ownerData.city || 'Não informada';
               }
             }
 

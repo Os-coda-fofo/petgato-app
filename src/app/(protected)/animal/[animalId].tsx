@@ -91,7 +91,7 @@ const AnimalInfoScreen = () => {
   return (
     <ScrollView style={styles.scroll}>
     <View style={styles.container}>
-      <StatusBar backgroundColor={"#ffee29b"} barStyle={"light-content"} />
+      <StatusBar backgroundColor={"#ffee29b"} barStyle={"dark-content"} />
       
         <View key={pet.id}>
           <Header title={pet.name} />
