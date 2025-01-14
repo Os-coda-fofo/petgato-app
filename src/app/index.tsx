@@ -1,16 +1,18 @@
 import Feather from '@expo/vector-icons/Feather';
 import { Link, useRouter } from 'expo-router';
 import React from 'react';
-import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../components/Button';
+import { auth } from '../services/auth/firebase-config';
 
 const Home = () => {
+  const id = auth.currentUser?.uid;
   const router = useRouter();
   return (
       <View style={styles.container}>
-        <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
-
-        <Feather style={styles.menuIcon} name="menu" size={24} color="#88c9bf" />
+          <TouchableOpacity  style={styles.menuIcon} onPress={() => router.push(`./myAnimals/${id}`)}>
+            <Feather name="menu" size={24} color="#88c9bf" />
+          </TouchableOpacity>
         <Text style={styles.title}>Olá!</Text>
         <Text style={[ styles.subtitle, { color: '#757575' }]}> Bem vindo ao Meau! Aqui você pode adotar, doar e ajudar cães e gatos com facilidade. Qual o seu interesse? </Text>
         
