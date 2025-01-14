@@ -9,12 +9,16 @@ const AuthContext = createContext<{
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, userData: object) => Promise<void>;
   signOut: () => Promise<void>;
+  setRedirectTo: (path: string | null) => void;
+  redirectTo: string | null;
 }>({
   user: null,
   isLoading: true,
   signIn: async () => {},
   signUp: async () => {},
   signOut: async () => {},
+  setRedirectTo: () => {},
+  redirectTo: null,
 });
 
 // Hook para acessar o contexto
@@ -30,6 +34,7 @@ const useSession = () => {
 const SessionProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [redirectTo, setRedirectTo] = useState<string | null>(null);
 
   // Monitora mudanças de estado de autenticação no Firebase
   useEffect(() => {
@@ -91,6 +96,7 @@ const SessionProvider = ({ children }: PropsWithChildren) => {
     try {
       await firebaseSignOut(auth);
       setUser(null);
+      setRedirectTo(null);
     } catch (error) {
       console.error('Error signing out:', error);
     } finally {
@@ -99,7 +105,7 @@ const SessionProvider = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, isLoading, signIn, signUp, signOut, setRedirectTo, redirectTo  }}>
       {children}
     </AuthContext.Provider>
   );

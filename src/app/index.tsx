@@ -3,20 +3,23 @@ import { Link, useRouter } from 'expo-router';
 import React from 'react';
 import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../components/Button';
+import { useSession } from '../services/auth/ctx';
 
 const Home = () => {
   const router = useRouter();
+  const { user, isLoading } = useSession();
+
   return (
       <View style={styles.container}>
         <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
         <Feather style={styles.menuIcon} name="menu" size={24} color="#88c9bf" />
-        <Text style={styles.title}>Olá!</Text>
+        <Text style={styles.title}>Olá</Text>
         <Text style={[ styles.subtitle, { color: '#757575' }]}> Bem vindo ao Meau! Aqui você pode adotar, doar e ajudar cães e gatos com facilidade. Qual o seu interesse? </Text>
         
         <View style={styles.buttonContainer}>
           <Button title="ADOTAR" onPress={() => router.push('/animalsList')} variant="default" />
-          <Button title="AJUDAR" onPress={() => router.push('/ajudar')} variant="default" />
+          <Button title="AJUDAR" onPress={() => router.push('/login-screen-error')} variant="default" />
           <Button title="CADASTRAR ANIMAL" onPress={() => router.push('/registerAnimal')} variant="default" />
         </View>
 

@@ -9,7 +9,7 @@
     "scheme": "meow",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "ios": {
@@ -19,18 +19,26 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.barbosa885.meow"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       [
-        "expo-font", 
-        { 
-          "CourgetteRegular": ["./assets/fonts/Courgette-Regular.ttf"]
+        "expo-font",
+        {
+          "CourgetteRegular": [
+            "./assets/fonts/Courgette-Regular.ttf"
+          ]
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3403df2a-772c-4e16-a79c-98e95124ad33"
+      }
+    }
   }
 }

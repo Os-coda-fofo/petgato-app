@@ -29,9 +29,9 @@ const FullAnimalRegistry = () => {
                         assim que alguém interessado entrar{"\n"}
                         em contato!</Text>
 
-        <View style={styles.buttonContainer}>
-          <Button title="MEUS PETS" onPress={() => router.push('/mypets')} variant="default"  />
-        </View>
+          <View style={styles.buttonContainer}>
+            <Button title="MEUS PETS" onPress={() => router.push('/mypets')} variant="default"  />
+          </View>
         </View>
     );
 }
