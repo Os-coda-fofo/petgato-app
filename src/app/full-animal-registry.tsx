@@ -3,9 +3,10 @@ import { Link, useRouter } from 'expo-router';
 import React from 'react';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
-
+import { auth } from '../services/auth/firebase-config';
 
 const FullAnimalRegistry = () => {
+    const id = auth.currentUser?.uid;
     const router = useRouter();
     return (
         <View style={styles.container}>
@@ -30,7 +31,7 @@ const FullAnimalRegistry = () => {
                         em contato!</Text>
 
         <View style={styles.buttonContainer}>
-          <Button title="MEUS PETS" onPress={() => router.push('/mypets')} variant="default"  />
+          <Button title="MEUS PETS" onPress={() => router.push(`./myAnimals/${id}`)} variant="default"  />
         </View>
         </View>
     );

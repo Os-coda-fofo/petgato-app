@@ -1,14 +1,15 @@
-import { router } from 'expo-router';
-import { collection, getDocs } from 'firebase/firestore';
+import { router, useLocalSearchParams } from 'expo-router';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Header from '../components/Header';
-import { db } from '../services/auth/firebase-config';
+import Header from '../../components/Header';
+import { db } from '../../services/auth/firebase-config';
 
 
 
-const AnimalsInfoScreen = () => {
-
+const MyAnimalsInfoScreen = () => {
+  
+  const {ownerId} = useLocalSearchParams();
   interface Pet {
     id: string;
     name: string;
@@ -24,7 +25,7 @@ const AnimalsInfoScreen = () => {
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'animals'));
+        const querySnapshot = await getDocs(query(collection(db, 'animals'), where('owner', '==', ownerId)));
         const petsData = querySnapshot.docs.map((doc) => {
           const data = doc.data() as Omit<Pet, 'id'>;
           return {
@@ -53,7 +54,7 @@ const AnimalsInfoScreen = () => {
         <View style={styles.container}>
         <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-        <Header title="Adotar" />
+        <Header title="Meus Pets" />
 
       {pets.map((pet) => (
         <View key={pet.id} style={styles.card}>
@@ -61,7 +62,7 @@ const AnimalsInfoScreen = () => {
           <View>
             <TouchableOpacity
               key={pet.id}
-              onPress={() => router.push(`./animal/${pet.id}`)} // Navega para a tela de detalhes
+              onPress={() => router.push(`./myAnimal/${pet.id}`)} // Navega para a tela de detalhes
               >
             <Text style={styles.name}>{pet.name}</Text>
             <Image source={{ uri: pet.photos[0] }} style={styles.image} />
@@ -129,5 +130,5 @@ const styles = StyleSheet.create({
 
 
 
-export default AnimalsInfoScreen;
+export default MyAnimalsInfoScreen;
 
