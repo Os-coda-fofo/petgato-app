@@ -25,7 +25,7 @@ const RegisterScreen = () => {
   const router = useRouter();
 
   if (user) {
-    router.replace(redirectTo || '/animalsList');
+    router.replace(redirectTo || '/registerAnimal');
     return null;
   }
 
@@ -63,7 +63,7 @@ const RegisterScreen = () => {
   }
 
   return (
-    <ScrollView style={styles.scroll}>
+    <ScrollView style={{ flexGrow: 1 }}>
     <View style={styles.container}>
       <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
@@ -109,9 +109,6 @@ const RegisterScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  scroll: {
-    flex: 1,
-  },
   container: {
     backgroundColor: '#fafafa',
     justifyContent: 'center',

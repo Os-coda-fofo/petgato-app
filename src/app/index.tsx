@@ -14,7 +14,7 @@ const Home = () => {
         <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
         <Feather style={styles.menuIcon} name="menu" size={24} color="#88c9bf" />
-        <Text style={styles.title}>Olá!</Text>
+        <Text style={styles.title}>Olá</Text>
         <Text style={[ styles.subtitle, { color: '#757575' }]}> Bem vindo ao Meau! Aqui você pode adotar, doar e ajudar cães e gatos com facilidade. Qual o seu interesse? </Text>
         
         <View style={styles.buttonContainer}>

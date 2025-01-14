@@ -198,172 +198,160 @@ const AnimalScreen = () => {
     };
 
   return (
-    <ScrollView style={styles.scroll}>
-    <View style={styles.container}>
-      <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
+    <ScrollView style={{ flexGrow: 1 }}>
+      <View style={styles.container}>
+        <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-        <View style={styles.header}>
-          <Link href="/" asChild>
-            <AntDesign name="arrowleft" size={24} color="#434343" />
-          </Link>
-          <Text style={styles.headerTitle}>Cadastro Animal</Text>
-        </View>
+          <View style={styles.header}>
+            <Link href="/" asChild>
+              <AntDesign name="arrowleft" size={24} color="#434343" />
+            </Link>
+            <Text style={styles.headerTitle}>Cadastro Animal</Text>
+          </View>
 
-        <View style={{top: 100}}>
+          <View style={{top: 100}}>
+          
+          <View style={styles.inputContainer}>
+          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>NOME DO ANIMAL</Text>
 
-        
-        <View style={styles.inputContainer}>
-        <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>NOME DO ANIMAL</Text>
+          <Input placeholder="Nome completo" onChangeText={(value) => handleFormChange('name', value)} value={formState.name}  />
+          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>FOTOS DO ANIMAL</Text>
+          
+          <View style={styles.imageBox}>
+            <View style={{ margin: 40, alignItems: "center"}}>
+              <MaterialIcons name="control-point" size={24} color="#434343" />
+              <Button title="adicionar foto" onPress={pickImage} variant="transparent" />
+            </View>
+          </View>
 
-        <Input placeholder="Nome completo" onChangeText={(value) => handleFormChange('name', value)} value={formState.name}  />
-        <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>FOTOS DO ANIMAL</Text>
-        
-        
-        <View style={styles.imageBox}>
-          <View style={{ margin: 40, alignItems: "center"}}>
-            <MaterialIcons name="control-point" size={24} color="#434343" />
-            <Button title="adicionar foto" onPress={pickImage} variant="transparent" />
+          <ScrollView horizontal>
+            {images.map((uri, index) => (
+              <View key={index} style={styles.imageContainer}>
+                <Image source={{ uri }} style={styles.image} />
+                <Button title="Remover" onPress={() => removeImage(index)} variant="transparent" />
+              </View>
+            ))}
+          </ScrollView>
+          
+          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start' }}>ESPÉCIE</Text>
+          <View style={styles.checkboxline}>
+          <Checkbox style={styles.checkbox} value={checkboxState.isCachorro} onValueChange={() => handleCheckboxChange('isCachorro')} />
+          <Text style={styles.paragraph}>Cachorro</Text>
+          <Checkbox style={styles.checkbox} value={checkboxState.isGato} onValueChange={() => handleCheckboxChange('isGato')} />
+          <Text style={styles.paragraph}>Gato</Text>
+          </View>
+          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SEXO</Text>
+
+          <View style={styles.checkboxline}>
+          <Checkbox style={styles.checkbox} value={checkboxState.isMacho} onValueChange={() => handleCheckboxChange('isMacho')} />
+          <Text style={styles.paragraph}>Macho</Text>
+          <Checkbox style={styles.checkbox} value={checkboxState.isFemea} onValueChange={() => handleCheckboxChange('isFemea')} />
+          <Text style={styles.paragraph}>Fêmea</Text>
+          </View>
+          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>PORTE</Text>
+          <View style={styles.checkboxline}>
+          <Checkbox style={styles.checkbox} value={checkboxState.isPequeno} onValueChange={() => handleCheckboxChange('isPequeno')} />
+          <Text style={styles.paragraph}>Pequeno</Text>
+          <Checkbox style={styles.checkbox} value={checkboxState.isMedio} onValueChange={() => handleCheckboxChange('isMedio')} />
+          <Text style={styles.paragraph}>Médio</Text>
+          <Checkbox style={styles.checkbox} value={checkboxState.isGrande} onValueChange={() => handleCheckboxChange('isGrande')} />
+          <Text style={styles.paragraph}>Grande</Text>
+          </View>
+          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>IDADE</Text>
+          <View style={styles.checkboxline}>
+          <Checkbox style={styles.checkbox} value={checkboxState.isFilhote} onValueChange={() => handleCheckboxChange('isFilhote')} />
+          <Text style={styles.paragraph}>Filhote</Text>
+          <Checkbox style={styles.checkbox} value={checkboxState.isAdulto} onValueChange={() => handleCheckboxChange('isAdulto')} />
+          <Text style={styles.paragraph}>Adulto</Text>
+          <Checkbox style={styles.checkbox} value={checkboxState.isIdoso} onValueChange={() => handleCheckboxChange('isIdoso')} />
+          <Text style={styles.paragraph}>Idoso</Text>
+          </View>
+          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>TEMPERAMENTO</Text>
+          <View style={styles.checkboxline}>
+          <Checkbox style={styles.checkbox} value={checkboxState.isBrincalhao} onValueChange={() => handleCheckboxChange('isBrincalhao')} />
+          <Text style={styles.paragraph}>Brincalhão</Text>
+          <Checkbox style={styles.checkbox} value={checkboxState.isTimido} onValueChange={() => handleCheckboxChange('isTimido')} />
+          <Text style={styles.paragraph}>Tímido</Text>
+          <Checkbox style={styles.checkbox} value={checkboxState.isCalmo} onValueChange={() => handleCheckboxChange('isCalmo')} />
+          <Text style={styles.paragraph}>Calmo</Text>
+          </View>
+          <View style={styles.checkboxline}>
+          <Checkbox style={styles.checkbox} value={checkboxState.isGuarda} onValueChange={() => handleCheckboxChange('isGuarda')} />
+          <Text style={styles.paragraph}>Guarda</Text>
+          <Checkbox style={styles.checkbox} value={checkboxState.isAmoroso} onValueChange={() => handleCheckboxChange('isAmoroso')} />
+          <Text style={styles.paragraph}>Amoroso</Text>
+          <Checkbox style={styles.checkbox} value={checkboxState.isPreguicoso} onValueChange={() => handleCheckboxChange('isPreguicoso')} />
+          <Text style={styles.paragraph}>Preguiçoso</Text>
+          </View>
+          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SAÚDE</Text>
+          <View style={styles.checkboxline}>
+          <Checkbox style={styles.checkbox} value={checkboxState.isVacinado} onValueChange={() => handleCheckboxChange('isVacinado')} />
+          <Text style={styles.paragraph}>Vacinado</Text>
+          <Checkbox style={styles.checkbox} value={checkboxState.isVermifugado} onValueChange={() => handleCheckboxChange('isVermifugado')} />
+          <Text style={styles.paragraph}>Vermifugado</Text>
+          </View>
+          <View style={styles.checkboxline}>
+          <Checkbox style={styles.checkbox} value={checkboxState.isCastrado} onValueChange={() => handleCheckboxChange('isCastrado')} />
+          <Text style={styles.paragraph}>Castrado</Text>
+          <Checkbox style={styles.checkbox} value={checkboxState.isDoente} onValueChange={() => handleCheckboxChange('isDoente')} />
+          <Text style={styles.paragraph}>Doente</Text>
+          </View>
+          <Input placeholder="Doenças do animal" onChangeText={(value) => handleFormChange('saude', value)} value={formState.saude}  />
+          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>EXIGÊNCIAS PARA ADOÇÃO</Text>
+          
+          <View style={styles.checkboxline}>
+          <Checkbox style={styles.checkbox} value={checkboxState.isTermo} onValueChange={() => handleCheckboxChange('isTermo')} />
+          <Text style={styles.paragraph}>Termo de adoção</Text>
+          </View>
+          <View style={styles.checkboxline}>
+          <Checkbox style={styles.checkbox} value={checkboxState.isFotos} onValueChange={() => handleCheckboxChange('isFotos')} />
+          <Text style={styles.paragraph}>Fotos da Casa</Text>
+          </View>
+          <View style={styles.checkboxline}>
+          <Checkbox style={styles.checkbox} value={checkboxState.isVisita} onValueChange={() => handleCheckboxChange('isVisita')} />
+          <Text style={styles.paragraph}>Visita prévia ao animal</Text>
+          </View>
+          <View style={styles.checkboxline}>
+          <Checkbox style={styles.checkbox} value={checkboxState.isAcompanhamento} onValueChange={() => handleCheckboxChange('isAcompanhamento')} />
+          <Text style={styles.paragraph}>Acompanhamento pós adoção</Text>
+          </View>
+          <View style={styles.checkboxtempo}>
+          <Checkbox style={styles.checkboxFade} value={checkboxState.is1mes} onValueChange={() => handleCheckboxChange('is1mes')} />
+          <Text style={styles.paragraphFade}>1 mês</Text>
+          </View>
+          <View style={styles.checkboxtempo}>
+          <Checkbox style={styles.checkboxFade} value={checkboxState.is3mes} onValueChange={() => handleCheckboxChange('is3mes')} />
+          <Text style={styles.paragraphFade}>3 meses</Text>
+          </View>
+          <View style={styles.checkboxtempo}>
+          <Checkbox style={styles.checkboxFade} value={checkboxState.is6mes} onValueChange={() => handleCheckboxChange('is6mes')} />
+          <Text style={styles.paragraphFade}>6 meses</Text>
+          </View>
+          <View style={styles.registerBtn}>
+            <Button title="COLOCAR PARA ADOÇÃO" onPress={async () => { await saveAnimalData(); router.push('/full-animal-registry'); }} variant="yellow" />
+          </View>
+          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SOBRE O ANIMAL</Text>
+          <Input placeholder="Compartilhe a história do animal" onChangeText={(value) => handleFormChange('sobre', value)} value={formState.sobre}  />
+          
           </View>
         </View>
-        <ScrollView horizontal>
-              {images.map((uri, index) => (
-                <View key={index} style={styles.imageContainer}>
-                  <Image source={{ uri }} style={styles.image} />
-                  <Button title="Remover" onPress={() => removeImage(index)} variant="transparent" />
-                </View>
-              ))}
-            </ScrollView>
-        
-        <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>ESPÉCIE</Text>
-        <View style={styles.checkboxline}>
-        <Checkbox style={styles.checkbox} value={checkboxState.isCachorro} onValueChange={() => handleCheckboxChange('isCachorro')} />
-        <Text style={styles.paragraph}>Cachorro</Text>
-        <Checkbox style={styles.checkbox} value={checkboxState.isGato} onValueChange={() => handleCheckboxChange('isGato')} />
-        <Text style={styles.paragraph}>Gato</Text>
-        </View>
-        <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SEXO</Text>
-
-        <View style={styles.checkboxline}>
-        <Checkbox style={styles.checkbox} value={checkboxState.isMacho} onValueChange={() => handleCheckboxChange('isMacho')} />
-        <Text style={styles.paragraph}>Macho</Text>
-        <Checkbox style={styles.checkbox} value={checkboxState.isFemea} onValueChange={() => handleCheckboxChange('isFemea')} />
-        <Text style={styles.paragraph}>Fêmea</Text>
-        </View>
-        <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>PORTE</Text>
-        <View style={styles.checkboxline}>
-        <Checkbox style={styles.checkbox} value={checkboxState.isPequeno} onValueChange={() => handleCheckboxChange('isPequeno')} />
-        <Text style={styles.paragraph}>Pequeno</Text>
-        <Checkbox style={styles.checkbox} value={checkboxState.isMedio} onValueChange={() => handleCheckboxChange('isMedio')} />
-        <Text style={styles.paragraph}>Médio</Text>
-        <Checkbox style={styles.checkbox} value={checkboxState.isGrande} onValueChange={() => handleCheckboxChange('isGrande')} />
-        <Text style={styles.paragraph}>Grande</Text>
-        </View>
-        <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>IDADE</Text>
-        <View style={styles.checkboxline}>
-        <Checkbox style={styles.checkbox} value={checkboxState.isFilhote} onValueChange={() => handleCheckboxChange('isFilhote')} />
-        <Text style={styles.paragraph}>Filhote</Text>
-        <Checkbox style={styles.checkbox} value={checkboxState.isAdulto} onValueChange={() => handleCheckboxChange('isAdulto')} />
-        <Text style={styles.paragraph}>Adulto</Text>
-        <Checkbox style={styles.checkbox} value={checkboxState.isIdoso} onValueChange={() => handleCheckboxChange('isIdoso')} />
-        <Text style={styles.paragraph}>Idoso</Text>
-        </View>
-        <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>TEMPERAMENTO</Text>
-        <View style={styles.checkboxline}>
-        <Checkbox style={styles.checkbox} value={checkboxState.isBrincalhao} onValueChange={() => handleCheckboxChange('isBrincalhao')} />
-        <Text style={styles.paragraph}>Brincalhão</Text>
-        <Checkbox style={styles.checkbox} value={checkboxState.isTimido} onValueChange={() => handleCheckboxChange('isTimido')} />
-        <Text style={styles.paragraph}>Tímido</Text>
-        <Checkbox style={styles.checkbox} value={checkboxState.isCalmo} onValueChange={() => handleCheckboxChange('isCalmo')} />
-        <Text style={styles.paragraph}>Calmo</Text>
-        </View>
-        <View style={styles.checkboxline}>
-        <Checkbox style={styles.checkbox} value={checkboxState.isGuarda} onValueChange={() => handleCheckboxChange('isGuarda')} />
-        <Text style={styles.paragraph}>Guarda</Text>
-        <Checkbox style={styles.checkbox} value={checkboxState.isAmoroso} onValueChange={() => handleCheckboxChange('isAmoroso')} />
-        <Text style={styles.paragraph}>Amoroso</Text>
-        <Checkbox style={styles.checkbox} value={checkboxState.isPreguicoso} onValueChange={() => handleCheckboxChange('isPreguicoso')} />
-        <Text style={styles.paragraph}>Preguiçoso</Text>
-        </View>
-        <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SAÚDE</Text>
-        <View style={styles.checkboxline}>
-        <Checkbox style={styles.checkbox} value={checkboxState.isVacinado} onValueChange={() => handleCheckboxChange('isVacinado')} />
-        <Text style={styles.paragraph}>Vacinado</Text>
-        <Checkbox style={styles.checkbox} value={checkboxState.isVermifugado} onValueChange={() => handleCheckboxChange('isVermifugado')} />
-        <Text style={styles.paragraph}>Vermifugado</Text>
-        </View>
-        <View style={styles.checkboxline}>
-        <Checkbox style={styles.checkbox} value={checkboxState.isCastrado} onValueChange={() => handleCheckboxChange('isCastrado')} />
-        <Text style={styles.paragraph}>Castrado</Text>
-        <Checkbox style={styles.checkbox} value={checkboxState.isDoente} onValueChange={() => handleCheckboxChange('isDoente')} />
-        <Text style={styles.paragraph}>Doente</Text>
-        </View>
-        <Input placeholder="Doenças do animal" onChangeText={(value) => handleFormChange('saude', value)} value={formState.saude}  />
-        <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>EXIGÊNCIAS PARA ADOÇÃO</Text>
-        
-        <View style={styles.checkboxline}>
-        <Checkbox style={styles.checkbox} value={checkboxState.isTermo} onValueChange={() => handleCheckboxChange('isTermo')} />
-        <Text style={styles.paragraph}>Termo de adoção</Text>
-        </View>
-        <View style={styles.checkboxline}>
-        <Checkbox style={styles.checkbox} value={checkboxState.isFotos} onValueChange={() => handleCheckboxChange('isFotos')} />
-        <Text style={styles.paragraph}>Fotos da Casa</Text>
-        </View>
-        <View style={styles.checkboxline}>
-        <Checkbox style={styles.checkbox} value={checkboxState.isVisita} onValueChange={() => handleCheckboxChange('isVisita')} />
-        <Text style={styles.paragraph}>Visita prévia ao animal</Text>
-        </View>
-        <View style={styles.checkboxline}>
-        <Checkbox style={styles.checkbox} value={checkboxState.isAcompanhamento} onValueChange={() => handleCheckboxChange('isAcompanhamento')} />
-        <Text style={styles.paragraph}>Acompanhamento pós adoção</Text>
-        </View>
-        <View style={styles.checkboxtempo}>
-        <Checkbox style={styles.checkboxFade} value={checkboxState.is1mes} onValueChange={() => handleCheckboxChange('is1mes')} />
-        <Text style={styles.paragraphFade}>1 mês</Text>
-        </View>
-        <View style={styles.checkboxtempo}>
-        <Checkbox style={styles.checkboxFade} value={checkboxState.is3mes} onValueChange={() => handleCheckboxChange('is3mes')} />
-        <Text style={styles.paragraphFade}>3 meses</Text>
-        </View>
-        <View style={styles.checkboxtempo}>
-        <Checkbox style={styles.checkboxFade} value={checkboxState.is6mes} onValueChange={() => handleCheckboxChange('is6mes')} />
-        <Text style={styles.paragraphFade}>6 meses</Text>
-        </View>
-        
-        <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SOBRE O ANIMAL</Text>
-        <Input placeholder="Compartilhe a história do animal" onChangeText={(value) => handleFormChange('sobre', value)} value={formState.sobre}  />
-        </View>
-        <View style={styles.registerBtn}>
-          <Button title="COLOCAR PARA ADOÇÃO" onPress={async () => { await saveAnimalData(); router.push('/full-animal-registry'); }} variant="yellow" />
-        </View>
-      </View>
       </View> 
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  scroll: {
-    flex: 1,
-  },
   container: {
     backgroundColor: '#fafafa',
     justifyContent: 'center',
-    
   },
-  infoBox: {
-    margin: 15,
-    padding: 15,
-    marginTop: 100,
-    borderRadius: 8,
-    maxWidth: 350,
-    alignSelf: 'flex-start',
-    alignItems: 'center',
-  },
+
   checkboxline:{
     flexDirection: 'row',
     alignSelf: 'flex-start',
     justifyContent: 'space-between',
   },
+
   checkboxtempo:{
     flexDirection: 'row',
     alignSelf: 'flex-start',
@@ -436,7 +424,6 @@ const styles = StyleSheet.create({
   },
   registerBtn: {
     margin: 15,
-    marginTop: 50,
     width: '70%',
     alignSelf: 'center',
   },

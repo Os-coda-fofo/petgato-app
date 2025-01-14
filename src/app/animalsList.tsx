@@ -1,21 +1,21 @@
 import { router } from 'expo-router';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Header from '../../components/Header';
-import { db } from '../../services/auth/firebase-config';
+import Header from '../components/Header';
+import { db } from '../services/auth/firebase-config';
 
 const AnimalInfoScreen = () => {
-
   interface Pet {
     id: string;
     name: string;
-    photos: string;
+    photos?: string[];
     gender: string;
     age: string;
     size: string;
+    owner: string;
+    localidade: string;
   }
-
   const [pets, setPets] = useState<Pet[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,13 +23,28 @@ const AnimalInfoScreen = () => {
     const fetchPets = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'animals'));
-        const petsData = querySnapshot.docs.map((doc) => {
-          const data = doc.data() as Omit<Pet, 'id'>;
-          return {
-            id: doc.id,
-            ...data,
-          };
-        });
+
+        const petsData = await Promise.all(
+          querySnapshot.docs.map(async (docs) => {
+            const data = docs.data() as Omit<Pet, 'id' | 'localidade'>;
+            let localidade = 'Não informada';
+
+            if (data.owner) {
+              const ownerDoc = await getDoc(doc(db, 'owners', data.owner));
+              if (ownerDoc.exists()) {
+                const ownerData = ownerDoc.data() as { localidade?: string };
+                localidade = ownerData.localidade || 'Não informada';
+              }
+            }
+
+            return {
+              id: docs.id,
+              ...data,
+              localidade,
+            };
+          })
+        );
+
         setPets(petsData);
       } catch (error) {
         console.error('Erro ao buscar os dados:', error);
@@ -46,7 +61,7 @@ const AnimalInfoScreen = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.scroll}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
         <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
@@ -61,13 +76,14 @@ const AnimalInfoScreen = () => {
               onPress={() => router.push(`./animal/${pet.id}`)}
             >
             <Text style={styles.name}>{pet.name}</Text>
-            <Image source={{ uri: pet.photos[0] }} style={styles.image} />
-            <View style={{flexDirection:"row",justifyContent:"space-between",marginHorizontal:50}}>
+            <Image source={{ uri: pet.photos?.[0] }} style={styles.image} />
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 50 }}>
             <Text style={styles.info}>{pet.gender}</Text>
             <Text style={styles.info}>{pet.age}</Text>
             <Text style={styles.info}>{pet.size}</Text>
+            <Text style={styles.info}>{pet.localidade}</Text>
           </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
           </View>
         </View>
       ))}
@@ -82,12 +98,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
-    backgroundColor: '#fafafa',
   },
 
   card: {
     backgroundColor: '#fff',
-
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     borderTopLeftRadius: 3,
@@ -102,6 +116,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     top: 100,
   },
+
   image: {
     width: '100%',
     height: 150,
@@ -121,11 +136,6 @@ const styles = StyleSheet.create({
     color: '#555',
     marginBottom: 4,
   },
-
-  scroll: {
-    flex: 1,
-  },
 });
 
 export default AnimalInfoScreen;
-

@@ -7,7 +7,6 @@ import { useSession } from '../services/auth/ctx';
 import { useRouter } from 'expo-router';
 import Header from '../components/Header';
 
-
 const LoginScreen = () => {
   const [formState, setFormState] = React.useState({
     email: '',
@@ -25,7 +24,7 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (!isLoading && user) {
-      router.replace(redirectTo || '/animalsList');
+      router.replace(redirectTo || '/registerAnimal');
       setRedirectTo(null); 
     }
   }, [isLoading, user]);
@@ -33,7 +32,7 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       await signIn(formState.email, formState.password)
-      router.replace(redirectTo || '/animalsList')
+      router.replace(redirectTo || '/registerAnimal')
     } 
     catch (error) {
       console.error('Erro de login', error);

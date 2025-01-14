@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { db } from '../../../services/auth/firebase-config';
 
-
 const AnimalInfoScreen = () => {
 
   const {animalId} = useLocalSearchParams();
@@ -21,7 +20,6 @@ const AnimalInfoScreen = () => {
     about: string;
     species: string;
     photos: string[];
-
     brincalhao: boolean;
     timido: boolean;
     calmo: boolean;
@@ -82,8 +80,6 @@ const AnimalInfoScreen = () => {
       </View>
     );
   }
-      //const pet = mockPets.find((animal) => animal.id.toString() === animalId.toString());
-
       if (!pet) {
         return (
           <View style={styles.container}>
@@ -175,12 +171,11 @@ const AnimalInfoScreen = () => {
             <Text style={{maxWidth: 320, color: "#434343"}}>{pet.about}</Text>
             </View>
             <View style={styles.buttonContainer}>
-              <Button title="PRETENTO ADOTAR" onPress={() => router.push('/confirmacao')} variant="default" />
+              <Button title="PRETENDO ADOTAR" onPress={() => router.push('/confirmacao')} variant="default" />
             </View>
           </View>    
         </View>
         
-      
     </View>
     </ScrollView>
   );
