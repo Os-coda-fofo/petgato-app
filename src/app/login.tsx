@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Text, StatusBar } from 'react-native';
 import Button from '../components/Button';
 import { Link } from 'expo-router';
@@ -13,7 +13,7 @@ const LoginScreen = () => {
     email: '',
     password: '',
   })
-  const { signIn, isLoading } = useSession();
+  const { user, signIn, isLoading, redirectTo, setRedirectTo } = useSession();
   const router = useRouter();
 
   const handleFormChange = (key: string, value: string) => {
@@ -23,16 +23,17 @@ const LoginScreen = () => {
     })
   }
 
-  const verifyEmail = (email: string) => {
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
-    return emailRegex.test(email)
-  }
+  useEffect(() => {
+    if (!isLoading && user) {
+      router.replace(redirectTo || '/registerAnimal');
+      setRedirectTo(null); 
+    }
+  }, [isLoading, user]);
 
   const handleLogin = async () => {
     try {
       await signIn(formState.email, formState.password)
-      console.log('Logado com sucesso!')
-      router.replace('/logged')
+      router.replace(redirectTo || '/registerAnimal')
     } 
     catch (error) {
       console.error('Erro de login', error);

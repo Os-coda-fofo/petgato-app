@@ -1,11 +1,10 @@
 import { router, useLocalSearchParams } from 'expo-router';
+import Button from '../../../components/Button';
+import Header from '../../../components/Header';
 import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import Button from '../../components/Button';
-import Header from '../../components/Header';
-import { db } from '../../services/auth/firebase-config';
-
+import { db } from '../../../services/auth/firebase-config';
 
 const AnimalInfoScreen = () => {
 
@@ -21,7 +20,6 @@ const AnimalInfoScreen = () => {
     about: string;
     species: string;
     photos: string[];
-
     brincalhao: boolean;
     timido: boolean;
     calmo: boolean;
@@ -82,12 +80,6 @@ const AnimalInfoScreen = () => {
       </View>
     );
   }
-
-      
-      
-      
-      //const pet = mockPets.find((animal) => animal.id.toString() === animalId.toString());
-
       if (!pet) {
         return (
           <View style={styles.container}>
@@ -96,12 +88,10 @@ const AnimalInfoScreen = () => {
         );
       }
 
-  
-
   return (
     <ScrollView style={styles.scroll}>
     <View style={styles.container}>
-      <StatusBar backgroundColor={"#ffee29b"} barStyle={"light-content"} />
+      <StatusBar backgroundColor={"#ffee29b"} barStyle={"dark-content"} />
       
         <View key={pet.id}>
           <Header title={pet.name} />
@@ -109,7 +99,8 @@ const AnimalInfoScreen = () => {
           <Image 
             style={styles.imageBox}
             source={{ uri: pet.photos[0] }} 
-            resizeMode="cover" />
+            resizeMode="cover" 
+          />
           
           <View style={styles.body}>
             <Text style={{color: "#434343", left: 20, fontWeight: 'bold'}}>{pet.name}</Text>
@@ -180,12 +171,11 @@ const AnimalInfoScreen = () => {
             <Text style={{maxWidth: 320, color: "#434343"}}>{pet.about}</Text>
             </View>
             <View style={styles.buttonContainer}>
-              <Button title="PRETENTO ADOTAR" onPress={() => router.push('/confirmacao')} variant="default" />
+              <Button title="PRETENDO ADOTAR" onPress={() => router.push('/confirmacao')} variant="default" />
             </View>
           </View>    
         </View>
         
-      
     </View>
     </ScrollView>
   );

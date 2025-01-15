@@ -29,7 +29,6 @@ const FullAnimalRegistry = () => {
                         aplicativo. Assim, poderemos te avisar{"\n"}
                         assim que alguém interessado entrar{"\n"}
                         em contato!</Text>
-
         <View style={styles.buttonContainer}>
           <Button title="MEUS PETS" onPress={() => router.push(`./myAnimals/${id}`)} variant="default"  />
         </View>
