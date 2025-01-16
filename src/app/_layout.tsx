@@ -19,13 +19,14 @@ export default function Layout() {
   });
 
   useEffect(() => {
-    const loadFonts = async () => {
+    const prepareApp = async () => {
       if (loaded) {
-        await SplashScreen.hideAsync();
+        await new Promise(resolve => setTimeout(resolve, 3000));
       }
+      await SplashScreen.hideAsync();
     }
-    loadFonts();
-  }, [loaded]);
+    prepareApp();
+  }, []);
 
   if (!loaded) {
     return null;
