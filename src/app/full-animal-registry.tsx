@@ -3,11 +3,11 @@ import { Link, useRouter } from 'expo-router';
 import React from 'react';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
-import { auth } from '../services/auth/firebase-config';
+import { useSession } from '../services/auth/ctx';
 
 const FullAnimalRegistry = () => {
-    const id = auth.currentUser?.uid;
     const router = useRouter();
+    const { user } = useSession();
     return (
         <View style={styles.container}>
               <StatusBar backgroundColor={"#ffd358"} barStyle={"dark-content"} />
@@ -29,9 +29,9 @@ const FullAnimalRegistry = () => {
                         aplicativo. Assim, poderemos te avisar{"\n"}
                         assim que alguém interessado entrar{"\n"}
                         em contato!</Text>
-        <View style={styles.buttonContainer}>
-          <Button title="MEUS PETS" onPress={() => router.push(`./myAnimals/${id}`)} variant="default"  />
-        </View>
+          <View style={styles.buttonContainer}>
+            <Button title="MEUS PETS" onPress={() => router.push(`./myAnimals/${user?.uid}`)} variant="default"  />
+          </View>
         </View>
     );
 }
@@ -39,7 +39,6 @@ const FullAnimalRegistry = () => {
 
 export const screenOptions = {
     headerShown: false,
-
 };
 
 const styles = StyleSheet.create({

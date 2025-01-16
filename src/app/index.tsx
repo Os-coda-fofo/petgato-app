@@ -1,19 +1,17 @@
 import Feather from '@expo/vector-icons/Feather';
 import { Link, useRouter } from 'expo-router';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, StatusBar } from 'react-native';
 import Button from '../components/Button';
-import { auth } from '../services/auth/firebase-config';
 import { useSession } from '../services/auth/ctx';
 
 const Home = () => {
-  const id = auth.currentUser?.uid;
   const router = useRouter();
-  const { user, isLoading } = useSession();
+  const { user } = useSession();
 
   return (
       <View style={styles.container}>
-          <TouchableOpacity  style={styles.menuIcon} onPress={() => router.push(`./myAnimals/${id}`)}>
+          <TouchableOpacity  style={styles.menuIcon} onPress={() => router.push(`./myAnimals/${user?.uid}`)}>
             <Feather name="menu" size={24} color="#88c9bf" />
           </TouchableOpacity>
         <Text style={styles.title}>Olá!</Text>

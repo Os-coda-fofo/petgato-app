@@ -27,20 +27,20 @@ const AnimalInfoScreen = () => {
         const petsData = await Promise.all(
           querySnapshot.docs.map(async (docs) => {
             const data = docs.data() as Omit<Pet, 'id' | 'localidade'>;
-            let city = 'Não informada';
+            let localidade = 'Não informada';
 
             if (data.owner) {
               const ownerDoc = await getDoc(doc(db, 'users', data.owner));
               if (ownerDoc.exists()) {
                 const ownerData = ownerDoc.data() as { city?: string };
-                city = ownerData.city || 'Não informada';
+                localidade = ownerData.city || 'Não informada';
               }
             }
 
             return {
               id: docs.id,
               ...data,
-              city,
+              localidade,
             };
           })
         );
@@ -137,4 +137,5 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
 });
+
 export default AnimalInfoScreen;

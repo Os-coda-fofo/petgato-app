@@ -6,7 +6,6 @@ import Input from '../components/Input';
 import { useSession } from '../services/auth/ctx';
 import { useRouter } from 'expo-router';
 import Header from '../components/Header';
-import { auth } from '../services/auth/firebase-config';
 
 const LoginScreen = () => {
   const [formState, setFormState] = React.useState({
