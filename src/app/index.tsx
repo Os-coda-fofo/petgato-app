@@ -1,7 +1,7 @@
 import Feather from '@expo/vector-icons/Feather';
 import { Link, useRouter } from 'expo-router';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, StatusBar } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, StatusBar, Alert } from 'react-native';
 import Button from '../components/Button';
 import { useSession } from '../services/auth/ctx';
 
@@ -9,9 +9,21 @@ const Home = () => {
   const router = useRouter();
   const { user } = useSession();
 
+  function handleMyPets() {
+    if (user) {
+      try {
+        router.push(`/myPets/${user.uid}`);
+      } catch (error: any) {
+        console.error('Erro ao buscar os dados:', error);
+      }
+    } else {
+      Alert.alert('Usuário não logado', 'Faça login para acessar seus pets');
+    }
+  }
+
   return (
       <View style={styles.container}>
-        <TouchableOpacity  style={styles.menuIcon} onPress={() => router.push(`./myAnimals/${user?.uid}`)}>
+        <TouchableOpacity  style={styles.menuIcon} onPress={handleMyPets}>
           <Feather name="menu" size={24} color="#88c9bf" />
         </TouchableOpacity>
 
