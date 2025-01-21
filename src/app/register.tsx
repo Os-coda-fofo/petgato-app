@@ -1,11 +1,12 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
+import Header from '../components/Header';
 import Input from '../components/Input';
 import { useSession } from '../services/auth/ctx';
-import Header from '../components/Header';
 
 const RegisterScreen = () => {
   const [formState, setFormState] = React.useState({
@@ -20,6 +21,26 @@ const RegisterScreen = () => {
     password: '',
     confirmPassword: '',
   })
+
+  const [pfpimage, setImage] = useState<string | null>(null);
+  
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+        base64: true,
+      });
+      console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+  const removeImage = () => {
+    setImage(null);
+  };
   
   const { user, signUp, isLoading, redirectTo } = useSession();
   const router = useRouter();
@@ -45,6 +66,7 @@ const RegisterScreen = () => {
       address,
       phone,
       username,
+      pfpimage,
     };
 
     try {
@@ -94,11 +116,19 @@ const RegisterScreen = () => {
         </View>
         
         <View style={styles.imageBox}>
-          <View style={{ margin: 40, alignItems: "center"}}>
-          <MaterialIcons name="control-point" size={24} color="#434343" />
-            <Text style={{ color: '#757575', fontFamily: 'Roboto_400Regular', fontSize: 16 }}>adicionar foto</Text>
+            <View style={{ margin: 40, alignItems: "center"}}>
+              <MaterialIcons name="control-point" size={24} color="#434343" />
+              <Button title="adicionar foto" onPress={pickImage} variant="transparent" />
+            </View>
           </View>
-        </View>
+
+          {pfpimage && (
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: pfpimage }} style={styles.image} />
+            <Button title="Remover" onPress={removeImage} variant="transparent" />
+          </View>
+        )}
+
         <View style={styles.registerBtn}>
           <Button title={ isLoading ? "Carregando..." : "FAZER CADASTRO" } onPress={() => {handleSubmit(), router.replace('/login')}} variant="main" />
         </View>
@@ -131,6 +161,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignSelf: 'center',
     alignItems: 'center',
+  },
+  imageContainer: {
+    margin: 10,
+    alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
   },
   header: {
     flexDirection: 'row',
