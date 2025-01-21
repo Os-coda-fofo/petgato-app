@@ -37,7 +37,7 @@ const MyAnimalInfoScreen = () => {
     acompanhamento: boolean;
     acompanhamentoTempo: string;
   }
-  
+
   const [pet, setPet] = useState<Pet | null>(null);
   const [loading, setLoading] = useState(true);
 

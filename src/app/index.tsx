@@ -9,15 +9,12 @@ const Home = () => {
   const router = useRouter();
   const { user } = useSession();
 
-  function handleMyPets() {
+  const handleMyPets = () => {
     if (user) {
-      try {
-        router.push(`/myPets/${user.uid}`);
-      } catch (error: any) {
-        console.error('Erro ao buscar os dados:', error);
-      }
+      router.replace(`/myAnimals/${user?.uid}`);
     } else {
       Alert.alert('Usuário não logado', 'Faça login para acessar seus pets');
+      router.replace('/login');
     }
   }
 
