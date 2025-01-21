@@ -14,6 +14,7 @@ export default function Chat() {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const userId = auth.currentUser?.uid;
   const [user, setUser] = useState<User | null>();
+  
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -35,7 +36,7 @@ export default function Chat() {
 
         fetchUser();
     // Listener para carregar mensagens do Firebase em tempo real
-    const messagesRef = collection(db, 'chat');
+    const messagesRef = collection(db, 'chats');
     const q = query(messagesRef, orderBy('createdAt', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
         const fetchedMessages = snapshot.docs.map((doc) => {
@@ -55,7 +56,7 @@ export default function Chat() {
 
   const onSend = useCallback(async (messages: IMessage[] = []) => {
     const { _id, createdAt, text, user } = messages[0];
-    const messagesRef = collection(db, 'messages');
+    const messagesRef = collection(db, 'chats');
     setMessages(previousMessages =>
         GiftedChat.append(previousMessages, messages),
       )
@@ -70,7 +71,7 @@ export default function Chat() {
       user={{
         _id: userId || "defaut",
         name: user?.name || "defaut",
-        avatar: user?.pfpimage || "default-avatar"
+        avatar: user?.pfpimage || "https://i.pravatar.cc/300"
       }}
     />
   );
