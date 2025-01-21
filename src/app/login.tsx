@@ -32,7 +32,7 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       await signIn(formState.email, formState.password)
-      router.replace(redirectTo || '/registerAnimal')
+      router.replace(redirectTo || '/full-animal-registry')
     } 
     catch (error) {
       console.error('Erro de login', error);

@@ -1,11 +1,9 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/Header';
 import { db } from '../../services/auth/firebase-config';
-
-
 
 const MyAnimalsInfoScreen = () => {
   
@@ -17,22 +15,38 @@ const MyAnimalsInfoScreen = () => {
     gender: string;
     age: string;
     size: string;
+    city: string;
+    owner: string;
   }
-
   const [pets, setPets] = useState<Pet[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const querySnapshot = await getDocs(query(collection(db, 'animals'), where('owner', '==', ownerId)));
-        const petsData = querySnapshot.docs.map((doc) => {
-          const data = doc.data() as Omit<Pet, 'id'>;
-          return {
-            id: doc.id,
-            ...data,
-          };
-        });
+        const querySnapshot = await getDocs(collection(db, 'animals'));
+
+        const petsData = await Promise.all(
+          querySnapshot.docs.map(async (docs) => {
+            const data = docs.data() as Omit<Pet, 'id' | 'localidade'>;
+            let localidade = 'Não informada';
+
+            if (data.owner) {
+              const ownerDoc = await getDoc(doc(db, 'users', data.owner));
+              if (ownerDoc.exists()) {
+                const ownerData = ownerDoc.data() as { city?: string };
+                localidade = ownerData.city || 'Não informada';
+              }
+            }
+
+            return {
+              id: docs.id,
+              ...data,
+              localidade,
+            };
+          })
+        );
+
         setPets(petsData);
       } catch (error) {
         console.error('Erro ao buscar os dados:', error);
@@ -50,7 +64,7 @@ const MyAnimalsInfoScreen = () => {
 
 
   return (
-    <ScrollView contentContainerStyle={styles.scroll}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
         <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
@@ -63,34 +77,34 @@ const MyAnimalsInfoScreen = () => {
             <TouchableOpacity
               key={pet.id}
               onPress={() => router.push(`./myAnimal/${pet.id}`)} // Navega para a tela de detalhes
-              >
+            >
             <Text style={styles.name}>{pet.name}</Text>
             <Image source={{ uri: pet.photos[0] }} style={styles.image} />
-            <View style={{flexDirection:"row",justifyContent:"space-between",marginHorizontal:50}}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 50 }}>
             <Text style={styles.info}>{pet.gender}</Text>
             <Text style={styles.info}>{pet.age}</Text>
             <Text style={styles.info}>{pet.size}</Text>
+            <Text style={styles.info}>{pet.city}</Text>
             </View>
             </TouchableOpacity>
           </View>
         </View>
       ))}
-      <View style={{margin:70}}/>
     </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'relative',
-        backgroundColor: '#fafafa',
-      },
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    backgroundColor: '#fafafa',
+  },
+
   card: {
     backgroundColor: '#fff',
-    
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     borderTopLeftRadius: 3,
@@ -105,12 +119,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     top: 100,
   },
+
   image: {
     width: '100%',
     height: 150,
     resizeMode: 'cover',
   },
-  
+
   name: {
     backgroundColor: '#fee29b',
     fontSize: 18,
@@ -118,13 +133,11 @@ const styles = StyleSheet.create({
     color: '#333',
     padding: 5,
   },
+
   info: {
     fontSize: 14,
     color: '#555',
     marginBottom: 4,
-  },
-  scroll: {
-    flex: 1,
   },
 });
 

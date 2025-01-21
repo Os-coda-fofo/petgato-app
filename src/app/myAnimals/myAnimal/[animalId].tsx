@@ -21,7 +21,6 @@ const MyAnimalInfoScreen = () => {
     about: string;
     species: string;
     photos: string[];
-
     brincalhao: boolean;
     timido: boolean;
     calmo: boolean;
@@ -83,25 +82,18 @@ const MyAnimalInfoScreen = () => {
     );
   }
 
-      
-      
-      
-      //const pet = mockPets.find((animal) => animal.id.toString() === animalId.toString());
-
-      if (!pet) {
-        return (
-          <View style={styles.container}>
-            <Text>Animal não encontrado.</Text>
-          </View>
-        );
-      }
-
-  
+  if (!pet) {
+    return (
+      <View style={styles.container}>
+        <Text>Animal não encontrado.</Text>
+      </View>
+    );
+  }
 
   return (
-    <ScrollView style={styles.scroll}>
+    <ScrollView style={{ flexGrow: 1 }}>
     <View style={styles.container}>
-      <StatusBar backgroundColor={"#ffee29b"} barStyle={"light-content"} />
+      <StatusBar backgroundColor={"#ffee29b"} barStyle={"dark-content"} />
       
         <View key={pet.id}>
           <Header title={pet.name} />
@@ -134,18 +126,18 @@ const MyAnimalInfoScreen = () => {
               <Text style={{color: "#757575"}}>{pet.castrado  ? 'Sim' : 'Não'}</Text>
             </View>
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>VERMIFUGADO</Text>
-            <Text style={{color: "#757575"}}>{pet.vermifugado ? 'Sim' : 'Não'}</Text>
+              <Text style={{color: '#f7a800'}}>VERMIFUGADO</Text>
+              <Text style={{color: "#757575"}}>{pet.vermifugado ? 'Sim' : 'Não'}</Text>
             </View>
             </View>
             <View style={styles.inline}>
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>VACINADO</Text>
-            <Text style={{color: "#757575"}}>{pet.vacinado  ? 'Sim' : 'Não'}</Text>
+              <Text style={{color: '#f7a800'}}>VACINADO</Text>
+              <Text style={{color: "#757575"}}>{pet.vacinado  ? 'Sim' : 'Não'}</Text>
             </View>
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>DOENÇAS</Text>
-            <Text style={{color: "#757575"}}>{pet.doente  ? 'Sim' : 'Nenhuma'}</Text>
+              <Text style={{color: '#f7a800'}}>DOENÇAS</Text>
+              <Text style={{color: "#757575"}}>{pet.doente  ? 'Sim' : 'Nenhuma'}</Text>
             </View>
             </View>
             <View style={styles.horizontalLine} />
@@ -189,21 +181,17 @@ const MyAnimalInfoScreen = () => {
             </View>
           </View>    
         </View>
-        
-      
     </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  scroll: {
-    flex: 1,
-  },
   container: {
     backgroundColor: '#fafafa',
     justifyContent: 'center',
   },
+
   infoBox: {
     backgroundColor: "#e1f7f1",
     margin: 15,
@@ -214,21 +202,24 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
   },
+
   infoblock: {
     alignItems: "flex-start",
     margin: 16,
     left: 16,
   },
+
   body: {
     top: 100,
   },
+
   inline:{
     flexDirection: 'row',
     alignSelf: 'flex-start',
     justifyContent: 'space-between',
     width: 350,
-   
   },
+
   horizontalLine: {
     height: 1,
     backgroundColor: "#E0E0E0", 
@@ -236,6 +227,7 @@ const styles = StyleSheet.create({
     maxWidth: 320,
     marginLeft: 16,
   },
+
   imageBox: {
     backgroundColor: "#e6e7e7",
     width: '100%',
@@ -244,6 +236,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
   },
+
   header: {
     flexDirection: 'row',
     width: '100%',
@@ -256,24 +249,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     gap: 16,
   },
+
   headerTitle: {
     fontSize: 20,
     fontFamily: 'Roboto_500Medium',
     color: '#434343',
   },
+
   inputContainer: {
     width: '80%',
     alignItems: 'center',
     alignSelf: 'center',
   },
+
   buttonContainer: {
     width: 250,
     height: 40,
-   
     justifyContent: 'center',
     alignSelf: 'center',
-    
   },
+
   subtitle:{
     maxWidth: 350,
     fontSize: 16,
@@ -281,6 +276,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto_400Regular',
     textAlign: 'center',
   },
+
   registerBtn: {
     margin: 15,
     marginTop: 50,

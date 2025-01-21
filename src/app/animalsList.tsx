@@ -87,7 +87,6 @@ const AnimalInfoScreen = () => {
           </View>
         </View>
       ))}
-      <View style={{margin:70}}/>
     </View>
     </ScrollView>
   );
@@ -101,7 +100,6 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    backgroundColor: '#fff',
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     borderTopLeftRadius: 3,

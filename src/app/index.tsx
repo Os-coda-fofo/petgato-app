@@ -11,13 +11,11 @@ const Home = () => {
 
   return (
       <View style={styles.container}>
-          <TouchableOpacity  style={styles.menuIcon} onPress={() => router.push(`./myAnimals/${user?.uid}`)}>
-            <Feather name="menu" size={24} color="#88c9bf" />
-          </TouchableOpacity>
-        <Text style={styles.title}>Olá!</Text>
-        <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
+        <TouchableOpacity  style={styles.menuIcon} onPress={() => router.push(`./myAnimals/${user?.uid}`)}>
+          <Feather name="menu" size={24} color="#88c9bf" />
+        </TouchableOpacity>
 
-        <Feather style={styles.menuIcon} name="menu" size={24} color="#88c9bf" />
+        <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
         <Text style={styles.title}>Olá</Text>
         <Text style={[ styles.subtitle, { color: '#757575' }]}> Bem vindo ao Meau! Aqui você pode adotar, doar e ajudar cães e gatos com facilidade. Qual o seu interesse? </Text>
         
