@@ -10,7 +10,6 @@ import { SessionProvider } from '../services/auth/ctx';
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
-
   const [loaded] = useFonts({
     CourgetteRegular: require("../../assets/fonts/Courgette-Regular.ttf"),
     Roboto_400Regular,
@@ -32,6 +31,8 @@ export default function Layout() {
     return null;
   }
 
+
+  
   return (
     <SessionProvider>
       <SafeAreaProvider>
@@ -40,7 +41,7 @@ export default function Layout() {
         </SafeAreaView>
       </SafeAreaProvider>
     </SessionProvider>
-  )
+  );
 }
 export const screenOptions = {
   headerShown: false,
@@ -54,3 +55,16 @@ const styles = StyleSheet.create({
   }
 });
 
+/*return (
+  <GestureHandlerRootView style={styles.container}>
+    <Drawer screenOptions={{ headerShown: true }} />
+    <SessionProvider>
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.safeView}>
+          <Slot />
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </SessionProvider>
+  </GestureHandlerRootView>
+);
+}*/

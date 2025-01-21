@@ -4,6 +4,7 @@ import React from 'react';
 import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../components/Button';
 import { useSession } from '../services/auth/ctx';
+import { DrawerToggleButton } from '@react-navigation/drawer';
 
 const Home = () => {
   const router = useRouter();
@@ -34,13 +35,58 @@ const Home = () => {
   );
 }
 
+export default function Index() {
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Image 
+          source= {{ uri: 'https://reactnative.dev/img/tiny_logo.png' }} 
+          style={styles.img}/>
+        />
+        <View style={styles.user}>
+          <Text style={styles.hi}>Olá</Text>
+          <Text style={styles.username}>Teste</Text>
+        </View>
+
+        <DrawerToggleButton />
+      </View>
+      <Home />
+    </View>
+  )
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 26,
+    paddingTop: 32,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
     backgroundColor: '#fafafa',
+  },
+  header: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    backgroundColor: '#88c9bf',
+  },
+  img: {
+    width: 50,
+    height: 50,
+    borderRadius: 12,
+  },
+  user: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  hi: {
+    fontSize: 14,
+  },
+  username: {
+    fontSize: 16,
+    fontWeight: '700',
   },
   title: {
     fontSize: 72,
