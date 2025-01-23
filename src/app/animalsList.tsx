@@ -14,7 +14,7 @@ const AnimalInfoScreen = () => {
     age: string;
     size: string;
     owner: string;
-    city: string;
+    localidade: string;
   }
   const [pets, setPets] = useState<Pet[]>([]);
   const [loading, setLoading] = useState(true);
@@ -81,7 +81,7 @@ const AnimalInfoScreen = () => {
             <Text style={styles.info}>{pet.gender}</Text>
             <Text style={styles.info}>{pet.age}</Text>
             <Text style={styles.info}>{pet.size}</Text>
-            <Text style={styles.info}>{pet.city}</Text>
+            <Text style={styles.info}>{pet.localidade}</Text>
           </View>
             </TouchableOpacity>
           </View>

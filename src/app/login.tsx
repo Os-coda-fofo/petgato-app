@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Text, StatusBar } from 'react-native';
+import { View, StyleSheet, Text, StatusBar, Alert } from 'react-native';
 import Button from '../components/Button';
 import { Link } from 'expo-router';
 import Input from '../components/Input';
@@ -24,7 +24,7 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (!isLoading && user) {
-      router.replace(redirectTo || '/registerAnimal');
+      router.replace(redirectTo || '/');
       setRedirectTo(null); 
     }
   }, [isLoading, user]);
@@ -32,7 +32,8 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       await signIn(formState.email, formState.password)
-      router.replace(redirectTo || '/registerAnimal')
+      router.replace(redirectTo || '/')
+      Alert.alert('Alerta', 'Login realizado com sucesso!')
     } 
     catch (error) {
       console.error('Erro de login', error);

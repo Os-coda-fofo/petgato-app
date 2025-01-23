@@ -4,7 +4,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Checkbox from 'expo-checkbox';
 import * as ImagePicker from 'expo-image-picker';
 import { Link, useRouter } from 'expo-router';
-import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
@@ -199,7 +199,7 @@ const AnimalScreen = () => {
     };
 
   return (
-    <ScrollView style={{ flexGrow: 1 }}>
+    <ScrollView style={{ flex: 1, paddingBottom: 24 }}>
       <View style={styles.container}>
         <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
@@ -218,12 +218,12 @@ const AnimalScreen = () => {
           <Input placeholder="Nome completo" onChangeText={(value) => handleFormChange('name', value)} value={formState.name}  />
           <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>FOTOS DO ANIMAL</Text>
           
-          <View style={styles.imageBox}>
-            <View style={{ margin: 40, alignItems: "center"}}>
+          <TouchableOpacity onPress={pickImage}>
+            <View style={styles.imagePickerBox}>
               <MaterialIcons name="control-point" size={24} color="#434343" />
               <Button title="adicionar foto" onPress={pickImage} variant="transparent" />
             </View>
-          </View>
+          </TouchableOpacity>
 
           <ScrollView horizontal>
             {images.map((uri, index) => (
@@ -236,13 +236,13 @@ const AnimalScreen = () => {
           
           <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start' }}>ESPÉCIE</Text>
           <View style={styles.checkboxline}>
-          <Checkbox style={styles.checkbox} value={checkboxState.isCachorro} onValueChange={() => handleCheckboxChange('isCachorro')} />
-          <Text style={styles.paragraph}>Cachorro</Text>
-          <Checkbox style={styles.checkbox} value={checkboxState.isGato} onValueChange={() => handleCheckboxChange('isGato')} />
-          <Text style={styles.paragraph}>Gato</Text>
+            <Checkbox style={styles.checkbox} value={checkboxState.isCachorro} onValueChange={() => handleCheckboxChange('isCachorro')} />
+            <Text style={styles.paragraph}>Cachorro</Text>
+            <Checkbox style={styles.checkbox} value={checkboxState.isGato} onValueChange={() => handleCheckboxChange('isGato')} />
+            <Text style={styles.paragraph}>Gato</Text>
           </View>
-          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SEXO</Text>
 
+          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SEXO</Text>
           <View style={styles.checkboxline}>
           <Checkbox style={styles.checkbox} value={checkboxState.isMacho} onValueChange={() => handleCheckboxChange('isMacho')} />
           <Text style={styles.paragraph}>Macho</Text>
@@ -328,11 +328,11 @@ const AnimalScreen = () => {
           <Checkbox style={styles.checkboxFade} value={checkboxState.is6mes} onValueChange={() => handleCheckboxChange('is6mes')} />
           <Text style={styles.paragraphFade}>6 meses</Text>
           </View>
+          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SOBRE O ANIMAL</Text>
+          <Input placeholder="Compartilhe a história do animal" onChangeText={(value) => handleFormChange('sobre', value)} value={formState.sobre}  />
           <View style={styles.registerBtn}>
             <Button title="COLOCAR PARA ADOÇÃO" onPress={async () => { await saveAnimalData(); router.push('/full-animal-registry'); }} variant="yellow" />
           </View>
-          <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SOBRE O ANIMAL</Text>
-          <Input placeholder="Compartilhe a história do animal" onChangeText={(value) => handleFormChange('sobre', value)} value={formState.sobre}  />
           
           </View>
         </View>
@@ -348,9 +348,10 @@ const styles = StyleSheet.create({
   },
 
   checkboxline:{
+    flex: 1,
     flexDirection: 'row',
     alignSelf: 'flex-start',
-    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 
   checkboxtempo:{
@@ -359,22 +360,27 @@ const styles = StyleSheet.create({
     left: 15,
     justifyContent: 'space-between',
   },
+
   imageContainer: {
     margin: 10,
     alignItems: 'center',
   },
-  imageBox: {
+
+  imagePickerBox: {
     backgroundColor: "#e6e7e7",
-    margin: 15,
-    maxWidth: 250,
-    padding: 15,
+    margin: 30,
+    padding: 20,
+    width: 200,
+    height: 200,
     borderRadius: 10,
-    alignSelf: 'center',
-    alignItems: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
+
   paragraph: {
-    fontSize: 15,
+    fontSize: 14,
   },
+
   image: {
     width: 200,
     height: 200,
@@ -424,7 +430,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   registerBtn: {
-    margin: 15,
+    margin: 20,
+    marginBottom: 200,
     width: '70%',
     alignSelf: 'center',
   },

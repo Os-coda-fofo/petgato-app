@@ -1,13 +1,12 @@
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Header from '../../components/Header';
-import { db } from '../../services/auth/firebase-config';
+import Header from '../../../components/Header';
+import { db } from '../../../services/auth/firebase-config';
 
 const MyAnimalsInfoScreen = () => {
   
-  const {ownerId} = useLocalSearchParams();
   interface Pet {
     id: string;
     name: string;
@@ -15,7 +14,7 @@ const MyAnimalsInfoScreen = () => {
     gender: string;
     age: string;
     size: string;
-    city: string;
+    localidade: string;
     owner: string;
   }
   const [pets, setPets] = useState<Pet[]>([]);
@@ -62,7 +61,6 @@ const MyAnimalsInfoScreen = () => {
     return <ActivityIndicator size="large" color="#88c9bf" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />;
   }
 
-
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
@@ -84,7 +82,7 @@ const MyAnimalsInfoScreen = () => {
             <Text style={styles.info}>{pet.gender}</Text>
             <Text style={styles.info}>{pet.age}</Text>
             <Text style={styles.info}>{pet.size}</Text>
-            <Text style={styles.info}>{pet.city}</Text>
+            <Text style={styles.info}>{pet.localidade}</Text>
             </View>
             </TouchableOpacity>
           </View>
@@ -140,8 +138,6 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
 });
-
-
 
 export default MyAnimalsInfoScreen;
 

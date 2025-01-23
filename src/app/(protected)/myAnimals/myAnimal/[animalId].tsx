@@ -2,10 +2,9 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import Button from '../../../components/Button';
-import Header from '../../../components/Header';
-import { db } from '../../../services/auth/firebase-config';
-
+import Button from '../../../../components/Button';
+import Header from '../../../../components/Header';
+import { db } from '../../../../services/auth/firebase-config';
 
 const MyAnimalInfoScreen = () => {
 
@@ -40,8 +39,6 @@ const MyAnimalInfoScreen = () => {
 
   const [pet, setPet] = useState<Pet | null>(null);
   const [loading, setLoading] = useState(true);
-
-  console.log(animalId);
     
   useEffect(() => {
     const fetchPet = async () => {
