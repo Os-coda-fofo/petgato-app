@@ -6,6 +6,7 @@ import Input from '../components/Input';
 import { useSession } from '../services/auth/ctx';
 import { useRouter } from 'expo-router';
 import Header from '../components/Header';
+import Loading from '../components/Loading';
 
 const LoginScreen = () => {
   const [formState, setFormState] = React.useState({
@@ -40,18 +41,14 @@ const LoginScreen = () => {
   }}
 
   if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontSize: 24, fontFamily: 'CourgetteRegular' }} >Loading...</Text>
-      </View>
-    );
+    return <Loading />
   }
   
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-      <Header title="Login" />
+      <Header title="Login" showMenuButton />
 
       <View style={styles.inputContainer}>
       <Input placeholder="Nome de usuário" onChangeText={(value) => handleFormChange('email', value)} value={formState.email} checked={formState.email.length > 0} />

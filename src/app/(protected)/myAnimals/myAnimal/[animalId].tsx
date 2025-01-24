@@ -1,10 +1,12 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Button from '../../../../components/Button';
 import Header from '../../../../components/Header';
 import { db } from '../../../../services/auth/firebase-config';
+import Loading from '../../../../components/Loading';
+import PagerView from 'react-native-pager-view';
 
 const MyAnimalInfoScreen = () => {
 
@@ -64,11 +66,7 @@ const MyAnimalInfoScreen = () => {
   }, [animalId]);
 
   if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#f7a800" />
-      </View>
-    );
+    return <Loading />;
   }
 
   if (!pet) {
@@ -79,68 +77,83 @@ const MyAnimalInfoScreen = () => {
     );
   }
 
-  if (!pet) {
-    return (
-      <View style={styles.container}>
-        <Text>Animal não encontrado.</Text>
-      </View>
-    );
+  const Divider = () => { 
+    return <View style={{ height: 1, backgroundColor: "#E0E0E0", marginHorizontal: 20 }} /> 
   }
 
   return (
-    <ScrollView style={{ flexGrow: 1 }}>
     <View style={styles.container}>
-      <StatusBar backgroundColor={"#ffee29b"} barStyle={"dark-content"} />
-      
+    <Header title={pet.name} showBackButton showShareIcon onBackPress={() => router.back()}/>
+    <ScrollView style={{ flexGrow: 1 }}>
         <View key={pet.id}>
-          <Header title={pet.name} />
+
+            <PagerView style={{ height: 300 }} initialPage={0}>
+              {pet.photos.map((photo, index) => (
+                <View key={index}>
+                  <Image 
+                    style={{ width: '100%', height: '100%' }}
+                    source={{ uri: photo }} 
+                    resizeMode="cover" 
+                  />
+                </View>
+              ))}
+            </PagerView>
           
-          <Image 
-            style={styles.imageBox}
-            source={{ uri: pet.photos[0] }} 
-            resizeMode="cover" />
-          
-          <View style={styles.body}>
-            <Text style={{color: "#434343", left: 20, fontWeight: 'bold'}}>{pet.name}</Text>
+          <View >
+            <Text style={{ fontFamily: "Roboto_500Medium", fontSize: 16, color: "#434343", paddingTop: 24, paddingLeft: 32 }}>{pet.name}</Text>
+
             <View style={styles.inline}>
               <View style={styles.infoblock}>
-                <Text style={{color: '#f7a800'}}>SEXO</Text>
-                <Text style={{color: "#757575"}}>{pet.gender}</Text>
+                <Text style={styles.title}>SEXO</Text>
+                <Text style={styles.text}>{pet.gender}</Text>
               </View>
+
               <View style={styles.infoblock}>
-              <Text style={{color: '#f7a800'}}>PORTE</Text>
-                <Text style={{color: "#757575"}}>{pet.size}</Text>
+                <Text style={styles.title}>PORTE</Text>
+                <Text style={styles.text}>{pet.size}</Text>
               </View>
+
               <View style={styles.infoblock}>
-              <Text style={{color: '#f7a800'}}>IDADE</Text>
-                <Text style={{color: "#757575"}}>{pet.age}</Text>
+                <Text style={styles.title}>IDADE</Text>
+                <Text style={styles.text}>{pet.age}</Text>
               </View>
+
             </View>
-            <View style={styles.horizontalLine} />
+            <View style={styles.infoblock}>
+              <Text style={styles.title}>LOCALIZAÇÃO</Text>
+              <Text style={styles.text}>{pet.localidade}</Text>
+            </View>
+
+            <Divider />
+
+            <View style={styles.inline}>
+
+              <View style={styles.infoblock}>
+                <Text style={styles.title}>CASTRADO</Text>
+                <Text style={styles.text}>{pet.castrado  ? 'Sim' : 'Não'}</Text>
+              </View>
+
+              <View style={styles.infoblock}>
+                <Text style={styles.title}>VERMIFUGADO</Text>
+                <Text style={styles.text}>{pet.vermifugado ? 'Sim' : 'Não'}</Text>
+              </View>
+
+            </View>
+
             <View style={styles.inline}>
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>CASTRADO</Text>
-              <Text style={{color: "#757575"}}>{pet.castrado  ? 'Sim' : 'Não'}</Text>
+              <Text style={styles.title}>VACINADO</Text>
+              <Text style={styles.text}>{pet.vacinado  ? 'Sim' : 'Não'}</Text>
             </View>
             <View style={styles.infoblock}>
-              <Text style={{color: '#f7a800'}}>VERMIFUGADO</Text>
-              <Text style={{color: "#757575"}}>{pet.vermifugado ? 'Sim' : 'Não'}</Text>
+              <Text style={styles.title}>DOENÇAS</Text>
+              <Text style={styles.text}>{pet.doente  ? 'Sim' : 'Nenhuma'}</Text>
             </View>
             </View>
-            <View style={styles.inline}>
+            <Divider />
             <View style={styles.infoblock}>
-              <Text style={{color: '#f7a800'}}>VACINADO</Text>
-              <Text style={{color: "#757575"}}>{pet.vacinado  ? 'Sim' : 'Não'}</Text>
-            </View>
-            <View style={styles.infoblock}>
-              <Text style={{color: '#f7a800'}}>DOENÇAS</Text>
-              <Text style={{color: "#757575"}}>{pet.doente  ? 'Sim' : 'Nenhuma'}</Text>
-            </View>
-            </View>
-            <View style={styles.horizontalLine} />
-            <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>TEMPERAMENTO</Text>
-            <Text style={{color: "#757575"}}>{[
+            <Text style={styles.title}>TEMPERAMENTO</Text>
+            <Text style={styles.text}>{[
     pet.brincalhao && "brincalhão",
     pet.timido && "tímido",
     pet.calmo && "calmo",
@@ -153,8 +166,8 @@ const MyAnimalInfoScreen = () => {
             </View>
             <View style={styles.horizontalLine} />
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>EXIGÊNCIAS DO DOADOR</Text>
-            <Text style={{maxWidth: 320, color: "#434343"}}>{[
+            <Text style={styles.title}>EXIGÊNCIAS DO DOADOR</Text>
+            <Text style={styles.text}>{[
     pet.termo && "Termo de adoção",
     pet.fotos && "Fotos da casa",
     pet.visita && "Visita prévia",
@@ -165,28 +178,40 @@ const MyAnimalInfoScreen = () => {
             </View>
             <View style={styles.horizontalLine} />
             <View style={styles.infoblock}>
-            <Text style={{color: '#f7a800'}}>MAIS SOBRE {pet.name.toUpperCase()}</Text>
-            <Text style={{maxWidth: 320, color: "#434343"}}>{pet.about}</Text>
+            <Text style={styles.title}>MAIS SOBRE {pet.name.toUpperCase()}</Text>
+            <Text style={styles.text}>{pet.about}</Text>
             </View>
             <View style={[styles.buttonContainer, { flexDirection: 'row' }]}>
-                <View style={{marginHorizontal: 10,width: 150}}>
+                <View style={{ marginHorizontal: 10, width: 150 }}>
               <Button title="VER INTERESSADOS" onPress={() => router.push(`./candidate/${animalId}`)} textColor="#757575" variant="main" />
               </View>
-              <View style={{marginHorizontal: 10,width: 150}}>
+              <View style={{ marginHorizontal: 10, width: 150 }}>
               <Button title="REMOVER PET" onPress={() => router.push(`./remove/${animalId}`)} textColor="#757575" variant="main" />
                 </View>
             </View>
           </View>    
         </View>
+      </ScrollView>
     </View>
-    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#fafafa',
-    justifyContent: 'center',
+    paddingTop: 64
+  },
+
+  title: {
+    color: '#f7a800',
+    fontSize: 12,
+    fontFamily: 'Roboto_500Medium',
+  },
+
+  text: {
+    color: '#757575',
+    fontSize: 14,
   },
 
   infoBox: {
@@ -204,10 +229,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     margin: 16,
     left: 16,
-  },
-
-  body: {
-    top: 100,
   },
 
   inline:{

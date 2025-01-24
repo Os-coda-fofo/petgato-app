@@ -1,9 +1,10 @@
 import { router } from 'expo-router';
 import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../../../components/Header';
 import { db } from '../../../services/auth/firebase-config';
+import Loading from '../../../components/Loading';
 
 const MyAnimalsInfoScreen = () => {
   
@@ -58,37 +59,37 @@ const MyAnimalsInfoScreen = () => {
   }, []);
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#88c9bf" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />;
+    return <Loading />;
   }
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={styles.container}>
+      <View style={styles.container}>
         <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-        <Header title="Meus Pets" />
+        <Header title="Meus Pets" showMenuButton showSearchIcon />
 
-      {pets.map((pet) => (
-        <View key={pet.id} style={styles.card}>
-          
-          <View>
-            <TouchableOpacity
-              key={pet.id}
-              onPress={() => router.push(`./myAnimal/${pet.id}`)} // Navega para a tela de detalhes
-            >
-            <Text style={styles.name}>{pet.name}</Text>
-            <Image source={{ uri: pet.photos[0] }} style={styles.image} />
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 50 }}>
-            <Text style={styles.info}>{pet.gender}</Text>
-            <Text style={styles.info}>{pet.age}</Text>
-            <Text style={styles.info}>{pet.size}</Text>
-            <Text style={styles.info}>{pet.localidade}</Text>
+        {pets.map((pet) => (
+          <View key={pet.id} style={styles.card}>
+            
+            <View>
+              <TouchableOpacity
+                key={pet.id}
+                onPress={() => router.push(`./myAnimal/${pet.id}`)} // Navega para a tela de detalhes
+              >
+              <Text style={styles.name}>{pet.name}</Text>
+              <Image source={{ uri: pet.photos[0] }} style={styles.image} />
+              <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 50 }}>
+                <Text style={styles.info}>{pet.gender}</Text>
+                <Text style={styles.info}>{pet.age}</Text>
+                <Text style={styles.info}>{pet.size}</Text>
+                <Text style={styles.info}>{pet.localidade}</Text>
+              </View>
+              </TouchableOpacity>
             </View>
-            </TouchableOpacity>
           </View>
-        </View>
-      ))}
-    </View>
+        ))}
+      </View>
     </ScrollView>
   );
 };
@@ -120,12 +121,12 @@ const styles = StyleSheet.create({
 
   image: {
     width: '100%',
-    height: 150,
-    resizeMode: 'cover',
+    height: 200,
+    objectFit: 'cover',
   },
 
   name: {
-    backgroundColor: '#fee29b',
+    backgroundColor: '#cfe9e5',
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',

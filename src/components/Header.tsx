@@ -1,29 +1,76 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import { Link } from 'expo-router';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+
+// Icons
+import { AntDesign, Entypo, Feather } from '@expo/vector-icons';
 
 interface HeaderProps {
   title: string;
   variant?: 'default' | 'yellow';
+  showShareIcon?: boolean;
+  showSearchIcon?: boolean;
+  showBackButton?: boolean;
+  showMenuButton?: boolean;
+  onBackPress?: () => void;
+  onMenuPress?: () => void;
+  onSharePress?: () => void;
+  onSearchPress?: () => void;
 }
 
-const Header = ({ title, variant = 'default' }: HeaderProps) => {
+const Header = ({
+  title, 
+  variant = 'default', 
+  showBackButton = false,
+  showMenuButton = false,
+  showShareIcon = false,
+  showSearchIcon = false,
+  onBackPress,
+  onMenuPress,
+  onSharePress,
+  onSearchPress,
+}: HeaderProps) => {
   return (
-    <View style={[ styles.header, styles[variant]]}>
-      <Link href="/" asChild>
-        <AntDesign name="arrowleft" size={24} color="#434343" />
-      </Link>
+    <View style={[ styles.headerContainer, styles[variant]]}>
+
+      {showBackButton && (
+        <TouchableOpacity onPress={onBackPress}>
+          <AntDesign name="arrowleft" size={24} color="#434343" style={styles.leftIcon}/>
+        </TouchableOpacity>
+      )} 
+
+      {showMenuButton && (
+        <TouchableOpacity onPress={onMenuPress} style={styles.leftIcon}>
+          <Feather name="menu" size={24} color="#434343" />
+        </TouchableOpacity>
+      )}
+
       <Text style={styles.headerTitle}>{title}</Text>
+
+      <View style={styles.rightIcons} >
+        {showShareIcon && (
+          <TouchableOpacity onPress={onSharePress} >
+            <Entypo name="share" size={24} color="#434343" />
+          </TouchableOpacity>
+        )}
+
+        {showSearchIcon && (
+          <TouchableOpacity onPress={onSearchPress} >
+            <Feather name="search" size={24} color="#434343" />
+          </TouchableOpacity>
+        )}
+      </View>
+
     </View>
   );  
 }
 
 const styles = StyleSheet.create({
-  header: {
+  // Header style
+  headerContainer: {
     flexDirection: 'row',
     width: '100%',
     height: 64,
+    zIndex: 1,
     backgroundColor: '#cfe9e5',
     position: 'absolute',
     top: 0,
@@ -39,6 +86,18 @@ const styles = StyleSheet.create({
     color: '#434343',
   },
 
+  // Icons
+  leftIcon: {
+    marginRight: 16,
+  },
+
+  rightIcons: {
+    flexDirection: 'row',
+    position: 'absolute',
+    right: 16,
+  },
+
+  // Color Variants
   default: {
     backgroundColor: '#cfe9e5',
   },

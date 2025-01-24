@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Checkbox from 'expo-checkbox';
 import * as ImagePicker from 'expo-image-picker';
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import { app, auth } from '../../services/auth/firebase-config';
+import Header from '../../components/Header';
 
 const AnimalScreen = () => {
   const router = useRouter();
@@ -203,12 +203,7 @@ const AnimalScreen = () => {
       <View style={styles.container}>
         <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-          <View style={styles.header}>
-            <Link href="/" asChild>
-              <AntDesign name="arrowleft" size={24} color="#434343" />
-            </Link>
-            <Text style={styles.headerTitle}>Cadastro Animal</Text>
-          </View>
+          <Header title="Cadastro de Animal" variant="yellow" showBackButton onBackPress={() => router.back()} />
 
           <View style={{top: 100}}>
           

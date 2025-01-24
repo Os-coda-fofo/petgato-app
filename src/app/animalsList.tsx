@@ -1,9 +1,10 @@
 import { router } from 'expo-router';
 import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../components/Header';
 import { db } from '../services/auth/firebase-config';
+import Loading from '../components/Loading';
 
 const AnimalInfoScreen = () => {
   interface Pet {
@@ -57,15 +58,15 @@ const AnimalInfoScreen = () => {
   }, []);
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#88c9bf" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} />;
-  }
+    return <Loading />;
+  } 
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={styles.container}>
-        <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
+      <View style={styles.container}>
+      <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-        <Header title="Adotar" />
+      <Header title="Adotar" variant="yellow" showMenuButton showSearchIcon onBackPress={() => router.back()} />
 
       {pets.map((pet) => (
         <View key={pet.id} style={styles.card}>
@@ -83,13 +84,13 @@ const AnimalInfoScreen = () => {
             <Text style={styles.info}>{pet.size}</Text>
             <Text style={styles.info}>{pet.localidade}</Text>
           </View>
-            </TouchableOpacity>
+          </TouchableOpacity>
           </View>
         </View>
       ))}
-    </View>
+      </View>
     </ScrollView>
-  );
+    );
 };
 
 const styles = StyleSheet.create({
@@ -100,6 +101,7 @@ const styles = StyleSheet.create({
   },
 
   card: {
+    backgroundColor: '#fff',
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     borderTopLeftRadius: 3,
@@ -107,8 +109,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     overflow: 'hidden',
     width: '90%',
-    elevation: 4,
-    shadowColor: '#000',
+    elevation: 4, // Sombra para Android
+    shadowColor: '#000', // Sombra para iOS
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -117,8 +119,9 @@ const styles = StyleSheet.create({
 
   image: {
     width: '100%',
-    height: 150,
+    minHeight: 200,
     resizeMode: 'cover',
+    objectFit: 'cover',
   },
 
   name: {
