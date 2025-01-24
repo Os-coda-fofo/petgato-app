@@ -164,7 +164,7 @@ const MyAnimalInfoScreen = () => {
     .filter(Boolean)
     .join(", ")}</Text>
             </View>
-            <View style={styles.horizontalLine} />
+            <Divider />
             <View style={styles.infoblock}>
             <Text style={styles.title}>EXIGÊNCIAS DO DOADOR</Text>
             <Text style={styles.text}>{[
@@ -176,18 +176,18 @@ const MyAnimalInfoScreen = () => {
     .filter(Boolean)
     .join(", ")}</Text>
             </View>
-            <View style={styles.horizontalLine} />
+            <Divider />
             <View style={styles.infoblock}>
             <Text style={styles.title}>MAIS SOBRE {pet.name.toUpperCase()}</Text>
             <Text style={styles.text}>{pet.about}</Text>
             </View>
             <View style={[styles.buttonContainer, { flexDirection: 'row' }]}>
-                <View style={{ marginHorizontal: 10, width: 150 }}>
-              <Button title="VER INTERESSADOS" onPress={() => router.push(`./candidate/${animalId}`)} textColor="#757575" variant="main" />
+              <View style={{ marginHorizontal: 10, width: 150 }}>
+                <Button title="VER INTERESSADOS" onPress={() => router.push(`./candidate/${animalId}`)} textColor="#757575" variant="main" />
               </View>
               <View style={{ marginHorizontal: 10, width: 150 }}>
-              <Button title="REMOVER PET" onPress={() => router.push(`./remove/${animalId}`)} textColor="#757575" variant="main" />
-                </View>
+                <Button title="REMOVER PET" onPress={() => router.push(`./remove/${animalId}`)} textColor="#757575" variant="main" />
+              </View>
             </View>
           </View>    
         </View>
@@ -283,6 +283,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: 250,
     height: 40,
+    margin: 20,
+    marginBottom: 40,
     justifyContent: 'center',
     alignSelf: 'center',
   },
