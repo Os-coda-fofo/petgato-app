@@ -1,12 +1,13 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../../../../components/Button';
 import Header from '../../../../components/Header';
 import { db } from '../../../../services/auth/firebase-config';
 import Loading from '../../../../components/Loading';
 import PagerView from 'react-native-pager-view';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const MyAnimalInfoScreen = () => {
 
@@ -41,21 +42,34 @@ const MyAnimalInfoScreen = () => {
 
   const [pet, setPet] = useState<Pet | null>(null);
   const [loading, setLoading] = useState(true);
-    
+
   useEffect(() => {
     const fetchPet = async () => {
       try {
-        const docRef = doc(db, 'animals/'+ animalId);
+        const docRef = doc(db, 'animals/' + animalId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setPet(docSnap.data() as Pet);
+          const petData = docSnap.data() as Pet;
+          setPet(petData);
+
+          const ownerRef = doc(db, 'users/' + petData.owner);
+          const ownerSnap = await getDoc(ownerRef);
+
+          if (ownerSnap.exists()) {
+            const ownerData = ownerSnap.data();
+            const ownerLocalidade = ownerData.localidade || 'Não disponível';
+            setPet((prev) => prev ? { ...prev, localidade: ownerLocalidade } : prev);
+          } else {
+            console.log('Dono não encontrado no banco de dados');
+            setPet((prev) => prev ? { ...prev, localidade: 'Não disponível' } : prev);
+          }
         } else {
           console.log('Animal não encontrado no banco de dados');
           setPet(null);
         }
       } catch (error) {
-        console.error('Erro ao buscar o animal:', error);
+        console.error('Erro ao buscar o animal ou dono:', error);
         setPet(null);
       } finally {
         setLoading(false);
@@ -65,16 +79,13 @@ const MyAnimalInfoScreen = () => {
     fetchPet();
   }, [animalId]);
 
+
   if (loading) {
     return <Loading />;
   }
 
   if (!pet) {
-    return (
-      <View style={styles.container}>
-        <Text>Animal não encontrado.</Text>
-      </View>
-    );
+    return
   }
 
   const Divider = () => { 
@@ -83,9 +94,19 @@ const MyAnimalInfoScreen = () => {
 
   return (
     <View style={styles.container}>
-    <Header title={pet.name} showBackButton showShareIcon onBackPress={() => router.back()}/>
-    <ScrollView style={{ flexGrow: 1 }}>
+
+      <Header title={pet.name} showBackButton showShareIcon onBackPress={() => router.back()}/>
+      <StatusBar backgroundColor={"#88c9bf"} />
+
+      <ScrollView style={{ flexGrow: 1 }}>
         <View key={pet.id}>
+
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => {}}
+            >
+              <MaterialCommunityIcons name="pencil" size={24} color="#434343" />
+            </TouchableOpacity>
 
             <PagerView style={{ height: 300 }} initialPage={0}>
               {pet.photos.map((photo, index) => (
@@ -121,7 +142,7 @@ const MyAnimalInfoScreen = () => {
             </View>
             <View style={styles.infoblock}>
               <Text style={styles.title}>LOCALIZAÇÃO</Text>
-              <Text style={styles.text}>{pet.localidade}</Text>
+              <Text style={styles.text}>{pet.localidade || "Não encontrada"}</Text>
             </View>
 
             <Divider />
@@ -183,10 +204,10 @@ const MyAnimalInfoScreen = () => {
             </View>
             <View style={[styles.buttonContainer, { flexDirection: 'row' }]}>
               <View style={{ marginHorizontal: 10, width: 150 }}>
-                <Button title="VER INTERESSADOS" onPress={() => router.push(`./candidate/${animalId}`)} textColor="#757575" variant="main" />
+                <Button title="VER INTERESSADOS" onPress={() => router.push(`./candidate/${animalId}`)} variant="main" />
               </View>
               <View style={{ marginHorizontal: 10, width: 150 }}>
-                <Button title="REMOVER PET" onPress={() => router.push(`./remove/${animalId}`)} textColor="#757575" variant="main" />
+                <Button title="REMOVER PET" onPress={() => router.push(`./remove/${animalId}`)} variant="main"/>
               </View>
             </View>
           </View>    
@@ -234,7 +255,6 @@ const styles = StyleSheet.create({
   inline:{
     flexDirection: 'row',
     alignSelf: 'flex-start',
-    justifyContent: 'space-between',
     width: 350,
   },
 
@@ -303,6 +323,18 @@ const styles = StyleSheet.create({
     width: '70%',
     alignSelf: 'center',
   },
+
+  editButton: {
+    position: 'absolute',
+    top: 270,
+    right: 16,
+    backgroundColor: '#ffff',
+    padding: 16,
+    borderRadius: 100,
+    borderColor: "#000",
+    borderWidth: 0.5,
+    zIndex: 10,
+  }
 });
 
 export default MyAnimalInfoScreen;

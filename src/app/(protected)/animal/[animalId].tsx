@@ -2,14 +2,18 @@ import { router, useLocalSearchParams } from 'expo-router';
 import Button from '../../../components/Button';
 import Header from '../../../components/Header';
 import { doc, getDoc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { db } from '../../../services/auth/firebase-config';
 import Loading from '../../../components/Loading';
+import { AntDesign } from '@expo/vector-icons';
+import * as Sharing from 'expo-sharing';
+import { captureRef } from 'react-native-view-shot';
+import SharePetCard from '../../../components/SharePetCard';
 
 const AnimalInfoScreen = () => {
-
+  const viewShotRef = useRef(null);
   const {animalId} = useLocalSearchParams();
   interface Pet {
     owner: string;
@@ -39,14 +43,31 @@ const AnimalInfoScreen = () => {
     acompanhamentoTempo: string;
     localidade: string;
   }
-  
+
   const [pet, setPet] = useState<Pet | null>(null);
   const [loading, setLoading] = useState(true);
 
   const handleConfirmAdoption = () => {
     router.push('/confirmacao/');
   };
-    
+
+  const handleShare = async () => {
+    try {
+      const uri = await captureRef(viewShotRef, {
+        format: "png",
+        quality: 1,
+      });
+
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(uri);
+      } else {
+        console.log("Compartilhamento não disponível.");
+      }
+    } catch (error) {
+      console.error("Erro ao compartilhar:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchPet = async () => {
       try {
@@ -88,13 +109,21 @@ const AnimalInfoScreen = () => {
 
   return (
     <>
-      <Header title={pet.name} variant="yellow" showBackButton showShareIcon onBackPress={() => router.back()} />
+      <Header title={pet.name} variant="yellow" showBackButton showShareIcon onSharePress={handleShare} onBackPress={() => router.back()} />
       <View style={styles.container}>
         <StatusBar backgroundColor={"#f7a800"} barStyle={"light-content"} />
 
         <ScrollView style={{ flex: 1 }}>
 
           <View key={pet.id}>
+
+            <TouchableOpacity
+              style={styles.likeButton}
+              onPress={() => {}}
+            >
+              <AntDesign name="hearto" size={24} color="#434343" />
+            </TouchableOpacity>
+
             <PagerView style={{ height: 300 }} initialPage={0}>
               {pet.photos.map((photo, index) => (
                 <View key={index}>
@@ -107,7 +136,7 @@ const AnimalInfoScreen = () => {
               ))}
             </PagerView>
 
-            <View >
+            <View>
               <Text style={{ fontFamily: "Roboto_500Medium", fontSize: 16, color: "#434343", paddingTop: 24, paddingLeft: 32 }}>{pet.name}</Text>
 
               <View style={styles.inline}>
@@ -202,6 +231,20 @@ const AnimalInfoScreen = () => {
           </View>
 
         </ScrollView>
+        <View style={{ position: "absolute", left: -9999  }}>
+          <SharePetCard 
+            ref={viewShotRef}
+            name={pet.name}
+            age={pet.age}
+            temperament={[
+                "timido",
+                "calmo",
+                "brincalhão",
+            ]}
+            photo={pet.photos[0]}
+            about={pet.about}
+          />
+        </View>
       </View>
     </>
   );
@@ -279,6 +322,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto_400Regular',
     textAlign: 'center',
   },
+
+  likeButton: {
+    position: 'absolute',
+    top: 270,
+    right: 16,
+    backgroundColor: '#ffff',
+    padding: 16,
+    borderRadius: 100,
+    borderColor: "#000",
+    borderWidth: 0.5,
+    zIndex: 10,
+  }
 
 });
 

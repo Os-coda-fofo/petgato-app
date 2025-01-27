@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
   },
   registerBtn: {
     margin: 20,
-    marginBottom: 200,
+    marginBottom: 100,
     width: '70%',
     alignSelf: 'center',
   },

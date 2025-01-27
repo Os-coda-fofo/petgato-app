@@ -1,10 +1,11 @@
-import { router } from 'expo-router';
 import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import Header from '../../../components/Header';
 import { db } from '../../../services/auth/firebase-config';
 import Loading from '../../../components/Loading';
+import PetCard from '../../../components/PetCard';
+import { router } from 'expo-router';
 
 const MyAnimalsInfoScreen = () => {
   
@@ -63,31 +64,25 @@ const MyAnimalsInfoScreen = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
       <View style={styles.container}>
         <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-        <Header title="Meus Pets" showMenuButton showSearchIcon />
+        <Header title="Meus Pets" showMenuButton showSearchIcon onMenuPress={() => {router.push("/")}}/>
 
         {pets.map((pet) => (
-          <View key={pet.id} style={styles.card}>
-            
-            <View>
-              <TouchableOpacity
-                key={pet.id}
-                onPress={() => router.push(`./myAnimal/${pet.id}`)} // Navega para a tela de detalhes
-              >
-              <Text style={styles.name}>{pet.name}</Text>
-              <Image source={{ uri: pet.photos[0] }} style={styles.image} />
-              <View style={{ flexDirection: "row", justifyContent: "space-between", marginHorizontal: 50 }}>
-                <Text style={styles.info}>{pet.gender}</Text>
-                <Text style={styles.info}>{pet.age}</Text>
-                <Text style={styles.info}>{pet.size}</Text>
-                <Text style={styles.info}>{pet.localidade}</Text>
-              </View>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <PetCard 
+            id={pet.id} 
+            key={pet.id} 
+            name={pet.name}
+            gender={pet.gender}
+            age={pet.age}
+            size={pet.size}
+            localidade={pet.localidade}
+            photos={pet.photos}
+            variant="cyan"
+            whereToGo={() => router.push(`./myAnimal/${pet.id}`)}
+          />
         ))}
       </View>
     </ScrollView>
