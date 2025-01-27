@@ -1,15 +1,43 @@
-import { DrawerToggleButton } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerToggleButton } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler';
+import { enableScreens } from 'react-native-screens';
+import { DrawerSceneWrapper } from '../components/drawer-scene-wrapper';
 
 
-export default function Configurations() {
+enableScreens();
+
+const Drawer = createDrawerNavigator();
+
+function HomeScreen() {
+  return (
+    <View>
+      <Text>Home Screen</Text>
+    </View>
+  );
+}
+function App() {
+  return (
+    <DrawerSceneWrapper>
+      <NavigationContainer>
+        <Drawer.Navigator initialRouteName="Home">
+          <Drawer.Screen name="Home" component={HomeScreen} />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    </DrawerSceneWrapper>
+  );
+}
+
+export default App;
+
+
+export function Configurations() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.username}>Teste</Text>
-
-
         <DrawerToggleButton />
       </View>
     </View>
@@ -33,21 +61,10 @@ const styles = StyleSheet.create({
     gap: 7,
     backgroundColor: '#88c9bf',
   },
-  img: {
-    width: 50,
-    height: 50,
-    borderRadius: 12,
-  },
-  user: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  hi: {
-    fontSize: 14,
-  },
   username: {
     fontSize: 16,
     fontWeight: '700',
+    flex: 1,
   },
   title: {
     fontSize: 72,

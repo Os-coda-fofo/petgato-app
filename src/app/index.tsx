@@ -1,16 +1,23 @@
 import Feather from '@expo/vector-icons/Feather';
+import { DrawerToggleButton } from '@react-navigation/drawer';
 import { Link, useRouter } from 'expo-router';
 import React from 'react';
 import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import 'react-native-gesture-handler';
+import { enableScreens } from 'react-native-screens';
 import Button from '../components/Button';
+import { DrawerSceneWrapper } from '../components/drawer-scene-wrapper';
 import { useSession } from '../services/auth/ctx';
-import { DrawerToggleButton } from '@react-navigation/drawer';
+
+
+enableScreens();
 
 const Home = () => {
   const router = useRouter();
   const { user, isLoading } = useSession();
 
   return (
+    <DrawerSceneWrapper>
       <View style={styles.container}>
         <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
@@ -32,6 +39,7 @@ const Home = () => {
         
         <Image style={styles.logo} source={require('../../assets/logo/Meau_marca_2.png')} />
       </View>
+    </DrawerSceneWrapper>
   );
 }
 
@@ -42,7 +50,6 @@ export default function Index() {
         <Image 
           source= {{ uri: 'https://reactnative.dev/img/tiny_logo.png' }} 
           style={styles.img}/>
-        />
         <View style={styles.user}>
           <Text style={styles.hi}>Olá</Text>
           <Text style={styles.username}>Teste</Text>
@@ -125,5 +132,3 @@ const styles = StyleSheet.create({
     left: 16,
   }
 });
-
-export default Home;
