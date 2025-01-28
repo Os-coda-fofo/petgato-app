@@ -1,13 +1,14 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import Button from '../../../components/Button';
-import Header from '../../../components/Header';
-import { doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { db } from '../../../services/auth/firebase-config';
+import Button from '../../../components/Button';
+import Header from '../../../components/Header';
+import { auth, db } from '../../../services/auth/firebase-config';
 
 const AnimalInfoScreen = () => {
 
+  const userId = auth.currentUser?.uid;
   const {animalId} = useLocalSearchParams();
   interface Pet {
     owner: string;
@@ -42,6 +43,34 @@ const AnimalInfoScreen = () => {
 
   console.log(animalId);
     
+  const saveChatData = async () => {
+        if (!userId) {
+          console.error('Usuário não está logado');
+          return;
+        }
+  
+        try {
+          // Crie uma referência para o Firestore
+          const groupChatCollectionRef = collection(db, 'groupChats');
+  
+          // Crie um objeto com os dados do formulário
+          const chatData = {
+            owner: pet?.owner,
+            client: userId,
+            petId: animalId
+          };
+  
+          console.log("Usuário:", userId);
+          console.log('Dados do dodo:', pet?.owner);
+          console.log('Dados do pet:', animalId);
+          await addDoc(groupChatCollectionRef, chatData);
+  
+          console.log('chat criado com sucesso!');
+        } catch (error) {
+          console.error('Erro ao salvar o chat:', error);
+        }
+      };
+
   useEffect(() => {
     const fetchPet = async () => {
       try {
@@ -171,7 +200,7 @@ const AnimalInfoScreen = () => {
             <Text style={{maxWidth: 320, color: "#434343"}}>{pet.about}</Text>
             </View>
             <View style={styles.buttonContainer}>
-              <Button title="PRETENDO ADOTAR" onPress={() => router.push('/confirmacao')} variant="default" />
+              <Button title="PRETENDO ADOTAR" onPress={async () => {await saveChatData();router.push('/');}} variant="default" />
             </View>
           </View>    
         </View>
