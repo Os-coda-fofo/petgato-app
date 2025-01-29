@@ -2,7 +2,11 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+=======
+import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+>>>>>>> origin/KAN-22-Criar-o-chat
 import Button from '../components/Button';
 import Header from '../components/Header';
 import Input from '../components/Input';
@@ -113,6 +117,7 @@ const RegisterScreen = () => {
           
           <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16, marginTop: 16, marginBottom: 24, alignSelf: "flex-start" }}>FOTO DE PERFIL</Text>
         </View>
+<<<<<<< HEAD
 
         <TouchableOpacity style={styles.imageBox} onPress={pickImage}>
           <View style={{ width: 200, height: 200, alignItems: "center", justifyContent: "center" }}>
@@ -122,6 +127,17 @@ const RegisterScreen = () => {
         </TouchableOpacity>
 
         {pfpimage && (
+=======
+        
+        <View style={styles.imageBox}>
+            <View style={{ margin: 40, alignItems: "center"}}>
+              <MaterialIcons name="control-point" size={24} color="#434343" />
+              <Button title="adicionar foto" onPress={pickImage} variant="transparent" />
+            </View>
+          </View>
+
+          {pfpimage && (
+>>>>>>> origin/KAN-22-Criar-o-chat
           <View style={styles.imageContainer}>
             <Image source={{ uri: pfpimage }} style={styles.image} />
             <Button title="Remover" onPress={removeImage} variant="transparent" />

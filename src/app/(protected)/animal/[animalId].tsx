@@ -47,6 +47,7 @@ const AnimalInfoScreen = () => {
   const [pet, setPet] = useState<Pet | null>(null);
   const [loading, setLoading] = useState(true);
 
+<<<<<<< HEAD
   const handleConfirmAdoption = () => {
     router.push('/confirmacao/');
   };
