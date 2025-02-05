@@ -40,25 +40,30 @@ const MyAnimalInfoScreen = () => {
     acompanhamentoTempo: string;
   }
 
+  interface Owner {
+    city: string;
+  }
+
   const [pet, setPet] = useState<Pet | null>(null);
+  const [ownerLocation, setOwnerLocation ] = useState<Owner | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPet = async () => {
       try {
-        const docRef = doc(db, 'animals/' + animalId);
+        const docRef = doc(db, `animals/${animalId}`);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
           const petData = docSnap.data() as Pet;
           setPet(petData);
 
-          const ownerRef = doc(db, 'users/' + petData.owner);
+          const ownerRef = doc(db, `users/${petData.owner}`);
           const ownerSnap = await getDoc(ownerRef);
 
           if (ownerSnap.exists()) {
             const ownerData = ownerSnap.data();
-            const ownerLocalidade = ownerData.localidade || 'Não disponível';
+            const ownerLocalidade = ownerData.city || 'Não disponível';
             setPet((prev) => prev ? { ...prev, localidade: ownerLocalidade } : prev);
           } else {
             console.log('Dono não encontrado no banco de dados');

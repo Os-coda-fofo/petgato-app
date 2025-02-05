@@ -1,58 +1,58 @@
 import { useLocalSearchParams } from 'expo-router';
-import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from 'firebase/firestore';
 import React, { useCallback, useEffect, useState } from 'react';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
-import { auth, db } from '../../../services/auth/firebase-config';
-
+import { db } from '../../../services/auth/firebase-config';
+import { useSession } from '../../../services/auth/ctx';
 
 export default function Chat() {
-    interface User {
-        uid: string;
-        name: string;
-        pfpimage: string;
-        email: string;
-      }
-
-    const {chatId} = useLocalSearchParams();
-  const [messages, setMessages] = useState<IMessage[]>([]);
-  const userId = auth.currentUser?.uid;
-  const [user, setUser] = useState<User | null>();
-  
-
+  const { chatId } = useLocalSearchParams();
+  const { user: sessionUser } = useSession();
+  const [ messages, setMessages ] = useState<IMessage[]>([]);
 
   useEffect(() => {
-    
-    // Listener para carregar mensagens do Firebase em tempo real
+    if (!chatId) return;
+
     const messagesRef = collection(db, 'chats');
     const q = query(messagesRef, orderBy('createdAt', 'desc'));
+    
     const unsubscribe = onSnapshot(q, (snapshot) => {
-        const fetchedMessages = snapshot.docs
-            .map((doc) => {
+      const fetchedMessages = snapshot.docs
+        .map((doc) => {
           const data = doc.data();
           return {
             _id: doc.id,
             text: data.text,
-            createdAt: data.createdAt.toDate(), 
+            createdAt: data.createdAt?.toDate?.() || new Date(),
             user: data.user,
-            groupChatId: data.groupChatId
+            groupChatId: data.groupChatId,
           };
         })
-        .filter(chat => chat.groupChatId === chatId);
-        setMessages(fetchedMessages); 
-      });
+        // filtramos para mostrar apenas as mensagens do chat atual
+        .filter((msg) => msg.groupChatId === chatId);
+
+      setMessages(fetchedMessages);
+    });
 
     return () => unsubscribe();
-  }, [userId]);
+  }, [chatId]);
 
-  const onSend = useCallback(async (messages: IMessage[] = []) => {
-    const { _id, createdAt, text, user } = messages[0];
-    const groupChatId = chatId;
-    const messagesRef = collection(db, 'chats');
-    setMessages(previousMessages =>
-        GiftedChat.append(previousMessages, messages),
-      )
-    await addDoc(messagesRef, { _id, createdAt, text, user, groupChatId });
-  }, []);
+  const onSend = useCallback(
+    async (newMessages: IMessage[] = []) => {
+      if (!newMessages.length) return;
+      const message = newMessages[0];
+
+      // Crie no Firestore usando serverTimestamp
+      await addDoc(collection(db, 'chats'), {
+        _id: message._id,
+        text: message.text,
+        createdAt: serverTimestamp(),
+        user: message.user,
+        groupChatId: chatId,
+      });
+    },
+    [chatId]
+  );
 
   return (
     <GiftedChat
@@ -60,9 +60,9 @@ export default function Chat() {
       showAvatarForEveryMessage = {true}
       onSend={messages => onSend(messages)}
       user={{
-        _id: userId || "defaut",
-        name: user?.name || "defaut",
-        avatar: user?.pfpimage || "https://i.pravatar.cc/300"
+        _id: sessionUser?.uid || "default",
+        name: sessionUser?.name || "Usuário",
+        avatar: sessionUser?.pfpimage || "https://i.pravatar.cc/300"
       }}
     />
   );

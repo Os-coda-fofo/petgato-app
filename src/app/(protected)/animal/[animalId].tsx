@@ -13,6 +13,7 @@ import { captureRef } from 'react-native-view-shot';
 import SharePetCard from '../../../components/SharePetCard';
 
 const AnimalInfoScreen = () => {
+
   const viewShotRef = useRef(null);
   const {animalId} = useLocalSearchParams();
   interface Pet {
@@ -44,10 +45,14 @@ const AnimalInfoScreen = () => {
     localidade: string;
   }
 
+  interface Owner {
+    city: string;
+  }
+
   const [pet, setPet] = useState<Pet | null>(null);
+  const [ownerLocation, setOwnerLocation] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-<<<<<<< HEAD
   const handleConfirmAdoption = () => {
     router.push('/confirmacao/');
   };
@@ -72,20 +77,48 @@ const AnimalInfoScreen = () => {
   useEffect(() => {
     const fetchPet = async () => {
       try {
-        const docRef = doc(db, 'animals/'+ animalId);
+        const docRef = doc(db, `animals/${animalId}`);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setPet(docSnap.data() as Pet);
+          const petData = docSnap.data() as Pet;
+          setPet(petData);
+
+          if (petData.owner) {
+            await fetchOwnerLocation(petData.owner);
+          } else {
+            console.log('Animal não tem dono.');
+            setOwnerLocation(null);
+          }
         } else {
-          console.log('Animal não encontrado no banco de dados');
+          console.log('Animal não encontrado.');
           setPet(null);
         }
+
       } catch (error) {
         console.error('Erro ao buscar o animal:', error);
         setPet(null);
       } finally {
         setLoading(false);
+      }
+    };
+
+    const fetchOwnerLocation = async (ownerId: string) => {
+      try {
+        const ownerRef = doc(db, `users/${ownerId}`);
+        const ownerSnap = await getDoc(ownerRef);
+
+        if (ownerSnap.exists()) {
+          const ownerData = ownerSnap.data() as Owner;
+          setOwnerLocation(ownerData.city || 'Localização não disponível');
+          console.log('Localização do owner:', ownerData.city);
+        } else {
+          console.log('Usuário owner não encontrado no banco de dados');
+          setOwnerLocation(null);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar a localização do owner:', error);
+        setOwnerLocation(null);
       }
     };
 
@@ -159,7 +192,7 @@ const AnimalInfoScreen = () => {
             </View>
             <View style={styles.infoblock}>
               <Text style={styles.title}>LOCALIZAÇÃO</Text>
-              <Text style={styles.text}>{pet.localidade}</Text>
+              <Text style={styles.text}>{ownerLocation}</Text>
             </View>
 
           <Divider />

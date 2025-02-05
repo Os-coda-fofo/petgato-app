@@ -30,7 +30,7 @@ const Home = () => {
         
         <View style={styles.buttonContainer}>
           <Button title="ADOTAR" onPress={() => router.push('/animalsList')} variant="default" />
-          <Button title="AJUDAR" onPress={() => router.push('/chatsList')} variant="default" />
+          <Button title="AJUDAR" onPress={() => router.push('/chat/chatsList')} variant="default" />
           <Button title="CADASTRAR ANIMAL" onPress={() => router.push('/registerAnimal')} variant="default" />
         </View>
 
