@@ -2,7 +2,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../components/Button';
 import Header from '../components/Header';
 import Input from '../components/Input';
@@ -89,40 +89,38 @@ const RegisterScreen = () => {
     <View style={styles.container}>
       <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-      <Header title="Cadastro" />
+      <Header title="Cadastro" showBackButton onBackPress={() => router.back()}/>
 
       <View style={styles.infoBox}>
-      <Text style={[ styles.subtitle, { color: '#757575' }]}> As informações preenchidas serão divulgadas apenas para a pessoa com qual você realizar o processo de adoção e/ou apadrinhamento, após a formalização do processo.</Text>
+        <Text style={[ styles.subtitle, { color: '#757575' }]}> As informações preenchidas serão divulgadas apenas para a pessoa com qual você realizar o processo de adoção e/ou apadrinhamento, após a formalização do processo.</Text>
       </View> 
-
       
         <View style={styles.inputContainer}>
-        <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>INFORMAÇÕES PESSOAIS</Text>
+          <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>INFORMAÇÕES PESSOAIS</Text>
 
-        <Input placeholder="Nome completo" onChangeText={(value) => handleFormChange('name', value)} value={formState.name}  />
-        <Input placeholder="Idade" onChangeText={(value) => handleFormChange('age', value)} value={formState.age} />
-        <Input placeholder="E-mail" onChangeText={(value) => handleFormChange('email', value)} value={formState.email}  />
-        <Input placeholder="Estado" onChangeText={(value) => handleFormChange('state', value)} value={formState.state} />
-        <Input placeholder="Cidade" onChangeText={(value) => handleFormChange('city', value)} value={formState.city}  />
-        <Input placeholder="Endereço" onChangeText={(value) => handleFormChange('address', value)} value={formState.address} />
-        <Input placeholder="Telefone" onChangeText={(value) => handleFormChange('phone',value)} value={formState.phone}  />
-        <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16, marginTop: 16,alignSelf: "flex-start" }} >INFORMAÇÕES DE PERFIL</Text>
-      
-        <Input placeholder="Nome de usuário" onChangeText={(value) => handleFormChange('username', value)} value={formState.username}  />
-        <Input placeholder="Senha" secureTextEntry onChangeText={(value) => handleFormChange('password', value)} value={formState.password}  />
-        <Input placeholder="Confirmação de senha" secureTextEntry onChangeText={(value) => handleFormChange('confirmPassword', value)} value={formState.confirmPassword} />
+          <Input placeholder="Nome completo" onChangeText={(value) => handleFormChange('name', value)} value={formState.name}  />
+          <Input placeholder="Idade" onChangeText={(value) => handleFormChange('age', value)} value={formState.age} />
+          <Input placeholder="E-mail" onChangeText={(value) => handleFormChange('email', value)} value={formState.email}  />
+          <Input placeholder="Estado" onChangeText={(value) => handleFormChange('state', value)} value={formState.state} />
+          <Input placeholder="Cidade" onChangeText={(value) => handleFormChange('city', value)} value={formState.city}  />
+          <Input placeholder="Endereço" onChangeText={(value) => handleFormChange('address', value)} value={formState.address} />
+          <Input placeholder="Telefone" onChangeText={(value) => handleFormChange('phone',value)} value={formState.phone}  />
+          <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16, marginTop: 16, alignSelf: "flex-start" }} >INFORMAÇÕES DE PERFIL</Text>
         
-        <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16, marginTop: 16, alignSelf: "flex-start" }}>FOTO DE PERFIL</Text>
+          <Input placeholder="Nome de usuário" onChangeText={(value) => handleFormChange('username', value)} value={formState.username}  />
+          <Input placeholder="Senha" secureTextEntry onChangeText={(value) => handleFormChange('password', value)} value={formState.password}  />
+          <Input placeholder="Confirmação de senha" secureTextEntry onChangeText={(value) => handleFormChange('confirmPassword', value)} value={formState.confirmPassword} />
+          
+          <Text style={{ color: '#88c9bf', fontFamily: 'Roboto_400Regular', fontSize: 16, marginTop: 16, marginBottom: 24, alignSelf: "flex-start" }}>FOTO DE PERFIL</Text>
         </View>
-        
-        <View style={styles.imageBox}>
-            <View style={{ margin: 40, alignItems: "center"}}>
-              <MaterialIcons name="control-point" size={24} color="#434343" />
-              <Button title="adicionar foto" onPress={pickImage} variant="transparent" />
-            </View>
+        <TouchableOpacity style={styles.imageBox} onPress={pickImage}>
+          <View style={{ width: 200, height: 200, alignItems: "center", justifyContent: "center" }}>
+            <MaterialIcons name="control-point" size={24} color="#434343" />
+            <Text style={{ fontSize: 14, paddingTop: 16, fontFamily: "Roboto_400Regular" }}> Adicionar foto </Text>
           </View>
+        </TouchableOpacity>
 
-          {pfpimage && (
+        {pfpimage && (
           <View style={styles.imageContainer}>
             <Image source={{ uri: pfpimage }} style={styles.image} />
             <Button title="Remover" onPress={removeImage} variant="transparent" />
@@ -155,9 +153,7 @@ const styles = StyleSheet.create({
   },
   imageBox: {
     backgroundColor: "#e6e7e7",
-    margin: 15,
     maxWidth: 250,
-    padding: 15,
     borderRadius: 10,
     alignSelf: 'center',
     alignItems: 'center',

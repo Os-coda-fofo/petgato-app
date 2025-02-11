@@ -1,25 +1,36 @@
 import Feather from '@expo/vector-icons/Feather';
 import { Link, useRouter } from 'expo-router';
 import React from 'react';
-import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, StatusBar, Alert } from 'react-native';
 import Button from '../components/Button';
 import { useSession } from '../services/auth/ctx';
 
 const Home = () => {
   const router = useRouter();
-  const { user, isLoading } = useSession();
+  const { user } = useSession();
+
+  const handleMyPets = () => {
+    if (user) {
+      router.replace(`/myAnimals/${user?.uid}`);
+    } else {
+      Alert.alert('Usuário não logado', 'Faça login para acessar seus pets');
+      router.replace('/login');
+    }
+  }
 
   return (
       <View style={styles.container}>
-        <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
+        <TouchableOpacity  style={styles.menuIcon} onPress={handleMyPets}>
+          <Feather name="menu" size={24} color="#88c9bf" />
+        </TouchableOpacity>
 
-        <Feather style={styles.menuIcon} name="menu" size={24} color="#88c9bf" />
+        <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
         <Text style={styles.title}>Olá</Text>
         <Text style={[ styles.subtitle, { color: '#757575' }]}> Bem vindo ao Meau! Aqui você pode adotar, doar e ajudar cães e gatos com facilidade. Qual o seu interesse? </Text>
         
         <View style={styles.buttonContainer}>
           <Button title="ADOTAR" onPress={() => router.push('/animalsList')} variant="default" />
-          <Button title="AJUDAR" onPress={() => router.push('/login-screen-error')} variant="default" />
+          <Button title="AJUDAR" onPress={() => router.push('/chat/chatsList')} variant="default" />
           <Button title="CADASTRAR ANIMAL" onPress={() => router.push('/registerAnimal')} variant="default" />
         </View>
 

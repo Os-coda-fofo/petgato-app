@@ -1,22 +1,23 @@
-import { router } from 'expo-router';
 import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
-import Header from '../components/Header';
-import { db } from '../services/auth/firebase-config';
-import Loading from '../components/Loading';
-import PetCard from '../components/PetCard';
+import Header from '../../../components/Header';
+import { db } from '../../../services/auth/firebase-config';
+import Loading from '../../../components/Loading';
+import PetCard from '../../../components/PetCard';
+import { router } from 'expo-router';
 
-const AnimalInfoScreen = () => {
+const MyAnimalsInfoScreen = () => {
+  
   interface Pet {
     id: string;
     name: string;
-    photos?: string[];
+    photos: string;
     gender: string;
     age: string;
     size: string;
-    owner: string;
     localidade: string;
+    owner: string;
   }
   const [pets, setPets] = useState<Pet[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,38 +61,40 @@ const AnimalInfoScreen = () => {
 
   if (loading) {
     return <Loading />;
-  } 
+  }
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100  }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
       <View style={styles.container}>
-      <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
+        <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-      <Header title="Adotar" variant="yellow" showMenuButton showSearchIcon onBackPress={() => router.back()} />
+        <Header title="Meus Pets" showMenuButton showSearchIcon onMenuPress={() => {router.push("/")}}/>
 
-      {pets.map((pet) => (
-        <PetCard 
-          id={pet.id} 
-          key={pet.id} 
-          name={pet.name} 
-          gender={pet.gender} 
-          age={pet.age} 
-          size={pet.size} 
-          localidade={pet.localidade} 
-          photos={pet.photos} 
-          whereToGo={() => router.push(`./animal/${pet.id}`)}
-        />
-      ))}
+        {pets.map((pet) => (
+          <PetCard 
+            id={pet.id} 
+            key={pet.id} 
+            name={pet.name}
+            gender={pet.gender}
+            age={pet.age}
+            size={pet.size}
+            localidade={pet.localidade}
+            photos={pet.photos}
+            variant="cyan"
+            whereToGo={() => router.push(`./myAnimal/${pet.id}`)}
+          />
+        ))}
       </View>
     </ScrollView>
-    );
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    backgroundColor: '#fafafa',
   },
 
   card: {
@@ -113,25 +116,24 @@ const styles = StyleSheet.create({
 
   image: {
     width: '100%',
-    minHeight: 200,
-    resizeMode: 'cover',
+    height: 200,
     objectFit: 'cover',
   },
 
   name: {
-    backgroundColor: '#fee29b',
-    fontSize: 16,
-    fontFamily: 'Roboto_500Medium',
-    color: '#434343',
-    padding: 10,
+    backgroundColor: '#cfe9e5',
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    padding: 5,
   },
 
   info: {
-    fontSize: 12,
-    fontFamily: 'Roboto_400Regular',
-    color: '#434343',
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 4,
   },
-
 });
 
-export default AnimalInfoScreen;
+export default MyAnimalsInfoScreen;
+
