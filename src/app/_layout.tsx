@@ -4,11 +4,9 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 //import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 //import { SessionProvider } from '../services/auth/ctx';
-import { Feather } from '@expo/vector-icons';
-import { Drawer } from 'expo-router/drawer';
+import { Stack } from 'expo-router';
 //import { DrawerToggleButton } from '@react-navigation/drawer';
 
 SplashScreen.preventAutoHideAsync();
@@ -36,6 +34,13 @@ export default function Layout() {
   }
   
   return (
+    <Stack>
+  
+    <Stack.Screen name="index" options={{ title: "Home" }} />
+    <Stack.Screen name="settings" options={{ title: "Settings" }} />
+    <Stack.Screen name="(drawer)/_layout" options={{ headerShown: false }} />
+  </Stack>
+    /*
     <GestureHandlerRootView>
       <Drawer screenOptions={{ 
         headerShown: false,
@@ -71,9 +76,9 @@ export default function Layout() {
         />
       </Drawer>
     </GestureHandlerRootView>
-    );
+   */ 
+  );
 }
-
 export const screenOptions = {
   headerShown: false,
 };
