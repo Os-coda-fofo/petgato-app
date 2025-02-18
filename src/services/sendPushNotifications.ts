@@ -25,7 +25,7 @@ export async function sendAdoptionNotification(animalId: string, animalName: str
     return;
   }
 
-  const notificationToken = userDoc.data().expoPushToken;
+  const notificationToken = userDoc.data().expoPushToken.data;
   console.log("✅ Token de notificação encontrado:", notificationToken);
 
   if (!notificationToken) {
@@ -44,7 +44,7 @@ export async function sendAdoptionNotification(animalId: string, animalName: str
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        to: notificationToken.data,
+        to: notificationToken,
         sound: "default",
         title: "Novo Interesse na Adoção!",
         body: `${adopterName} quer adotar ${animalName}. Veja os detalhes!`,
