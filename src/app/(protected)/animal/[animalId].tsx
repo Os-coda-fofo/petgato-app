@@ -303,7 +303,7 @@ const handleConfirmAdoption = async (animalId: string) => {
           </View>
 
             <View style={styles.buttonContainer}>
-              <Button title="PRETENDO ADOTAR" onPress={handleConfirmAdoption} variant="default" />
+              <Button title="PRETENDO ADOTAR" onPress={() => handleConfirmAdoption} variant="default" />
             </View>
           </View>    
           </View>
