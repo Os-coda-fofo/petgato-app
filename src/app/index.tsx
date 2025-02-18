@@ -31,7 +31,6 @@ const Home = () => {
   };
 
   return (
-    <ScrollView>
       <View style={styles.container}>
         <TouchableOpacity style={styles.menuIcon} onPress={handleMyPets}>
           <Feather name="menu" size={24} color="#88c9bf" />
@@ -64,7 +63,6 @@ const Home = () => {
         
         <Image style={styles.logo} source={require('../../assets/logo/Meau_marca_2.png')} />
       </View>
-      </ScrollView>
   );
 };
 
@@ -73,7 +71,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative',
     backgroundColor: '#fafafa',
   },
   title: {
@@ -93,8 +90,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: 320,
     gap: 12,
-    //justifyContent: 'center',
-    //alignItems: 'center',
+   // justifyContent: 'center',
+   // alignItems: 'center',
   },
   btnLogin: {
     fontSize: 16,
@@ -104,7 +101,7 @@ const styles = StyleSheet.create({
   },
   btnLogout: {
     fontSize: 16,
-    color: '#88c9bf',
+    color: '#f2001c',
     textAlign: 'center', 
     marginTop: 20,
   },
