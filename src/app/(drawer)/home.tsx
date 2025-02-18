@@ -1,21 +1,17 @@
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { Button, StyleSheet, Text, View } from "react-native";
+import { RootStackParamList } from '../../types';
 
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { StyleSheet } from "react-native";
-import HomeScreen from '../app/home';
-import ProfileScreen from '../app/profile';
-
-const Drawer = createDrawerNavigator();
-
-
-export default function CustomDrawer() {
+export default function HomeScreen() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <NavigationContainer independent={true}>
-      <Drawer.Navigator>
-        <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Profile" component={ProfileScreen} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <View style={styles.container}>
+      <Text style={styles.title}>Home</Text>
+      <Button
+        title="Go to Profile"
+        onPress={() => navigation.navigate('Profile')}
+      />
+    </View>
   );
 }
 
@@ -26,10 +22,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   title: { 
     fontSize: 20,
     fontWeight: 'bold',
   }
-  }
-);
+});

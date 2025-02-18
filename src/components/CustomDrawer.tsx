@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import HomeScreen from '../app/(drawer)/home';
-import ProfileScreen from './app/(drawer)/profile';
+import ProfileScreen from '../app/(drawer)/profile';
 
 const Drawer = createDrawerNavigator();
 
@@ -13,14 +13,12 @@ interface CustomDrawerProps {
 
 const CustomDrawer: React.FC<CustomDrawerProps> = ({ children }) => {
   return (
-    <NavigationContainer>
+    <NavigationContainer independent={true}>
       <Drawer.Navigator>
         <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Profile" component={ProfileScreen} />
+        <Drawer.Screen name="Profile" component={ProfileScreen} /> {/*  Agora o Profile está incluído! */}
       </Drawer.Navigator>
-      <View style={{ flex: 1 }}>
-        {children}
-      </View>
+      <View style={{ flex: 1 }}>{children}</View>
     </NavigationContainer>
   );
 };

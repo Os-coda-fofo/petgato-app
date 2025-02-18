@@ -11,7 +11,6 @@ import { SessionProvider } from '../services/auth/ctx';
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
-
   const [loaded] = useFonts({
     CourgetteRegular: require("../../assets/fonts/Courgette-Regular.ttf"),
     Roboto_400Regular,
@@ -20,27 +19,22 @@ export default function Layout() {
   });
 
   useEffect(() => {
-    const prepareApp = async () => {
-      if (loaded) {
-        await SplashScreen.hideAsync();
-      }
-    };
-    prepareApp();
-  }, []);
-
+  console.log("Fontes carregadas?", loaded); // 🔥 Verificar no console
+  const prepareApp = async () => {
+    if (loaded) {
+      console.log("Escondendo SplashScreen..."); // 🔥 Confirmação no console
+      await SplashScreen.hideAsync();
+    }
+  };
   prepareApp();
-  }, [loaded]); // 🔥 Agora ele reexecuta quando `loaded` mudar!
-
-  if (!loaded) {
-    return null; // Mantém a SplashScreen até as fontes carregarem
-  }
+}, [loaded]);
 
   return (
     <SessionProvider>
       <SafeAreaProvider>
-        <CustomDrawer> {/* O Drawer encapsula toda a navegação */}
+        <CustomDrawer> {/* Agora o CustomDrawer gerencia a navegação */}
           <SafeAreaView style={styles.safeView}>
-            <Slot /> {/* Aqui entram as telas do expo-router */}
+            <Slot />
           </SafeAreaView>
         </CustomDrawer>
       </SafeAreaProvider>
@@ -52,11 +46,9 @@ export const screenOptions = {
   headerShown: false,
 };
 
-
 const styles = StyleSheet.create({
   safeView: {
     flex: 1,
     backgroundColor: '#ffff',
-  }
+  },
 });
-
