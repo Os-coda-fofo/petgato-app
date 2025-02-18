@@ -16,7 +16,7 @@ import { sendAdoptionNotification } from '../../../services/sendPushNotification
 
 const AnimalInfoScreen = () => {
   const viewShotRef = useRef(null);
-  const { user: sessionUser } = useSession();
+  const { user: sessionUser} = useSession();
   const {animalId} = useLocalSearchParams();
   interface Pet {
     owner: string;
@@ -55,51 +55,67 @@ const AnimalInfoScreen = () => {
   const [ownerLocation, setOwnerLocation] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-const handleConfirmAdoption = async (animalId: string) => {
-  try {
-    const petRef = doc(db, `animals/${animalId}`);
-    const petSnap = await getDoc(petRef);
+  const handleConfirmAdoption = async (animalId: string) => {
+    console.log("🐾 Botão 'Pretendo Adotar' clicado.");
 
-    if (!petSnap.exists()) {
-      console.error("Animal não encontrado.");
-      return;
+    try {
+      const petRef = doc(db, `animals/${animalId}`);
+      console.log("📡 Buscando dados do animal no Firestore...");
+
+      const petSnap = await getDoc(petRef);
+
+      if (!petSnap.exists()) {
+        console.error("❌ Animal não encontrado no Firestore.");
+        Alert.alert("Erro", "Animal não encontrado.");
+        return;
+      }
+
+      const petData = petSnap.data();
+      console.log("✅ Dados do animal encontrados:", petData);
+
+      if (!sessionUser) {
+        console.error("🚨 Usuário não autenticado.");
+        Alert.alert("Erro", "Você precisa estar logado para adotar um animal.");
+        return;
+      }
+
+      console.log(`👤 Usuário autenticado: ${sessionUser.uid}`);
+
+      // Verifica se o usuário já é dono do animal
+      if (petData.owner === sessionUser.uid) {
+        console.warn("⚠️ O usuário já é o dono do animal.");
+        Alert.alert("Aviso", "Você já é o proprietário deste animal.");
+        return;
+      }
+
+      // Verifica se o usuário está bloqueado
+      if (petData.blockedUsers && petData.blockedUsers.includes(sessionUser.uid)) {
+        console.warn("🚫 O usuário está bloqueado para adotar este animal.");
+        Alert.alert("Erro", "Você está bloqueado de adotar este animal.");
+        return;
+      }
+
+      console.log("✍️ Adicionando usuário à lista de interessados...");
+
+      // Adiciona o usuário à lista de interessados no Firestore
+      await updateDoc(petRef, {
+        interestedUsers: arrayUnion(sessionUser.uid),
+      });
+
+      console.log("✅ Usuário adicionado à lista de interessados com sucesso!");
+
+      // 🔥 Enviar notificação ao dono do animal
+      console.log("📢 Enviando notificação ao dono do animal...");
+      await sendAdoptionNotification(petData.owner, petData.name, sessionUser.displayName);
+
+      console.log("✅ Notificação enviada com sucesso!");
+
+      Alert.alert("Sucesso", "Você demonstrou interesse na adoção deste animal.");
+    } catch (error) {
+      console.error("❌ Erro ao processar adoção:", error);
+      Alert.alert("Erro", "Houve um problema ao processar sua solicitação.");
     }
-
-    const petData = petSnap.data();
-
-    if (!sessionUser) {
-      Alert.alert("Você precisa estar logado para adotar um animal.");
-      return;
-    }
-
-    // Verifique se o usuário é o proprietário
-    if (petData.owner === sessionUser.uid) {
-      Alert.alert("Você já é o proprietário deste animal.");
-      return;
-    }
-
-    // Verifique se o usuário está na lista de bloqueados
-    if (petData.blockedUsers && petData.blockedUsers.includes(sessionUser.uid)) {
-      Alert.alert("Você está bloqueado de adotar este animal.");
-      return;
-    }
-
-    // Adicione o ID à lista de interessados
-    await updateDoc(petRef, {
-      interestedUsers: arrayUnion(sessionUser.uid),
-    });
-
-    console.log("Usuário adicionado à lista de interessados.");
-
-    // Enviar notificação ao dono do animal
-    await sendAdoptionNotification(petData.owner, petData.name, sessionUser.displayName);
-
-    // Redirecionar para a tela de confirmação
-    router.push("./confirmacao");
-  } catch (error) {
-    console.error("Erro ao atualizar interessados:", error);
-  }
-};
+  };
 
   const handleShare = async () => {
     try {
@@ -303,7 +319,7 @@ const handleConfirmAdoption = async (animalId: string) => {
           </View>
 
             <View style={styles.buttonContainer}>
-              <Button title="PRETENDO ADOTAR" onPress={() => handleConfirmAdoption} variant="default" />
+              <Button title="PRETENDO ADOTAR" onPress={() => handleConfirmAdoption(animalId)} variant="default" />
             </View>
           </View>    
           </View>
