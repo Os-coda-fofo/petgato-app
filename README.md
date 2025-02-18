@@ -23,9 +23,11 @@ The app was made in react native, with the aim of serving as learning for a grou
 ## 🛠️ Features
 
 - Feature 1: User can register and login
-- Feature 2: User can register a pet
-- Feature 3: User can make a description of pet characteristics
-
+- Feature 2: User can register a pet and make a description of pet characteristics
+- Feature 3: User can add an image of the pet
+- Feature 4: User can adopt pets
+- Feature 5: User can chat with the current pet sitter/tutor
+- (Future) Feature 6: User can receive notification on the phone
 ---
 
 ## 🖥️ Installation
