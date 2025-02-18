@@ -69,7 +69,7 @@ const AnimalInfoScreen = () => {
       <View style={styles.container}>
       <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-      <Header title="Adotar" variant="yellow" showMenuButton showSearchIcon onBackPress={() => router.back()} />
+      <Header title="Adotar" variant="yellow" showBackButton showSearchIcon onBackPress={() => router.back()} />
 
       {pets.map((pet) => (
         <PetCard 

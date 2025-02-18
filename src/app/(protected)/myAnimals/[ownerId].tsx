@@ -70,7 +70,7 @@ const MyAnimalsInfoScreen = () => {
       <View style={styles.container}>
         <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-        <Header title="Meus Pets" showMenuButton showSearchIcon onMenuPress={() => {router.push("/")}}/>
+        <Header title="Meus Pets" showBackButton showSearchIcon onBackPress={() => {router.push("/")}}/>
 
         {pets.map((pet) => (
           <PetCard 
