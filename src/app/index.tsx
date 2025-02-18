@@ -5,6 +5,8 @@ import { Alert, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } fro
 import Button from '../components/Button';
 import { useSession } from '../services/auth/ctx';
 import { useNotification } from '../services/NotificationContext';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../services/auth/firebase-config';
 
 
 const Home = () => {
@@ -28,6 +30,9 @@ const Home = () => {
     try {
       await signOut();
       router.replace('/login');
+      await updateDoc(doc(db, "users", user.uid), {
+        expoPushToken: null,
+      });
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
       Alert.alert('Erro', 'Não foi possível sair');
@@ -45,10 +50,6 @@ const Home = () => {
 
   return (
       <View style={styles.container}>
-        <Text> {expoPushToken} </Text>
-        <Text> {notification?.request.content.title} </Text>
-        <Text> {JSON.stringify(notification?.request.content.data, null, 2)} </Text>
-      
         <TouchableOpacity style={styles.menuIcon} onPress={handleMyPets}>
           <Feather name="menu" size={24} color="#88c9bf" />
         </TouchableOpacity>
