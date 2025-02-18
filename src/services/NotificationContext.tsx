@@ -10,6 +10,7 @@ import * as Notifications from "expo-notifications";
 import { Subscription } from "expo-modules-core";
 import { registerForPushNotificationsAsync } from "./pushNotifications";
 import { useSession } from "./auth/ctx";
+import { useRouter } from "expo-router";
 
 interface NotificationContextType {
   expoPushToken: string | null;
@@ -42,6 +43,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   const [notification, setNotification] = useState<Notifications.Notification | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const { user } = useSession();
+  const router = useRouter();
 
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
@@ -71,7 +73,15 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
           JSON.stringify(response, null, 2),
           JSON.stringify(response.notification.request.content.data, null, 2)
         );
-        // Handle the notification response here
+
+        // Navigate to the screen based on the data in the notification
+        const screen = response.notification.request.content.data.screen;
+        const animalId = response.notification.request.content.data.animalId;
+
+        if (screen && animalId) {
+          console.log("🔔 Navigate to screen: ", screen);
+          router.push(`${screen}/${animalId}`);
+        }
       });
 
     return () => {

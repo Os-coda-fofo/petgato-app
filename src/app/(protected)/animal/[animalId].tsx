@@ -104,12 +104,23 @@ const AnimalInfoScreen = () => {
       console.log("✅ Usuário adicionado à lista de interessados com sucesso!");
 
       // 🔥 Enviar notificação ao dono do animal
+      
+      // Buscar dados de usuário no Firestore
+      const userRef = doc(db, `users/${sessionUser.uid}`);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        console.error("❌ Usuário não encontrado no Firestore.");
+        Alert.alert("Erro", "Usuário não encontrado.");
+        return;
+      }
+      const userData = userSnap.data();
+
       console.log("📢 Enviando notificação ao dono do animal...");
-      await sendAdoptionNotification(petData.owner, petData.name, sessionUser.displayName);
+      await sendAdoptionNotification(petData.owner, petData.name, userData.name);
+      router.push("/confirmacao");
 
       console.log("✅ Notificação enviada com sucesso!");
-
-      Alert.alert("Sucesso", "Você demonstrou interesse na adoção deste animal.");
     } catch (error) {
       console.error("❌ Erro ao processar adoção:", error);
       Alert.alert("Erro", "Houve um problema ao processar sua solicitação.");

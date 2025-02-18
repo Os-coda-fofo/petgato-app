@@ -34,7 +34,7 @@ export async function sendAdoptionNotification(animalOwnerId: string, animalName
         sound: "default",
         title: "Novo Interesse na Adoção!",
         body: `${adopterName} quer adotar ${animalName}. Veja os detalhes!`,
-        data: { screen: "AdoptionRequests", animalId: animalOwnerId },
+        data: { screen: "/myAnimals/myAnimal/candidate", animalId: animalOwnerId },
       }),
     });
 
