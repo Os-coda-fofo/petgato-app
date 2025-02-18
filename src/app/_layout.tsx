@@ -43,15 +43,15 @@ export default function Layout() {
   }
 
   return (
-    <NotificationProvider >
-      <SessionProvider>
+    <SessionProvider>
+      <NotificationProvider >
         <SafeAreaProvider>
           <SafeAreaView style={styles.safeView}>
             <Slot />
           </SafeAreaView>
         </SafeAreaProvider>
-      </SessionProvider>
-    </NotificationProvider>
+      </NotificationProvider>
+    </SessionProvider>
   )
 }
 

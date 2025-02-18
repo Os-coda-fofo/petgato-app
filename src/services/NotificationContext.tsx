@@ -41,17 +41,21 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
   const [notification, setNotification] = useState<Notifications.Notification | null>(null);
   const [error, setError] = useState<Error | null>(null);
+  const { user } = useSession();
 
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
   useEffect(() => {
-    const { user } = useSession();
     if (user) {
-      registerForPushNotificationsAsync({ userId: user.uid }).then(
-        (token) => setExpoPushToken(token),
-        (error) => setError(error)
-      );
+      registerForPushNotificationsAsync({ userId: user.uid }).then((token) => {
+        console.log("🔔 Expo Push Token: ", token);
+        setExpoPushToken(token);
+      })
+      .catch((e) => {
+        console.error("🔔 Error: ", e);
+        setError(e);
+      });
     }
     
     notificationListener.current =
@@ -80,7 +84,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
         Notifications.removeNotificationSubscription(responseListener.current);
       }
     };
-  }, []);
+  }, [user]);
 
   return (
     <NotificationContext.Provider value={{ expoPushToken, notification, error }} >

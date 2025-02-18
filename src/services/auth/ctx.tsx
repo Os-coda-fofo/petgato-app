@@ -26,10 +26,11 @@ const AuthContext = createContext<{
 const useSession = () => {
   const value = useContext(AuthContext);
   if (!value) {
-    throw new Error('useSession must be used within an AuthProvider');
+    console.warn('useSession foi chamado antes do AuthProvider ser inicializado.');
+    return { user: null, isLoading: true, signIn: async () => {}, signUp: async () => {}, signOut: async () => {}, setRedirectTo: () => {}, redirectTo: null };
   }
   return value;
-}
+};
 
 // Componente de provedor do contexto
 const SessionProvider = ({ children }: PropsWithChildren) => {

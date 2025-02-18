@@ -45,10 +45,9 @@ const Home = () => {
 
   return (
       <View style={styles.container}>
-      <Text> {expoPushToken} </Text>
-      <Text> {notification?.request.content.title} </Text>
-      <Text> {JSON.stringify(notification?.request.content.data, null, 2)} </Text>
-      <Text> {error} </Text>
+        <Text> {expoPushToken} </Text>
+        <Text> {notification?.request.content.title} </Text>
+        <Text> {JSON.stringify(notification?.request.content.data, null, 2)} </Text>
       
         <TouchableOpacity style={styles.menuIcon} onPress={handleMyPets}>
           <Feather name="menu" size={24} color="#88c9bf" />
@@ -133,12 +132,8 @@ const styles = StyleSheet.create({
     height: 44,
     marginTop: 40,
   },
-<<<<<<< HEAD
 
-  menuIcon : {
-=======
   menuIcon: {
->>>>>>> origin
     position: 'absolute',
     top: 16,
     left: 16,
