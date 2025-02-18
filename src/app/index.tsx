@@ -1,94 +1,51 @@
-import Feather from '@expo/vector-icons/Feather';
-import { Link, useRouter } from 'expo-router';
-import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, StatusBar, Alert } from 'react-native';
-import Button from '../components/Button';
-import { useSession } from '../services/auth/ctx';
+import { DrawerToggleButton } from '@react-navigation/drawer';
+import { StyleSheet, Text, View } from 'react-native';
 
-const Home = () => {
-  const router = useRouter();
-  const { user } = useSession();
-
-  const handleMyPets = () => {
-    if (user) {
-      router.replace(`/myAnimals/${user?.uid}`);
-    } else {
-      Alert.alert('Usuário não logado', 'Faça login para acessar seus pets');
-      router.replace('/login');
-    }
-  }
-
+export default function Index() {
   return (
-      <View style={styles.container}>
-        <TouchableOpacity  style={styles.menuIcon} onPress={handleMyPets}>
-          <Feather name="menu" size={24} color="#88c9bf" />
-        </TouchableOpacity>
-
-        <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
-        <Text style={styles.title}>Olá</Text>
-        <Text style={[ styles.subtitle, { color: '#757575' }]}> Bem vindo ao Meau! Aqui você pode adotar, doar e ajudar cães e gatos com facilidade. Qual o seu interesse? </Text>
-        
-        <View style={styles.buttonContainer}>
-          <Button title="ADOTAR" onPress={() => router.push('/animalsList')} variant="default" />
-          <Button title="AJUDAR" onPress={() => router.push('/chat/chatsList')} variant="default" />
-          <Button title="CADASTRAR ANIMAL" onPress={() => router.push('/registerAnimal')} variant="default" />
-        </View>
-
-        <Link href={"/login"} style={styles.btnLogin} asChild>
-          <TouchableOpacity>
-            <Text style={styles.btnLogin}> login </Text>
-          </TouchableOpacity>
-        </Link>
-        
-        <Image style={styles.logo} source={require('../../assets/logo/Meau_marca_2.png')} />
+    <View style={styles.container}>
+      <View style={styles.header}>
       </View>
+      
+      <View style={styles.user}>
+        <Text style={styles.hi}>Olá,</Text>
+        <Text style={styles.username}>Usuário</Text>
+      </View>
+
+      <DrawerToggleButton />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    padding: 24,
+    paddingTop: 32,
+    backgroundColor: '#ffffff',
+  },
+  header: {
+    width: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
-    position: 'relative',
-    backgroundColor: '#fafafa',
+    marginBottom: 10,
   },
-  title: {
-    fontSize: 72,
-    color: '#ffd358',
-    fontFamily: 'CourgetteRegular',
-    marginBottom: 52
+  img: {
+    width: 50,
+    height: 50,
+    borderRadius: 12,
+    marginRight: 7,
   },
-  subtitle: {
-    maxWidth: 300,
-    fontSize: 16,
-    color: '#757575',
-    fontFamily: 'Roboto_400Regular',
-    textAlign: 'center',
-    marginBottom: 48
-  },
-  buttonContainer: {
-    width: 320,
-    gap: 12,
-    justifyContent: 'center',
+  user: {
     alignItems: 'center',
+    marginTop: 20,
   },
-  btnLogin: {
-    fontSize: 16,
-    color: '#88c9bf',
-    textAlign: 'center', 
-    marginTop: 44,
+  hi: {
+    fontSize: 14,
+    fontWeight: 'bold',
   },
-  logo: {
-    width: 122,
-    height: 44,
-    marginTop: 68,
+  username: {
+    fontSize: 18,
+    fontWeight: '700',
   },
-  menuIcon : {
-    position: 'absolute',
-    top: 16,
-    left: 16,
-  }
 });
-
-export default Home;
