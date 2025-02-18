@@ -47,7 +47,7 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <StatusBar backgroundColor={"#88c9bf"} barStyle={"light-content"} />
 
-      <Header title="Login" showMenuButton />
+      <Header title="Login" showBackButton onBackPress={() => {router.push("/")}}/>
 
       <View style={styles.inputContainer}>
       <Input placeholder="Nome de usuário" onChangeText={(value) => handleFormChange('email', value)} value={formState.email} checked={formState.email.length > 0} />
