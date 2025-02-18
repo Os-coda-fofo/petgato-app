@@ -1,10 +1,24 @@
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "./auth/firebase-config";
 
-export async function sendAdoptionNotification(animalOwnerId: string, animalName: string, adopterName: string) {
-  console.log("📡 Buscando token de notificação do dono do animal...");
+export async function sendAdoptionNotification(animalId: string, animalName: string, adopterName: string) {
+  console.log("📡 Buscando informações do animal para notificar o dono...");
 
-  const userDoc = await getDoc(doc(db, "users", animalOwnerId));
+  // 🔥 Primeiro, buscamos os dados do animal para obter o ownerId (dono do animal)
+  const animalDoc = await getDoc(doc(db, "animals", animalId));
+
+  if (!animalDoc.exists()) {
+    console.error("❌ Animal não encontrado no Firestore.");
+    return;
+  }
+
+  const animalData = animalDoc.data();
+  const ownerId = animalData.owner; // Obtendo o ID do dono do animal
+
+  console.log(`✅ Dono do animal encontrado: ${ownerId}`);
+
+  // 🔥 Agora buscamos os dados do dono do animal
+  const userDoc = await getDoc(doc(db, "users", ownerId));
 
   if (!userDoc.exists()) {
     console.error("❌ Usuário dono do animal não encontrado no Firestore.");
@@ -21,7 +35,7 @@ export async function sendAdoptionNotification(animalOwnerId: string, animalName
 
   try {
     console.log("📢 Enviando push notification...");
-    
+
     await fetch("https://exp.host/--/api/v2/push/send", {
       method: "POST",
       headers: {
@@ -30,11 +44,11 @@ export async function sendAdoptionNotification(animalOwnerId: string, animalName
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        to: notificationToken,
+        to: notificationToken.data,
         sound: "default",
         title: "Novo Interesse na Adoção!",
         body: `${adopterName} quer adotar ${animalName}. Veja os detalhes!`,
-        data: { screen: "/myAnimals/myAnimal/candidate", animalId: animalOwnerId },
+        data: { screen: "/myAnimals/myAnimal/candidate", animalId: animalId },
       }),
     });
 

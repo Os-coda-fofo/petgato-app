@@ -117,8 +117,8 @@ const AnimalInfoScreen = () => {
       const userData = userSnap.data();
 
       console.log("📢 Enviando notificação ao dono do animal...");
-      await sendAdoptionNotification(petData.owner, petData.name, userData.name);
-      router.push("/confirmacao");
+      await sendAdoptionNotification(animalId, petData.name, userData.name);
+      router.push("./confirmacao");
 
       console.log("✅ Notificação enviada com sucesso!");
     } catch (error) {
