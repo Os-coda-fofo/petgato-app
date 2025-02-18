@@ -1,11 +1,11 @@
-import { collection, getDocs, getDoc, doc } from 'firebase/firestore';
+import { router, useLocalSearchParams } from 'expo-router';
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import Header from '../../../components/Header';
-import { db } from '../../../services/auth/firebase-config';
 import Loading from '../../../components/Loading';
 import PetCard from '../../../components/PetCard';
-import { router } from 'expo-router';
+import { db } from '../../../services/auth/firebase-config';
 
 const MyAnimalsInfoScreen = () => {
   
@@ -21,11 +21,13 @@ const MyAnimalsInfoScreen = () => {
   }
   const [pets, setPets] = useState<Pet[]>([]);
   const [loading, setLoading] = useState(true);
+  const { ownerId } = useLocalSearchParams();
 
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'animals'));
+        const q = query(collection(db, 'animals'), where('owner', '==', ownerId));
+        const querySnapshot = await getDocs(q);
 
         const petsData = await Promise.all(
           querySnapshot.docs.map(async (docs) => {

@@ -1,12 +1,11 @@
+import { Link, useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Text, StatusBar, Alert } from 'react-native';
+import { Alert, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/Button';
-import { Link } from 'expo-router';
-import Input from '../components/Input';
-import { useSession } from '../services/auth/ctx';
-import { useRouter } from 'expo-router';
 import Header from '../components/Header';
+import Input from '../components/Input';
 import Loading from '../components/Loading';
+import { useSession } from '../services/auth/ctx';
 
 const LoginScreen = () => {
   const [formState, setFormState] = React.useState({

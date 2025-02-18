@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { addDoc, arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { addDoc, arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, Image, StatusBar, StyleSheet, Text, View } from 'react-native';
 import Button from '../../../../../components/Button';
 import Header from '../../../../../components/Header';
 import Loading from '../../../../../components/Loading';
@@ -74,11 +74,41 @@ const { user: sessionUser } = useSession();
         interestedUsers: [], // Remove todos os interessados
         owner: userId, // Define o novo proprietário
       });
+
+    // Buscar e deletar qualquer conversa existente entre os usuários sobre o mesmo pet
+    const groupChatCollectionRef = collection(db, 'groupChats');
+    const q = query(
+      groupChatCollectionRef,
+      where('owner', '==', sessionUser.uid),
+      where('client', '==', userId),
+      where('petId', '==', animalId)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const deletePromises = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
+      await Promise.all(deletePromises);
+      console.log('Conversas deletadas com sucesso.');
+    }
   
       // Limpe a lista de interessados no estado
       setInterestedUsers([]);
   
       console.log(`Usuário ${userId} aceito como novo proprietário.`);
+            // Exibir aviso de confirmação e voltar para a tela de meus animais
+            Alert.alert(
+              'Confirmação',
+              'Usuário aceito como novo proprietário com sucesso!',
+              [
+                {
+                  text: 'OK',
+                  onPress: () => router.navigate('/'),
+                },
+              ],
+              { cancelable: false }
+            );
+            
     } catch (error) {
       console.error('Erro ao aceitar usuário:', error);
     }
@@ -93,6 +123,23 @@ const { user: sessionUser } = useSession();
         blockedUsers: arrayUnion(userId), // Adiciona aos bloqueados (se necessário)
       });
 
+    // Buscar e deletar qualquer conversa existente entre os usuários sobre o mesmo pet
+    const groupChatCollectionRef = collection(db, 'groupChats');
+    const q = query(
+      groupChatCollectionRef,
+      where('owner', '==', sessionUser.uid),
+      where('client', '==', userId),
+      where('petId', '==', animalId)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const deletePromises = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
+      await Promise.all(deletePromises);
+      console.log('Conversas deletadas com sucesso.');
+    }
+
       setInterestedUsers((prev) => prev.filter((user) => user.uid !== userId));
       console.log(`Usuário ${userId} bloqueado.`);
     } catch (error) {
@@ -106,6 +153,24 @@ const { user: sessionUser } = useSession();
       // Crie uma referência para o Firestore
       const groupChatCollectionRef = collection(db, 'groupChats');
 
+      // Crie uma consulta para verificar se o chat já existe
+    const q = query(
+      groupChatCollectionRef,
+      where('owner', '==', sessionUser.uid),
+      where('client', '==', userId),
+      where('petId', '==', animalId)
+    );
+
+      // Execute a consulta
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        // Se o chat já existir, retorne o ID do chat existente
+        const existingChat = querySnapshot.docs[0];
+        console.log('Chat já existe:', existingChat.id);
+        return existingChat.id;
+      }
+
       // Crie um objeto com os dados do formulário
       const chatData = {
         owner: sessionUser.uid,
@@ -116,6 +181,7 @@ const { user: sessionUser } = useSession();
       console.log("Usuário:", userId);
       console.log('Dados do dodo:', sessionUser.uid);
       console.log('Dados do pet:', animalId);
+
       const chatRef = await addDoc(groupChatCollectionRef, chatData);
       const chatId = chatRef.id;
       console.log('chat criado com sucesso!');
