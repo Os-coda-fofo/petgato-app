@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { addDoc, arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, Image, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../../../../../components/Button';
 import Header from '../../../../../components/Header';
 import Loading from '../../../../../components/Loading';
@@ -13,7 +13,8 @@ interface InterestedUser {
   name: string;
   email: string;
   phone: string;
-  photoURL?: string; // Foto de perfil opcional
+  pfpimage?: string; // Foto de perfil opcional
+  
 }
 
 const InterestedListScreen = () => {
@@ -205,11 +206,16 @@ const { user: sessionUser } = useSession();
         keyExtractor={(item) => item.uid}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            {item.photoURL && <Image source={{ uri: item.photoURL }} style={styles.avatar} />}
+            <TouchableOpacity style={{flexDirection: "row", gap: 50}} onPress={() => router.push(`../../../profile/${item.uid}`)}>
+              <View>
+            {item.pfpimage && <Image source={{ uri: item.pfpimage }} style={styles.avatar} />}
+            </View>
+            <View>
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.email}>📧 {item.email}</Text>
             <Text style={styles.phone}>📞 {item.phone}</Text>
-
+            </View>
+            </TouchableOpacity>
             <View style={styles.buttonContainer}>
                 <View style={{width: '30%'}}>
                 <Button title="Conversar" onPress={async () => {router.push(`../../../chat/${await saveChatData((item.uid))}`)}} variant="default" />
