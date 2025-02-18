@@ -5,6 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import CustomDrawer from '../components/CustomDrawer';
 import { SessionProvider } from '../services/auth/ctx';
 
 SplashScreen.preventAutoHideAsync();
@@ -21,27 +22,32 @@ export default function Layout() {
   useEffect(() => {
     const prepareApp = async () => {
       if (loaded) {
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await SplashScreen.hideAsync();
       }
-      await SplashScreen.hideAsync();
-    }
+    };
     prepareApp();
   }, []);
 
+  prepareApp();
+  }, [loaded]); // 🔥 Agora ele reexecuta quando `loaded` mudar!
+
   if (!loaded) {
-    return null;
+    return null; // Mantém a SplashScreen até as fontes carregarem
   }
 
   return (
     <SessionProvider>
       <SafeAreaProvider>
-        <SafeAreaView style={styles.safeView}>
-          <Slot />
-        </SafeAreaView>
+        <CustomDrawer> {/* O Drawer encapsula toda a navegação */}
+          <SafeAreaView style={styles.safeView}>
+            <Slot /> {/* Aqui entram as telas do expo-router */}
+          </SafeAreaView>
+        </CustomDrawer>
       </SafeAreaProvider>
     </SessionProvider>
-  )
+  );
 }
+
 export const screenOptions = {
   headerShown: false,
 };
