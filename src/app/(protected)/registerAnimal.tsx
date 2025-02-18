@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Checkbox from 'expo-checkbox';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import React, { useState } from 'react';
 import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../../components/Button';
-import Input from '../../components/Input';
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
-import { app, auth } from '../../services/auth/firebase-config';
 import Header from '../../components/Header';
+import Input from '../../components/Input';
+import { app, auth } from '../../services/auth/firebase-config';
 
 const AnimalScreen = () => {
   const router = useRouter();
@@ -326,7 +326,7 @@ const AnimalScreen = () => {
           <Text style={{ color: '#f7a800', fontFamily: 'Roboto_400Regular', fontSize: 16 , alignSelf: 'flex-start'}}>SOBRE O ANIMAL</Text>
           <Input placeholder="Compartilhe a história do animal" onChangeText={(value) => handleFormChange('sobre', value)} value={formState.sobre}  />
           <View style={styles.registerBtn}>
-            <Button title="COLOCAR PARA ADOÇÃO" onPress={async () => { await saveAnimalData(); router.push('/full-animal-registry'); }} variant="yellow" />
+            <Button title="REGISTRAR ANIMAL" onPress={async () => { await saveAnimalData(); router.push('/full-animal-registry'); }} variant="yellow" />
           </View>
           
           </View>
