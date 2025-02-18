@@ -12,6 +12,7 @@ import Loading from '../../../components/Loading';
 import SharePetCard from '../../../components/SharePetCard';
 import { useSession } from '../../../services/auth/ctx';
 import { db } from '../../../services/auth/firebase-config';
+import { sendAdoptionNotification } from '../../../services/sendPushNotifications';
 
 const AnimalInfoScreen = () => {
   const viewShotRef = useRef(null);
@@ -54,41 +55,51 @@ const AnimalInfoScreen = () => {
   const [ownerLocation, setOwnerLocation] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const handleConfirmAdoption = async () => {
-    try {
-      const petRef = doc(db, `animals/${animalId}`);
-      const petSnap = await getDoc(petRef);
-  
-      if (!petSnap.exists()) {
-        console.error('Animal não encontrado.');
-        return;
-      }
-  
-      const petData = petSnap.data();
-  
-      // Verifique se o usuário é o proprietário
-      if (petData.owner === sessionUser.uid) {
-        Alert.alert('Você já é o proprietário deste animal.');
-        return;
-      }
-  
-      // Verifique se o usuário está na lista de bloqueados
-      if (petData.blockedUsers && petData.blockedUsers.includes(sessionUser.uid)) {
-        Alert.alert('Você está bloqueado de adotar este animal.');
-        return;
-      }
-  
-      // Adicione o ID à lista de interessados
-      await updateDoc(petRef, {
-        interestedUsers: arrayUnion(sessionUser.uid),
-      });
-  
-      console.log('Usuário adicionado à lista de interessados');
-      router.push('./confirmacao');
-    } catch (error) {
-      console.error('Erro ao atualizar interessados:', error);
+const handleConfirmAdoption = async (animalId: string) => {
+  try {
+    const petRef = doc(db, `animals/${animalId}`);
+    const petSnap = await getDoc(petRef);
+
+    if (!petSnap.exists()) {
+      console.error("Animal não encontrado.");
+      return;
     }
-  };
+
+    const petData = petSnap.data();
+
+    if (!sessionUser) {
+      Alert.alert("Você precisa estar logado para adotar um animal.");
+      return;
+    }
+
+    // Verifique se o usuário é o proprietário
+    if (petData.owner === sessionUser.uid) {
+      Alert.alert("Você já é o proprietário deste animal.");
+      return;
+    }
+
+    // Verifique se o usuário está na lista de bloqueados
+    if (petData.blockedUsers && petData.blockedUsers.includes(sessionUser.uid)) {
+      Alert.alert("Você está bloqueado de adotar este animal.");
+      return;
+    }
+
+    // Adicione o ID à lista de interessados
+    await updateDoc(petRef, {
+      interestedUsers: arrayUnion(sessionUser.uid),
+    });
+
+    console.log("Usuário adicionado à lista de interessados.");
+
+    // Enviar notificação ao dono do animal
+    await sendAdoptionNotification(petData.owner, petData.name, sessionUser.displayName);
+
+    // Redirecionar para a tela de confirmação
+    router.push("./confirmacao");
+  } catch (error) {
+    console.error("Erro ao atualizar interessados:", error);
+  }
+};
 
   const handleShare = async () => {
     try {
