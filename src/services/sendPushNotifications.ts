@@ -25,7 +25,7 @@ export async function sendAdoptionNotification(animalId: string, animalName: str
     return;
   }
 
-  const notificationToken = userDoc.data().expoPushToken.data;
+  const notificationToken = userDoc.data().expoPushToken;
   console.log("✅ Token de notificação encontrado:", notificationToken);
 
   if (!notificationToken) {
