@@ -12,15 +12,13 @@
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.barbosa885.meow"
+      "package": "com.barbosa885.meow",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -37,8 +35,18 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "3403df2a-772c-4e16-a79c-98e95124ad33"
+        "projectId": "d5675dc7-f694-4388-8842-6c9fbe524bd0"
       }
-    }
+    },
+    "owner": "barbosa885",
+    "ios": {
+      "bundleIdentifier": "com.barbosa885.meow"
+    },
+    "notification": {
+      "android": {
+        "sound": true
+      }
+    },
+    "assetBundlePatterns": ["**/*"]
   }
 }

@@ -4,17 +4,35 @@ import React from 'react';
 import { Alert, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Button from '../components/Button';
 import { useSession } from '../services/auth/ctx';
+import { useNotification } from '../services/NotificationContext';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../services/auth/firebase-config';
 
 
 const Home = () => {
   const router = useRouter();
-  const { user, signOut } = useSession(); // Pegando o usuário e a função de logout
-  
+  const { user, signOut } = useSession();
+  const { expoPushToken, notification, error } = useNotification();
+
+  if (error) {
+    return <Text style={styles.errorMessage}>Error: {error.message}</Text>;
+  }
+
+  if (expoPushToken) {
+    console.log(expoPushToken);
+  }
+
+  if (notification) {
+    console.log(notification);
+  }
 
   const handleLogout = async () => {
     try {
       await signOut();
       router.replace('/login');
+      await updateDoc(doc(db, "users", user.uid), {
+        expoPushToken: null,
+      });
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
       Alert.alert('Erro', 'Não foi possível sair');
@@ -73,12 +91,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fafafa',
   },
+
   title: {
     fontSize: 72,
     color: '#ffd358',
     fontFamily: 'CourgetteRegular',
     marginBottom: 52
   },
+
   subtitle: {
     maxWidth: 300,
     fontSize: 16,
@@ -87,12 +107,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 48
   },
+
   buttonContainer: {
     width: 320,
     gap: 12,
    // justifyContent: 'center',
    // alignItems: 'center',
   },
+
   btnLogin: {
     fontSize: 16,
     color: '#88c9bf',
@@ -105,15 +127,23 @@ const styles = StyleSheet.create({
     textAlign: 'center', 
     marginTop: 20,
   },
+
   logo: {
     width: 122,
     height: 44,
     marginTop: 40,
   },
+
   menuIcon: {
     position: 'absolute',
     top: 16,
     left: 16,
+  },
+
+  errorMessage: {
+    color: '#ff0000',
+    fontSize: 16,
+    textAlign: 'center',
   }
 });
 
