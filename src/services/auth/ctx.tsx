@@ -1,7 +1,8 @@
-import { User, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut } from 'firebase/auth';
-import { auth, db } from './firebase-config';
+import { FirebaseError } from 'firebase/app';
+import { User, createUserWithEmailAndPassword, signOut as firebaseSignOut, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import React, { useContext, createContext, useState, useEffect, type PropsWithChildren } from 'react';
+import React, { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
+import { auth, db } from './firebase-config';
 
 const AuthContext = createContext<{
   user: any;
@@ -54,13 +55,19 @@ const SessionProvider = ({ children }: PropsWithChildren) => {
       console.log('Usuário logado com sucesso!');
       console.log('Usuário:', auth.currentUser);
     } catch (error) {
+      if (error instanceof FirebaseError) {
       if (error.code === 'auth/invalid-email') {
         alert('E-mail inválido . Por favor, verifique o e-mail fornecido.');
+        throw new Error('E-mail inválido');
       } else if (error.code === 'auth/wrong-password') {
         alert('Senha incorreta. Tente novamente.');
+        throw new Error('Senha incorreta.');
       } else {
         alert('Erro ao fazer login. Tente novamente.');
+        throw new Error('Erro ao fazer login.');
       }
+    } else {
+      console.error('Unexpected error:', error);}
     }
       finally {
         setIsLoading(false);
@@ -111,5 +118,5 @@ const SessionProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export { useSession, SessionProvider };
+export { SessionProvider, useSession };
 
