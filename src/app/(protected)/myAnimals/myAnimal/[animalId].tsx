@@ -1,18 +1,19 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { doc, getDoc } from 'firebase/firestore';
+import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import PagerView from 'react-native-pager-view';
 import Button from '../../../../components/Button';
 import Header from '../../../../components/Header';
-import { db } from '../../../../services/auth/firebase-config';
 import Loading from '../../../../components/Loading';
-import PagerView from 'react-native-pager-view';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { db } from '../../../../services/auth/firebase-config';
 
 const MyAnimalInfoScreen = () => {
+  const { animalId } = useLocalSearchParams();
 
-  const {animalId} = useLocalSearchParams();
   interface Pet {
+    localidade: string;
     owner: string;
     id: string;
     name: string;
@@ -31,13 +32,14 @@ const MyAnimalInfoScreen = () => {
     preguicoso: boolean;
     vacinado: boolean;
     vermifugado: boolean;
-    castrado:boolean;
+    castrado: boolean;
     doente: boolean;
     termo: boolean;
     fotos: boolean;
     visita: boolean;
     acompanhamento: boolean;
     acompanhamentoTempo: string;
+    adoption: boolean; // Adicionado para rastrear o estado de adoção
   }
 
   interface Owner {
@@ -45,7 +47,7 @@ const MyAnimalInfoScreen = () => {
   }
 
   const [pet, setPet] = useState<Pet | null>(null);
-  const [ownerLocation, setOwnerLocation ] = useState<Owner | null>(null);
+  const [ownerLocation, setOwnerLocation] = useState<Owner | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -84,48 +86,87 @@ const MyAnimalInfoScreen = () => {
     fetchPet();
   }, [animalId]);
 
-
   if (loading) {
     return <Loading />;
   }
 
   if (!pet) {
-    return
+    return null;
   }
 
-  const Divider = () => { 
-    return <View style={{ height: 1, backgroundColor: "#E0E0E0", marginHorizontal: 20 }} /> 
+  const handleToggleAdoption = async () => {
+    try {
+      const docRef = doc(db, `animals/${animalId}`);
+      await updateDoc(docRef, {
+        adoption: !pet.adoption,
+      });
+      setPet((prev) => prev ? { ...prev, adoption: !prev.adoption } : prev);
+      Alert.alert(`Animal ${pet.adoption ? 'removido da' : 'colocado para'} adoção com sucesso!`);
+    } catch (error) {
+      console.error('Erro ao atualizar o estado de adoção do animal:', error);
+    }
+  };
+
+  const handleRemovePet = async () => {
+    Alert.alert(
+      'Confirmação',
+      'Você tem certeza que deseja remover este pet?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Remover',
+          onPress: async () => {
+            try {
+              const docRef = doc(db, `animals/${animalId}`);
+              await deleteDoc(docRef);
+              Alert.alert('Pet removido com sucesso!');
+              router.back();
+            } catch (error) {
+              console.error('Erro ao remover o pet:', error);
+              Alert.alert('Erro ao remover o pet.');
+            }
+          },
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const Divider = () => {
+    return <View style={{ height: 1, backgroundColor: "#E0E0E0", marginHorizontal: 20 }} />
   }
 
   return (
     <View style={styles.container}>
-
-      <Header title={pet.name} showBackButton showShareIcon onBackPress={() => router.back()}/>
+      <Header title={pet.name} showBackButton showShareIcon onBackPress={() => router.back()} />
       <StatusBar backgroundColor={"#88c9bf"} />
 
       <ScrollView style={{ flexGrow: 1 }}>
         <View key={pet.id}>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => { }}
+          >
+            <MaterialCommunityIcons name="pencil" size={24} color="#434343" />
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={() => {}}
-            >
-              <MaterialCommunityIcons name="pencil" size={24} color="#434343" />
-            </TouchableOpacity>
+          <PagerView style={{ height: 300 }} initialPage={0}>
+            {pet.photos.map((photo, index) => (
+              <View key={index}>
+                <Image
+                  style={{ width: '100%', height: '100%' }}
+                  source={{ uri: photo }}
+                  resizeMode="cover"
+                />
+              </View>
+            ))}
+          </PagerView>
 
-            <PagerView style={{ height: 300 }} initialPage={0}>
-              {pet.photos.map((photo, index) => (
-                <View key={index}>
-                  <Image 
-                    style={{ width: '100%', height: '100%' }}
-                    source={{ uri: photo }} 
-                    resizeMode="cover" 
-                  />
-                </View>
-              ))}
-            </PagerView>
-          
-          <View >
+          <View>
             <Text style={{ fontFamily: "Roboto_500Medium", fontSize: 16, color: "#434343", paddingTop: 24, paddingLeft: 32 }}>{pet.name}</Text>
 
             <View style={styles.inline}>
@@ -143,7 +184,6 @@ const MyAnimalInfoScreen = () => {
                 <Text style={styles.title}>IDADE</Text>
                 <Text style={styles.text}>{pet.age}</Text>
               </View>
-
             </View>
             <View style={styles.infoblock}>
               <Text style={styles.title}>LOCALIZAÇÃO</Text>
@@ -153,69 +193,74 @@ const MyAnimalInfoScreen = () => {
             <Divider />
 
             <View style={styles.inline}>
-
               <View style={styles.infoblock}>
                 <Text style={styles.title}>CASTRADO</Text>
-                <Text style={styles.text}>{pet.castrado  ? 'Sim' : 'Não'}</Text>
+                <Text style={styles.text}>{pet.castrado ? 'Sim' : 'Não'}</Text>
               </View>
 
               <View style={styles.infoblock}>
                 <Text style={styles.title}>VERMIFUGADO</Text>
                 <Text style={styles.text}>{pet.vermifugado ? 'Sim' : 'Não'}</Text>
               </View>
-
             </View>
 
             <View style={styles.inline}>
-            <View style={styles.infoblock}>
-              <Text style={styles.title}>VACINADO</Text>
-              <Text style={styles.text}>{pet.vacinado  ? 'Sim' : 'Não'}</Text>
-            </View>
-            <View style={styles.infoblock}>
-              <Text style={styles.title}>DOENÇAS</Text>
-              <Text style={styles.text}>{pet.doente  ? 'Sim' : 'Nenhuma'}</Text>
-            </View>
-            </View>
-            <Divider />
-            <View style={styles.infoblock}>
-            <Text style={styles.title}>TEMPERAMENTO</Text>
-            <Text style={styles.text}>{[
-    pet.brincalhao && "brincalhão",
-    pet.timido && "tímido",
-    pet.calmo && "calmo",
-    pet.guarda && "guarda",
-    pet.amoroso && "amoroso",
-    pet.preguicoso && "preguiçoso",
-  ]
-    .filter(Boolean)
-    .join(", ")}</Text>
+              <View style={styles.infoblock}>
+                <Text style={styles.title}>VACINADO</Text>
+                <Text style={styles.text}>{pet.vacinado ? 'Sim' : 'Não'}</Text>
+              </View>
+              <View style={styles.infoblock}>
+                <Text style={styles.title}>DOENÇAS</Text>
+                <Text style={styles.text}>{pet.doente ? 'Sim' : 'Nenhuma'}</Text>
+              </View>
             </View>
             <Divider />
             <View style={styles.infoblock}>
-            <Text style={styles.title}>EXIGÊNCIAS DO DOADOR</Text>
-            <Text style={styles.text}>{[
-    pet.termo && "Termo de adoção",
-    pet.fotos && "Fotos da casa",
-    pet.visita && "Visita prévia",
-    pet.acompanhamento && `Acompanhamento durante ${pet.acompanhamentoTempo}`,
-  ]
-    .filter(Boolean)
-    .join(", ")}</Text>
+              <Text style={styles.title}>TEMPERAMENTO</Text>
+              <Text style={styles.text}>{[
+                pet.brincalhao && "brincalhão",
+                pet.timido && "tímido",
+                pet.calmo && "calmo",
+                pet.guarda && "guarda",
+                pet.amoroso && "amoroso",
+                pet.preguicoso && "preguiçoso",
+              ]
+                .filter(Boolean)
+                .join(", ")}</Text>
             </View>
             <Divider />
             <View style={styles.infoblock}>
-            <Text style={styles.title}>MAIS SOBRE {pet.name.toUpperCase()}</Text>
-            <Text style={styles.text}>{pet.about}</Text>
+              <Text style={styles.title}>EXIGÊNCIAS DO DOADOR</Text>
+              <Text style={styles.text}>{[
+                pet.termo && "Termo de adoção",
+                pet.fotos && "Fotos da casa",
+                pet.visita && "Visita prévia",
+                pet.acompanhamento && `Acompanhamento durante ${pet.acompanhamentoTempo}`,
+              ]
+                .filter(Boolean)
+                .join(", ")}</Text>
             </View>
+            <Divider />
+
+            <View style={styles.infoblock}>
+              <Text style={styles.title}>MAIS SOBRE {pet.name.toUpperCase()}</Text>
+              <Text style={styles.text}>{pet.about}</Text>
+            </View>
+
             <View style={[styles.buttonContainer, { flexDirection: 'row' }]}>
               <View style={{ marginHorizontal: 10, width: 150 }}>
                 <Button title="VER INTERESSADOS" onPress={() => router.push(`./candidate/${animalId}`)} variant="main" />
               </View>
               <View style={{ marginHorizontal: 10, width: 150 }}>
-                <Button title="REMOVER PET" onPress={() => router.push(`./remove/${animalId}`)} variant="main"/>
+                <Button title="REMOVER PET" onPress={handleRemovePet} variant="main" />
               </View>
             </View>
-          </View>    
+            <View style={[{ alignItems: 'center'}]}>
+            <View style={{ marginHorizontal: 10, width: '70%' ,marginBottom: 10}}>
+                <Button title={pet.adoption ? "REMOVER DA ADOÇÃO" : "COLOCAR PARA ADOÇÃO"} onPress={handleToggleAdoption} variant="main" />
+            </View>
+          </View>
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -257,7 +302,7 @@ const styles = StyleSheet.create({
     left: 16,
   },
 
-  inline:{
+  inline: {
     flexDirection: 'row',
     alignSelf: 'flex-start',
     width: 350,
@@ -265,7 +310,7 @@ const styles = StyleSheet.create({
 
   horizontalLine: {
     height: 1,
-    backgroundColor: "#E0E0E0", 
+    backgroundColor: "#E0E0E0",
     marginVertical: 10,
     maxWidth: 320,
     marginLeft: 16,
@@ -307,14 +352,14 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     width: 250,
-    height: 40,
-    margin: 20,
-    marginBottom: 40,
+    //height: 40,
+    //margin: 20,
+    //marginBottom: 40,
     justifyContent: 'center',
     alignSelf: 'center',
   },
 
-  subtitle:{
+  subtitle: {
     maxWidth: 350,
     fontSize: 16,
     color: '#757575',

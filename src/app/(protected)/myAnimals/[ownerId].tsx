@@ -12,7 +12,7 @@ const MyAnimalsInfoScreen = () => {
   interface Pet {
     id: string;
     name: string;
-    photos: string;
+    photos: string[];
     gender: string;
     age: string;
     size: string;

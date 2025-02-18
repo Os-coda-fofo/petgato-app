@@ -1,20 +1,21 @@
+import { AntDesign } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
+import * as Sharing from 'expo-sharing';
+import { arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import PagerView from 'react-native-pager-view';
+import { captureRef } from 'react-native-view-shot';
 import Button from '../../../components/Button';
 import Header from '../../../components/Header';
-import { doc, getDoc } from 'firebase/firestore';
-import React, { useEffect, useRef, useState } from 'react';
-import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import PagerView from 'react-native-pager-view';
-import { db } from '../../../services/auth/firebase-config';
 import Loading from '../../../components/Loading';
-import { AntDesign } from '@expo/vector-icons';
-import * as Sharing from 'expo-sharing';
-import { captureRef } from 'react-native-view-shot';
 import SharePetCard from '../../../components/SharePetCard';
+import { useSession } from '../../../services/auth/ctx';
+import { db } from '../../../services/auth/firebase-config';
 
 const AnimalInfoScreen = () => {
-
   const viewShotRef = useRef(null);
+  const { user: sessionUser } = useSession();
   const {animalId} = useLocalSearchParams();
   interface Pet {
     owner: string;
@@ -53,8 +54,40 @@ const AnimalInfoScreen = () => {
   const [ownerLocation, setOwnerLocation] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const handleConfirmAdoption = () => {
-    router.push('/confirmacao/');
+  const handleConfirmAdoption = async () => {
+    try {
+      const petRef = doc(db, `animals/${animalId}`);
+      const petSnap = await getDoc(petRef);
+  
+      if (!petSnap.exists()) {
+        console.error('Animal não encontrado.');
+        return;
+      }
+  
+      const petData = petSnap.data();
+  
+      // Verifique se o usuário é o proprietário
+      if (petData.owner === sessionUser.uid) {
+        Alert.alert('Você já é o proprietário deste animal.');
+        return;
+      }
+  
+      // Verifique se o usuário está na lista de bloqueados
+      if (petData.blockedUsers && petData.blockedUsers.includes(sessionUser.uid)) {
+        Alert.alert('Você está bloqueado de adotar este animal.');
+        return;
+      }
+  
+      // Adicione o ID à lista de interessados
+      await updateDoc(petRef, {
+        interestedUsers: arrayUnion(sessionUser.uid),
+      });
+  
+      console.log('Usuário adicionado à lista de interessados');
+      router.push('./confirmacao');
+    } catch (error) {
+      console.error('Erro ao atualizar interessados:', error);
+    }
   };
 
   const handleShare = async () => {
@@ -275,7 +308,8 @@ const AnimalInfoScreen = () => {
                 "calmo",
                 "brincalhão",
             ]}
-            photo={pet.photos[0]}
+            photo={pet.photos}
+            location={pet.localidade}
             about={pet.about}
           />
         </View>
