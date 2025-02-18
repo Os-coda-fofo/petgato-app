@@ -71,7 +71,6 @@ const AnimalInfoScreen = () => {
       }
 
       const petData = petSnap.data();
-      console.log("✅ Dados do animal encontrados:", petData);
 
       if (!sessionUser) {
         console.error("🚨 Usuário não autenticado.");
