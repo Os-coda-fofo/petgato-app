@@ -45,10 +45,10 @@ export async function sendAdoptionNotification(animalId: string, animalName: str
       },
       body: JSON.stringify({
         to: notificationToken,
-        sound: "default",
+        sound: "Dog-Bark",
         title: "Novo Interesse na Adoção!",
         body: `${adopterName} quer adotar ${animalName}. Veja os detalhes!`,
-        data: { screen: "/myAnimals/myAnimal/candidate", animalId: animalId },
+        data: { screen: "(protected)/myAnimals/myAnimal/candidate", animalId: animalId },
       }),
     });
 

@@ -47,6 +47,7 @@
         "sound": true
       }
     },
-    "assetBundlePatterns": ["**/*"]
+    "assetBundlePatterns": ["**/*"],
+    "assets": ["./assets/sounds/Dog-Bark.wav"]
   }
 }

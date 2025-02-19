@@ -15,8 +15,8 @@ export async function registerForPushNotificationsAsync({ userId }: Notification
   }
 
   if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
+    await Notifications.setNotificationChannelAsync("bark", {
+      name: "Bark",
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: "#FF231F7C",

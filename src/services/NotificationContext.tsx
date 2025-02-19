@@ -79,7 +79,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
         const animalId = response.notification.request.content.data.animalId;
 
         if (screen && animalId) {
-          console.log("🔔 Navigate to screen: ", screen);
+          console.log("🔔 Navigate to screen: ", `${screen}/${animalId}`);
           router.push(`${screen}/${animalId}`);
         }
       });
