@@ -17,7 +17,7 @@ import { sendAdoptionNotification } from '../../../services/sendPushNotification
 const AnimalInfoScreen = () => {
   const viewShotRef = useRef(null);
   const { user: sessionUser} = useSession();
-  const {animalId} = useLocalSearchParams();
+  const {animalId} = useLocalSearchParams<{ animalId: string }>();
   interface Pet {
     owner: string;
     id: string;
