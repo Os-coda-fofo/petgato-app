@@ -6,6 +6,16 @@ import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { SessionProvider } from '../services/auth/ctx';
+import * as Notifications from 'expo-notifications';
+import { NotificationProvider } from '../services/NotificationContext';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 SplashScreen.preventAutoHideAsync();
 
@@ -34,18 +44,20 @@ export default function Layout() {
 
   return (
     <SessionProvider>
-      <SafeAreaProvider>
-        <SafeAreaView style={styles.safeView}>
-          <Slot />
-        </SafeAreaView>
-      </SafeAreaProvider>
+      <NotificationProvider >
+        <SafeAreaProvider>
+          <SafeAreaView style={styles.safeView}>
+            <Slot />
+          </SafeAreaView>
+        </SafeAreaProvider>
+      </NotificationProvider>
     </SessionProvider>
   )
 }
+
 export const screenOptions = {
   headerShown: false,
 };
-
 
 const styles = StyleSheet.create({
   safeView: {

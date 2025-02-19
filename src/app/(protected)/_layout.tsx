@@ -16,7 +16,6 @@ export default function ProtectedLayout() {
   }
 
   return (
-
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1 }}>
         <Slot/>

@@ -7,6 +7,7 @@ import Header from '../../../../../components/Header';
 import Loading from '../../../../../components/Loading';
 import { useSession } from '../../../../../services/auth/ctx';
 import { db } from '../../../../../services/auth/firebase-config';
+import { Entypo } from '@expo/vector-icons';
 
 interface InterestedUser {
   uid: string;
@@ -69,47 +70,47 @@ const { user: sessionUser } = useSession();
   const handleAcceptUser = async (userId: string) => {
     try {
       const animalRef = doc(db, 'animals', animalId as string);
-  
+
       // Atualize o documento do animal
       await updateDoc(animalRef, {
         interestedUsers: [], // Remove todos os interessados
         owner: userId, // Define o novo proprietário
       });
 
-    // Buscar e deletar qualquer conversa existente entre os usuários sobre o mesmo pet
-    const groupChatCollectionRef = collection(db, 'groupChats');
-    const q = query(
-      groupChatCollectionRef,
-      where('owner', '==', sessionUser.uid),
-      where('client', '==', userId),
-      where('petId', '==', animalId)
-    );
+      // Buscar e deletar qualquer conversa existente entre os usuários sobre o mesmo pet
+      const groupChatCollectionRef = collection(db, 'groupChats');
+      const q = query(
+        groupChatCollectionRef,
+        where('owner', '==', sessionUser.uid),
+        where('client', '==', userId),
+        where('petId', '==', animalId)
+      );
 
-    const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(q);
 
-    if (!querySnapshot.empty) {
-      const deletePromises = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
-      await Promise.all(deletePromises);
-      console.log('Conversas deletadas com sucesso.');
-    }
-  
+      if (!querySnapshot.empty) {
+        const deletePromises = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
+        await Promise.all(deletePromises);
+        console.log('Conversas deletadas com sucesso.');
+      }
+
       // Limpe a lista de interessados no estado
       setInterestedUsers([]);
-  
+
       console.log(`Usuário ${userId} aceito como novo proprietário.`);
-            // Exibir aviso de confirmação e voltar para a tela de meus animais
-            Alert.alert(
-              'Confirmação',
-              'Usuário aceito como novo proprietário com sucesso!',
-              [
-                {
-                  text: 'OK',
-                  onPress: () => router.navigate('/'),
-                },
-              ],
-              { cancelable: false }
-            );
-            
+      // Exibir aviso de confirmação e voltar para a tela de meus animais
+      Alert.alert(
+        'Confirmação',
+        'Usuário aceito como novo proprietário com sucesso!',
+        [
+          {
+            text: 'OK',
+            onPress: () => router.navigate('/'),
+          },
+        ],
+        { cancelable: false }
+      );
+
     } catch (error) {
       console.error('Erro ao aceitar usuário:', error);
     }
@@ -149,7 +150,6 @@ const { user: sessionUser } = useSession();
   };
 
   const saveChatData = async (userId: string) => {
-
     try {
       // Crie uma referência para o Firestore
       const groupChatCollectionRef = collection(db, 'groupChats');
@@ -193,6 +193,19 @@ const { user: sessionUser } = useSession();
     
   };
 
+  const handleRefuseUser = async (userId: string) => {
+    try {
+      const animalRef = doc(db, 'animals', animalId as string);
+      await updateDoc(animalRef, {
+        interestedUsers: arrayRemove(userId),
+      });
+      setInterestedUsers((prev) => prev.filter((user) => user.uid !== userId));
+      console.log(`Usuário ${userId} recusado.`);
+    } catch (error) {
+      console.error('Erro ao recusar usuário:', error);
+    }
+  }
+
   if (loading) {
     return <Loading />;
   }
@@ -217,17 +230,19 @@ const { user: sessionUser } = useSession();
             </View>
             </TouchableOpacity>
             <View style={styles.buttonContainer}>
-                <View style={{width: '30%'}}>
+              <View style={{width: '30%'}}>
                 <Button title="Conversar" onPress={async () => {router.push(`../../../chat/${await saveChatData((item.uid))}`)}} variant="default" />
-                </View>
-                <View style={{width: '30%'}}>
+              </View>
+              <View style={{width: '30%'}}>
                 <Button title="Aceitar" onPress={() => handleAcceptUser(item.uid)} variant="default" />
-                </View>
-                <View style={{width: '30%'}}>
-                <Button title="Bloquear" onPress={() => handleBlockUser(item.uid)} variant="default" />
-                </View>
+              </View>
+              <View style={{width: '30%'}}>
+                <Button title="Recusar" onPress={() => handleRefuseUser(item.uid)} variant="default" />
+              </View>
             </View>
-
+            <TouchableOpacity onPress={() => handleBlockUser(item.uid)} style={{ position: "absolute", top: 0, right: 0, padding: 8 }}>
+              <Entypo name="block" size={24} color="red" onPress={() => handleBlockUser(item.uid)} />
+            </TouchableOpacity>
           </View>
         )}
         ListEmptyComponent={<Text style={styles.emptyText}>Nenhum interessado encontrado.</Text>}
